@@ -5,8 +5,8 @@ import java.util.Scanner;
 
 public class UserInterface {
 
-    private Scanner scanner;
-    private EngineManager engine;
+    private final Scanner scanner;
+    private EngineManager engine; // Program engine, contains all program processes.
 
     public UserInterface() {
         scanner = new Scanner(System.in); // Init scanner.
@@ -16,33 +16,36 @@ public class UserInterface {
     // Initialize menu display.
     public void init() {
         do {
-            this.presentMenu(); // Print menu.
-            int userChoice = scanner.nextInt(); // Read user choice.
-            if(userChoiseIsValid(userChoice)) {
-                this.cleanBuffer(); // Clean '\n' stuck in buffer after reading choice.
+            this.presentMenu();
+            int userChoice = this.getUserChoice(); // Read user choice.
+            this.cleanBuffer(); // Clean '\n' stuck in buffer after reading choice.
 
-                // Handle user choice.
-                switch (userChoice) {
-                    case 1: {
-                        System.out.print("Enter full xml file path: ");
-                        String filePathString = scanner.nextLine();
-                        System.out.println(this.engine.readXmlFile(filePathString)); // Handle load xml user's choice.
-                        break;
-                    }
-                    case 8: {
-                        System.exit(0);
-                        break;
-                    }
+            // Handle user choice by calling relevant function from program engine.
+            switch (userChoice) {
+                case 1: {
+                    System.out.print("Enter full xml file path: ");
+                    String filePathString = scanner.nextLine();
+                    System.out.println(engine.loadXML(filePathString)); // Handle load xml user's choice.
+                    break;
+                }
+                case 8: {
+                    System.exit(0);
+                    break;
+                }
+                default: {
+                    System.out.println("Error: invalid choice.");
                 }
             }
 
         } while(true);
     }
 
-    // TODO - Validation tests.
-    private boolean userChoiseIsValid(int userChoice) {
-        // TO-DO
-        return true;
+    // getUserChoice -> Check if next input is an int, if so return it else return 0 (non-valid choice).
+    private int getUserChoice() {
+        if(scanner.hasNextInt())
+            return scanner.nextInt();
+
+        return 0;
     }
 
     // presentMenu -> Print menu to screen.
