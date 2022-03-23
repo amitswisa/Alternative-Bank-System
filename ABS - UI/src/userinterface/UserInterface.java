@@ -1,6 +1,5 @@
 package userinterface;
 
-import dto.AbsDataTransferObject;
 import engine_managers.EngineManager;
 import java.util.Scanner;
 
@@ -20,14 +19,14 @@ public class UserInterface {
             this.presentMenu(); // Print menu.
             int userChoice = scanner.nextInt(); // Read user choice.
             if(userChoiseIsValid(userChoice)) {
+                this.cleanBuffer(); // Clean '\n' stuck in buffer after reading choice.
+
                 // Handle user choice.
                 switch (userChoice) {
                     case 1: {
-                        // Get xml file path from user.
-                        System.out.print("Enter full path of xml file: ");
+                        System.out.print("Enter full xml file path: ");
                         String filePathString = scanner.nextLine();
-
-                        System.out.println(this.engine.readXmlFile(filePathString));
+                        System.out.println(this.engine.readXmlFile(filePathString)); // Handle load xml user's choice.
                         break;
                     }
                     case 8: {
@@ -46,7 +45,7 @@ public class UserInterface {
         return true;
     }
 
-    // Print menu to screen.
+    // presentMenu -> Print menu to screen.
     private void presentMenu() {
         System.out.println("Current Time Unit: 1.");
         System.out.println("1. Load XML file.");
@@ -59,4 +58,8 @@ public class UserInterface {
         System.out.println("8. Exit.");
     }
 
+    // cleanBuffer -> Read next line to clean buffer from un relevant data left.
+    private void cleanBuffer() {
+        scanner.nextLine();
+    }
 }
