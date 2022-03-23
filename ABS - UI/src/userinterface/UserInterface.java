@@ -2,7 +2,6 @@ package userinterface;
 
 import dto.AbsDataTransferObject;
 import engine_managers.EngineManager;
-
 import java.util.Scanner;
 
 public class UserInterface {
@@ -19,17 +18,32 @@ public class UserInterface {
     public void init() {
         do {
             this.presentMenu(); // Print menu.
-            int userChoice = this.getUserChoice(); // Get choice from buffer.
-            System.out.println(engine.handleUserChoice(userChoice)); // Handle choice and present message.
+            int userChoice = scanner.nextInt(); // Read user choice.
+            if(userChoiseIsValid(userChoice)) {
+                // Handle user choice.
+                switch (userChoice) {
+                    case 1: {
+                        // Get xml file path from user.
+                        System.out.print("Enter full path of xml file: ");
+                        String filePathString = scanner.nextLine();
+
+                        System.out.println(this.engine.readXmlFile(filePathString));
+                        break;
+                    }
+                    case 8: {
+                        System.exit(0);
+                        break;
+                    }
+                }
+            }
+
         } while(true);
     }
 
-    /*
-        TODO - Validation tests.
-    */
-    private int getUserChoice() {
-        int userChoice = scanner.nextInt(); // Get choice from buffer.
-        return userChoice;
+    // TODO - Validation tests.
+    private boolean userChoiseIsValid(int userChoice) {
+        // TO-DO
+        return true;
     }
 
     // Print menu to screen.

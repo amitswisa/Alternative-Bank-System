@@ -17,11 +17,7 @@ public class XMLManager extends Throwable {
     }
 
     // Validates given xml file and load if valid.
-    public AbsDataTransferObject loadXMLfile() {
-
-        // Get xml file path from user.
-        System.out.print("Enter full path of xml file: ");
-        String filePathString = scanner.nextLine();
+    public AbsDataTransferObject loadXMLfile(String filePathString) {
 
         // File validation.
         File tempFileHolder = new File(filePathString); // Init temp file var.
