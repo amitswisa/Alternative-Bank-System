@@ -1,6 +1,7 @@
 package userinterface;
 
-import manager.EngineManager;
+import dto.AbsDataTransferObject;
+import engine_managers.EngineManager;
 
 import java.util.Scanner;
 
@@ -14,7 +15,7 @@ public class UserInterface {
         engine = new EngineManager(); // Init program engine.
     }
 
-    // Present menu
+    // Initialize menu display.
     public void init() {
         do {
             this.presentMenu(); // Print menu.

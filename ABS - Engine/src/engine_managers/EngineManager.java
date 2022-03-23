@@ -1,4 +1,6 @@
-package manager;
+package engine_managers;
+
+import dto.AbsDataTransferObject;
 
 public class EngineManager {
 
@@ -9,14 +11,12 @@ public class EngineManager {
     }
 
     // Handle user choice.
-    public String handleUserChoice(int userChoice) {
+    public AbsDataTransferObject handleUserChoice(int userChoice) {
 
-        String resMsg = "Choice Error: please choose existing option."; // Default return message.
         switch (userChoice)
         {
             case 1: {
-                resMsg = xmlManager.loadXMLfile();
-                break;
+                return xmlManager.loadXMLfile(); // Load xml file and return DTO response message.
             }
             case 8: {
                 System.exit(0);
@@ -24,6 +24,6 @@ public class EngineManager {
             }
         }
 
-        return resMsg;
+        return null; // No case was chosen.
     }
 }
