@@ -1,13 +1,17 @@
 package userinterface;
 
+import manager.EngineManager;
+
 import java.util.Scanner;
 
 public class UserInterface {
 
     private Scanner scanner;
+    private EngineManager engine;
 
     public UserInterface() {
-        scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in); // Init scanner.
+        engine = new EngineManager(); // Init program engine.
     }
 
     // Present menu
@@ -15,7 +19,7 @@ public class UserInterface {
         do {
             this.presentMenu(); // Print menu.
             int userChoice = this.getUserChoice(); // Get choice from buffer.
-
+            System.out.println(engine.handleUserChoice(userChoice)); // Handle choice and present message.
         } while(true);
     }
 
