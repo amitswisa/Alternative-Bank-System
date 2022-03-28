@@ -1,6 +1,10 @@
 package userinterface;
 
 import engine_managers.EngineManager;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.JAXBException;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -14,7 +18,7 @@ public class UserInterface {
     }
 
     // Initialize menu display.
-    public void init() {
+    public void init() throws JAXBException, FileNotFoundException {
         do {
             this.presentMenu();
             int userChoice = this.getUserChoice(); // Read user choice.
