@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ABS - Engine" />
     <orderEntry type="module" module-name="DataTransferObject" />
+    <orderEntry type="library" name="src" level="project" />
   </component>
 </module>

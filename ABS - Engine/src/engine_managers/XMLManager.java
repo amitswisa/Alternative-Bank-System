@@ -28,7 +28,10 @@ public class XMLManager extends Throwable {
         if(!this.isFileHaveXmlExtension(tempFileHolder))  // Check if file extension is ".xml"
             return new AbsDataTransferObject("Error: file must have .xml extension.");
 
-        // TODO - XML file content validation.
+        // TODO - XML file content validation there is no referance to undefinded category.
+
+        // TODO - XML file content validation There is no referance from a loan to an undefined customer.
+
 
         this.currentWorkFile = tempFileHolder; // Save file instance after validation checks.
         return new AbsDataTransferObject("File loaded successfully!");
