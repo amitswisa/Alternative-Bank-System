@@ -2,11 +2,9 @@ package engine.convertor;
 
 import abs.BankCategories;
 import abs.BankCustomer;
+import abs.BankLoan;
 import abs.BankSystem;
-import xmlgenerated.AbsCategories;
-import xmlgenerated.AbsCustomer;
-import xmlgenerated.AbsCustomers;
-import xmlgenerated.AbsDescriptor;
+import xmlgenerated.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,4 +32,10 @@ public class Convertor {
 
         return customerMap;
     }
+     public static void parseAbsLoans(Map<String,BankCustomer> customerMap, AbsLoans absLoans) {
+
+        for(AbsLoan absLoan: absLoans.getAbsLoan()){
+            customerMap.get(absLoan.getAbsOwner()).addLoan(new BankLoan(absLoan)); // Classify the loan to the customer.
+        }
+     }
 }

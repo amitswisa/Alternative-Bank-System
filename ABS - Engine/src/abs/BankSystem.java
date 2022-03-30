@@ -5,10 +5,11 @@ import xmlgenerated.AbsDescriptor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class BankSystem {
 
-    private int currentYaz;
+    private static int currentYaz;
     private BankCategories categories;
     private Map<String, BankCustomer> customers;
 
@@ -25,5 +26,10 @@ public class BankSystem {
         currentYaz = 1; // After file loaded successfully from xml -> start bank system from scratch.
         categories = Convertor.parseAbsCategories(absDescriptor.getAbsCategories());
         customers = Convertor.parseAbsCustomers(absDescriptor.getAbsCustomers());
+        Convertor.parseAbsLoans(customers, absDescriptor.getAbsLoans());
+    }
+
+    public static int getCurrentYaz() {
+        return currentYaz;
     }
 }

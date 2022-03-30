@@ -2,10 +2,7 @@ package abs;
 
 import xmlgenerated.AbsLoan;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BankLoan {
 
@@ -40,5 +37,21 @@ public class BankLoan {
         transactionList = new ArrayList<>(5);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BankLoan bankLoan = (BankLoan) o;
+        return loanID.equals(bankLoan.loanID);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(loanID);
+    }
+
+    @Override
+    public String toString() {
+        return this.loanID;
+    }
 }
