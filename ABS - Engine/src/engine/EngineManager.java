@@ -1,11 +1,15 @@
-package engine_managers;
+package engine;
 
+import abs.BankSystem;
 import dto.DataTransferObject;
+import engine.convertor.Convertor;
+import engine.xmlmanager.XMLManager;
 import xmlgenerated.AbsDescriptor;
 
 public class EngineManager {
 
     private final XMLManager xmlManager;
+    private BankSystem bankSystem;
 
     public EngineManager() {
         xmlManager = new XMLManager(); // Init xml manager.
@@ -17,13 +21,12 @@ public class EngineManager {
     public DataTransferObject loadXML(String filePath) {
         AbsDescriptor xmlObject;
         try {
-            xmlObject = this.xmlManager.loadXMLfile(filePath);
+            xmlObject = this.xmlManager.loadXMLfile(filePath); // Try loading xml file and return AbdDescriptor.
         } catch(DataTransferObject e) {
             return e;
         }
 
-        //TODO - Converting AbsDescriptor to our kind of object.
-
+        bankSystem = new BankSystem(xmlObject); // Creating bank system from AbsDescriptor.
         return new DataTransferObject("File loaded successfully!");
     }
 

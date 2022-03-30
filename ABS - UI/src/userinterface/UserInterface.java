@@ -1,6 +1,6 @@
 package userinterface;
 
-import engine_managers.EngineManager;
+import engine.EngineManager;
 
 import java.util.Scanner;
 
