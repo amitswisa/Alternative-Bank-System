@@ -1,14 +1,11 @@
 package engine_managers;
 
-import dto.AbsDataTransferObject;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.JAXBException;
-import java.io.FileNotFoundException;
+import dto.DataTransferObject;
+import xmlgenerated.AbsDescriptor;
 
 public class EngineManager {
 
-    private XMLManager xmlManager;
+    private final XMLManager xmlManager;
 
     public EngineManager() {
         xmlManager = new XMLManager(); // Init xml manager.
@@ -16,9 +13,18 @@ public class EngineManager {
 
     /*# readXmlFile - Load relevant xml file to XMLManager.
     # arg::String filePath - path of xml file.
-    # return value - AbsDataTransferObject Object.*/
-    public AbsDataTransferObject loadXML(String filePath) throws JAXBException, FileNotFoundException {
-        return this.xmlManager.loadXMLfile(filePath);
+    # return value - DataTransferObject Object.*/
+    public DataTransferObject loadXML(String filePath) {
+        AbsDescriptor xmlObject;
+        try {
+            xmlObject = this.xmlManager.loadXMLfile(filePath);
+        } catch(DataTransferObject e) {
+            return e;
+        }
+
+        //TODO - Converting AbsDescriptor to our kind of object.
+
+        return new DataTransferObject("File loaded successfully!");
     }
 
 }

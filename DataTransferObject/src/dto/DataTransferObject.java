@@ -1,10 +1,10 @@
 package dto;
 
-public class AbsDataTransferObject {
+public class DataTransferObject extends Throwable {
 
     private final String message;
 
-    public AbsDataTransferObject(String message) {
+    public DataTransferObject(String message) {
         this.message = message;
     }
 

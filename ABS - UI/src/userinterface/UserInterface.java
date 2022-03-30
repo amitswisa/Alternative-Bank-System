@@ -1,10 +1,7 @@
 package userinterface;
 
 import engine_managers.EngineManager;
-import org.xml.sax.SAXException;
 
-import javax.xml.bind.JAXBException;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -18,7 +15,7 @@ public class UserInterface {
     }
 
     // Initialize menu display.
-    public void init() throws JAXBException, FileNotFoundException {
+    public void init() {
         do {
             this.presentMenu();
             int userChoice = this.getUserChoice(); // Read user choice.
@@ -29,7 +26,8 @@ public class UserInterface {
                 case 1: {
                     System.out.print("Enter full xml file path: ");
                     String filePathString = scanner.nextLine();
-                    System.out.println(engine.loadXML(filePathString)); // Handle load xml user's choice.
+                    // Try load xml file and validate it, print DTO result.
+                    System.out.println(engine.loadXML(filePathString));
                     break;
                 }
                 case 8: {
