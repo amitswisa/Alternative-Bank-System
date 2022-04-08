@@ -51,7 +51,44 @@ public class BankLoan {
     }
 
     @Override
+    //TODO- ask amit if it OK before:  return this.loanID;
     public String toString() {
-        return this.loanID;
+        return "Loan ID: " + this.loanID + "\n" +
+                "Loan Category: " + this.loanCategory + "\n" +
+                "Loan Amount: " + this.loanAmount + "\n" +
+                "Original Time of loan: " + this.loanTotalTime + "\n" +
+                "Loan Interest: " + this.loanInterestPerPayment + "\n" +
+                "Payment Interval: " + this.paymentInterval + "\n" +
+                "Loan Status: " + this.loanStatus + "\n" + "\n";
+    }
+
+    public void showLoan() {
+        System.out.println(this);
+
+        //Print all the investors.
+        for (Map.Entry<String,Integer> invester : this.loanInvestors.entrySet())
+            System.out.println("Name:" + invester.getKey() + ", Investment: " + invester.getValue());
+
+        //Show more deatails according to loan status.
+        Status status = this.loanStatus;
+        switch (status){
+            case ACTIVE: {
+                System.out.println("Started YAZ:" + this.loanStartTime); //print the YAZ start to be active
+                //TODO - print the next YAZ payment
+                //TODO - print the information of all payments
+                break;
+            }
+            case RISK: {
+                //TODO - print all like active and which payment dont paid.
+                break;
+            }
+            case FINISHED: {
+                break;
+            }
+            default: {
+                System.out.println("Error: invalid loan status.");
+            }
+        }
+
     }
 }

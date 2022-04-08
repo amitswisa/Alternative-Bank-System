@@ -26,4 +26,5 @@ public class CustomerOperationData extends DataTransferObject {
     public int getBalanceAfter() {
         return balanceAfter;
     }
+
 }

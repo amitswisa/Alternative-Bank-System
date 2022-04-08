@@ -16,9 +16,29 @@ public class UserInterface {
 
     // Initialize menu display.
     public void init() {
+        //The first choice must be 1 or 8
+        this.presentMenu();
+        int userChoice = this.getUserChoice(); // Read user choice.
+        switch (userChoice) {
+            case 1: {
+                System.out.print("Enter full xml file path: ");
+                String filePathString = scanner.nextLine();
+                // Try load xml file and validate it, print DTO result.
+                System.out.println(engine.loadXML(filePathString));
+                break;
+            }
+            case 8: {
+                System.exit(0);
+                break;
+            }
+            default: {
+                System.out.println("Error: invalid choice first you must choose 1 or 8.");
+            }
+        }
+
         do {
             this.presentMenu();
-            int userChoice = this.getUserChoice(); // Read user choice.
+            userChoice = this.getUserChoice(); // Read user choice.
             this.cleanBuffer(); // Clean '\n' stuck in buffer after reading choice.
 
             // Handle user choice by calling relevant function from program engine.
@@ -30,6 +50,10 @@ public class UserInterface {
                     System.out.println(engine.loadXML(filePathString));
                     break;
                 }
+              /* case 2: {
+                //TODO- show all the loans information
+                   break;
+                }*/
                 case 8: {
                     System.exit(0);
                     break;
