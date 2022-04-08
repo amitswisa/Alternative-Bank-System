@@ -99,4 +99,7 @@ public class XMLManager {
         return (AbsDescriptor) unmarshaller.unmarshal(in); // return unmarshalled data.
     }
 
+    public boolean isFileLoaded() {
+        return (this.currentWorkFile != null);
+    }
 }

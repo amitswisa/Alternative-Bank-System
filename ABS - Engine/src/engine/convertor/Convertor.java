@@ -33,9 +33,9 @@ public class Convertor {
         return customerMap;
     }
      public static void parseAbsLoans(Map<String,BankCustomer> customerMap, AbsLoans absLoans) {
-
+         // Classify and add a loan to relevant customer.
         for(AbsLoan absLoan: absLoans.getAbsLoan()){
-            customerMap.get(absLoan.getAbsOwner()).addLoan(new BankLoan(absLoan)); // Classify the loan to the customer.
+            customerMap.get(absLoan.getAbsOwner()).addLoan(new BankLoan(absLoan));
         }
      }
 }

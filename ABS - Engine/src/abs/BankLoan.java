@@ -3,10 +3,11 @@ package abs;
 import xmlgenerated.AbsLoan;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BankLoan {
 
-    enum Status {
+    public enum Status {
         PENDING,
         ACTIVE,
         RISK,
@@ -37,6 +38,93 @@ public class BankLoan {
         transactionList = new ArrayList<>(5);
     }
 
+    // Return next payment time for current loan in Yaz.
+    public int getNextPaymentTime(){
+
+        // filter list and return new list with objects that their nextPayment is greater then current Yaz and still not payed.
+       List<BankLoanTransaction> tempList = (List<BankLoanTransaction>) transactionList.stream().filter(s -> s.getTransactionStatus()== BankLoanTransaction.Status.NOT_PAYED
+               && s.getPaymentTime() >= BankSystem.getCurrentYaz());
+
+       if(tempList.get(0) != null)
+           return tempList.get(0).getPaymentTime();
+
+       return 0; // default values for unfound objects after filter.
+
+    }
+
+    public String getLoanID() {
+        return loanID;
+    }
+
+    public String getLoanCategory() {
+        return loanCategory;
+    }
+
+    public int getLoanAmount() {
+        return loanAmount;
+    }
+
+    public int getLoanTotalTime() {
+        return loanTotalTime;
+    }
+
+    public int getLoanStartTime() {
+        return loanStartTime;
+    }
+
+    public int getLoanInterestPerPayment() {
+        return loanInterestPerPayment;
+    }
+
+    public int getPaymentInterval() {
+        return paymentInterval;
+    }
+
+    public Map<String, Integer> getLoanInvestors() {
+        return loanInvestors;
+    }
+
+    public Status getLoanStatus() {
+        return loanStatus;
+    }
+
+    public List<BankLoanTransaction> getTransactionList() {
+        return transactionList;
+    }
+
+    // Return list of all transactions that already payed before current YAZ.
+    public List<BankLoanTransaction> getPayedTransactions() {
+        return (List<BankLoanTransaction>) this.transactionList.stream().filter(s -> s.getTransactionStatus() == BankLoanTransaction.Status.PAYED
+                && s.getPaymentTime() <= BankSystem.getCurrentYaz());
+    }
+
+    // Return list of all transactions that didnt payed yet before current YAZ.
+    public List<BankLoanTransaction> getUnpayedTransactions() {
+        return (List<BankLoanTransaction>) this.transactionList.stream().filter(s -> s.getTransactionStatus() == BankLoanTransaction.Status.NOT_PAYED
+                && s.getPaymentTime() <= BankSystem.getCurrentYaz());
+    }
+
+    // Return total unpaied transactions amount of money.
+    public int getUnpayedTransactionsAmountOfMoney() {
+        List<BankLoanTransaction> unPayedTransactions = this.getUnpayedTransactions();
+
+        // if all transactions alreadty paied.
+        if(unPayedTransactions == null)
+            return 0;
+
+        return unPayedTransactions.stream().mapToInt(e->e.getPaymentValue()+e.getInterestValue()).sum();
+    }
+
+    // Return loan interest total value.
+    public int getTotalLoanInterest() {
+        return (this.getLoanTotalTime()/this.getPaymentInterval())*this.getLoanInterestPerPayment();
+    }
+
+    // Return total loan amount minus existing invesments money.
+    public int getAmountLeftToActivateLoan() {
+        return this.getLoanAmount() - loanInvestors.values().stream().mapToInt(e -> e).sum();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,48 +135,6 @@ public class BankLoan {
 
     @Override
     public int hashCode() {
-        return Objects.hash(loanID);
-    }
-
-    @Override
-    //TODO- ask amit if it OK before:  return this.loanID;
-    public String toString() {
-        return "Loan ID: " + this.loanID + "\n" +
-                "Loan Category: " + this.loanCategory + "\n" +
-                "Loan Amount: " + this.loanAmount + "\n" +
-                "Original Time of loan: " + this.loanTotalTime + "\n" +
-                "Loan Interest: " + this.loanInterestPerPayment + "\n" +
-                "Payment Interval: " + this.paymentInterval + "\n" +
-                "Loan Status: " + this.loanStatus + "\n" + "\n";
-    }
-
-    public void showLoan() {
-        System.out.println(this);
-
-        //Print all the investors.
-        for (Map.Entry<String,Integer> invester : this.loanInvestors.entrySet())
-            System.out.println("Name:" + invester.getKey() + ", Investment: " + invester.getValue());
-
-        //Show more deatails according to loan status.
-        Status status = this.loanStatus;
-        switch (status){
-            case ACTIVE: {
-                System.out.println("Started YAZ:" + this.loanStartTime); //print the YAZ start to be active
-                //TODO - print the next YAZ payment
-                //TODO - print the information of all payments
-                break;
-            }
-            case RISK: {
-                //TODO - print all like active and which payment dont paid.
-                break;
-            }
-            case FINISHED: {
-                break;
-            }
-            default: {
-                System.out.println("Error: invalid loan status.");
-            }
-        }
-
+        return loanID.hashCode();
     }
 }

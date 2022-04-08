@@ -38,4 +38,10 @@ public class BankLoanTransaction {
     public void setTransactionStatus(Status transactionStatus) {
         this.transactionStatus = transactionStatus;
     }
+
+    @Override
+    public String toString() {
+        return "Payment time: " + this.paymentTime + "\nPayment Value: " + this.paymentValue
+                + "\nPayment Interest: " + this.interestValue + "\nToal payment: " + (this.paymentValue+this.interestValue);
+    }
 }

@@ -17,6 +17,4 @@ public class BankCategories {
         this.bankCategories = setOfCategories;
     }
 
-
-
 }

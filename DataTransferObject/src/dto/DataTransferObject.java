@@ -1,13 +1,20 @@
 package dto;
 
+import abs.BankSystem;
+
 public class DataTransferObject extends Throwable {
 
     private final String message;
     private final int timeInYaz;
 
+    public DataTransferObject() {
+        this.message = "";
+        this.timeInYaz = BankSystem.getCurrentYaz();
+    }
+
     public DataTransferObject(String message) {
         this.message = message;
-        this.timeInYaz = 0;
+        this.timeInYaz = BankSystem.getCurrentYaz();
     }
 
     public DataTransferObject(String message, int timeInYaz) {
@@ -18,6 +25,10 @@ public class DataTransferObject extends Throwable {
     // Get Data Transfer Object message.
     public String getMessage() {
         return this.message;
+    }
+
+    public int getTimeInYaz() {
+        return this.timeInYaz;
     }
 
     @Override

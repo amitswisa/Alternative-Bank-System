@@ -4,12 +4,14 @@ import dto.DataTransferObject;
 
 public class CustomerOperationData extends DataTransferObject {
 
+    private final String operationName;
     private final int currentOptAmount; // Represents current transaction value, (should be displayed as abs value).
     private final int balanceBefore;
     private final int balanceAfter;
 
-    public CustomerOperationData(int timeInYaz, String message, int balance, int currentOptAmount) {
-        super(message, timeInYaz);
+    public CustomerOperationData(String operationName, String message, int balance, int currentOptAmount) {
+        super(message);
+        this.operationName = operationName;
         this.currentOptAmount = currentOptAmount;
         this.balanceAfter = currentOptAmount + balance;
         this.balanceBefore = balance;
@@ -27,4 +29,15 @@ public class CustomerOperationData extends DataTransferObject {
         return balanceAfter;
     }
 
+    public String getOperationName() {
+        return this.operationName;
+    }
+
+    @Override
+    public String toString() {
+        return "Operation date: " + this.getTimeInYaz() +".\nAmount: "
+                +Math.abs(getCurrentOptAmount())+".\nOperation: " + getOperationName()
+                        + ".\nBalance before operation: " + this.getBalanceBefore()
+                             + ".\nBalance after operation: "+this.getBalanceAfter() +".\n";
+    }
 }
