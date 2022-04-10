@@ -130,7 +130,8 @@ public class UserInterface {
                 if(data.getLogCustomer() == null || data.getLogCustomer().size() <= 0)
                     System.out.println("      There are no operations to view.");
                 else
-                    System.out.println(data.getLogCustomer());
+                    data.getLogCustomer().stream().forEach(e -> System.out.println(e + "\n"));
+
 
                 //Print eacg customer investments.
                 System.out.println("   Customer Investments list: ");
@@ -139,7 +140,8 @@ public class UserInterface {
                 else {
                     // Trigger relevant printing function for each of the customer investments.
                     for(LoanDataObject loanData : data.getInvestmentList())
-                        System.out.println(loanData.getLoanDetails());
+                        System.out.println(loanData.getLoanDetails() + "\n");
+
                 }
 
                 //Print eacg customer loans taken.
@@ -277,7 +279,7 @@ public class UserInterface {
                     } while(loansToInvest == null);
 
                     try {
-                        this.engine.makeInvestments(chosenCustomer, amountToInvest, loansToInvest);
+                        System.out.println(this.engine.makeInvestments(chosenCustomer, amountToInvest, loansToInvest));
                     }catch(DataTransferObject e) {
                         System.out.println(e);
                     }
@@ -299,8 +301,8 @@ public class UserInterface {
             try {
                 int choice = Integer.parseInt(loanName);
                 // create new list -> for each loan get owner name and owner id.
-                nameOfLoansToInvest.add(new Triple<>(pendingLoans.get(choice).getLoanOwnerName(), pendingLoans.get(choice).getLoanOpeningTime(), pendingLoans.get(choice).getLoanName()));
-            } catch(NumberFormatException e) { // in case string sent wasnt valid.
+                nameOfLoansToInvest.add(new Triple<>(pendingLoans.get(choice -1).getLoanOwnerName(), pendingLoans.get(choice-1).getLoanOpeningTime(), pendingLoans.get(choice-1).getLoanName()));
+            } catch(NumberFormatException | IndexOutOfBoundsException e) { // in case string sent wasnt valid.
                 System.out.println("Error: invalid list of loans to invest.");
                 return null;
             }
@@ -318,6 +320,8 @@ public class UserInterface {
                 System.out.println("Error: Invalid argurment was given.");
             else {
                 int amountHolder = scanner.nextInt();
+                this.cleanBuffer();
+
                 if(amountHolder >= 0)
                     totalTime = amountHolder;
                 else

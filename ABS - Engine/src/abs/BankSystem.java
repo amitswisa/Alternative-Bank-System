@@ -16,14 +16,6 @@ public class BankSystem {
     private BankCategories categories;
     private Map<String, BankCustomer> customers;
 
-    // TODO - Ask Aviad.
-    public BankSystem()
-    {
-        currentYaz = 1;
-        categories =new BankCategories();
-        customers = new HashMap<>();
-    }
-
     public BankSystem(AbsDescriptor absDescriptor)
     {
         currentYaz = 1; // After file loaded successfully from xml -> start bank system from scratch.
@@ -92,7 +84,7 @@ public class BankSystem {
     }
 
     //Section 6 - from menu.
-    public void makeInvestments(String customerName, int amountToInvest, List<Triple<String,Integer,String>> customerLoansToInvestList) {
+    public String makeInvestments(String customerName, int amountToInvest, List<Triple<String,Integer,String>> customerLoansToInvestList) {
 
         // Get list of Bank Loans from list of bank loans names.
         List<BankLoan> loansToInvest = this.makeLoansListFromLoansNames(customerLoansToInvestList);
@@ -101,25 +93,26 @@ public class BankSystem {
         this.sortLoanslist(loansToInvest);
 
         // go through the list and invest money as much as possible and equally berween all loans.
-        this.investEqually(customerName , amountToInvest , loansToInvest);
+        return this.investEqually(getCustomerByName(customerName) , amountToInvest , loansToInvest);
 
     }
 
     // go through the list and invest money as much as possible and equally berween all loans.
-    private void investEqually(String customerName, int amountToInvest, List<BankLoan> loansToInvest) {
-
+    private String investEqually(BankCustomer customerName, int amountToInvest, List<BankLoan> loansToInvest) {
+        String res = "New investments: \n";
         for (int i = 0 ; i < loansToInvest.size() ; i++) {
             int avgInvestmentAmount = amountToInvest / (loansToInvest.size() - i ); // Initial average investment in each loan.
             //for the last investment we try to invest the max amount letf
-            if(i == (loansToInvest.size() -1)) {
-                amountToInvest -= loansToInvest.get(i).invest(customerName , amountToInvest);
-            }
-            else {
-                amountToInvest -= loansToInvest.get(i).invest(customerName , avgInvestmentAmount);
-            }
-        }
+            int realTimeInvestedAmount;
+            if(i == (loansToInvest.size() -1))
+                realTimeInvestedAmount = loansToInvest.get(i).invest(customerName , amountToInvest);
+            else
+                realTimeInvestedAmount = loansToInvest.get(i).invest(customerName , avgInvestmentAmount);
 
-        //TODO - think how we handle if not all the money invested, send messege how much money invest
+            amountToInvest -= realTimeInvestedAmount;
+            res += "Invested " + realTimeInvestedAmount + " in " + loansToInvest.get(i).getLoanID() + ".\n";
+        }
+        return res;
     }
 
     //Sort the list by  the amount left to activate the loan.

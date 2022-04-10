@@ -2,6 +2,7 @@ package dto.objectdata;
 
 import abs.BankLoan;
 import abs.BankLoanTransaction;
+import abs.Investor;
 import dto.infodata.DataTransferObject;
 
 import java.util.Map;
@@ -20,8 +21,13 @@ public class LoanDataObject extends DataTransferObject {
         System.out.println(this);
 
         //Print all the investors.
-        for (Map.Entry<String,Integer> invester : this.loan.getLoanInvestors().entrySet())
-            System.out.println("Name:" + invester.getKey() + ", Investment: " + invester.getValue());
+        Map<String, Investor> temp = this.loan.getLoanInvestors();
+        if(temp != null && temp.size() > 0) {
+            System.out.println("List of investors: ");
+            for (Map.Entry<String, Investor> invester : temp.entrySet())
+                System.out.println("Name:" + invester.getKey() + ", Investment: " + invester.getValue().getInitialInvestment());
+        } else
+            System.out.println("No investors at this moment.");
 
         //Show more deatails according to loan status.
         BankLoan.Status status = this.loan.getLoanStatus();
@@ -44,8 +50,9 @@ public class LoanDataObject extends DataTransferObject {
                 if(status != BankLoan.Status.PENDING) // if current loan status is not pending or any of the above.
                     System.out.println("Error: invalid loan status.");
             }
-        }
 
+        }
+        System.out.println(" ");
     }
 
     private void presentActiveStatusData() {
@@ -75,7 +82,7 @@ public class LoanDataObject extends DataTransferObject {
 
     // Part of section 3 from menu.
     public String getLoanDetails() {
-         return "      Loan Name: " + this.loan.getLoanID() + ".\n" +
+         return "   Loan Name: " + this.loan.getLoanID() + ".\n" +
                 "      Loan Category: " + this.loan.getLoanCategory() + ".\n" +
                 "      Loan Amount: " + this.loan.getLoanAmount() + ".\n" +
                 "      Payment Interval: " + this.loan.getPaymentInterval() + ".\n" +
@@ -132,13 +139,18 @@ public class LoanDataObject extends DataTransferObject {
 
     @Override
     public String toString() {
-        return "Loan ID: " + this.loan.getLoanID() + "\n" +
+        String res =  "Loan ID: " + this.loan.getLoanID() + "\n" +
                 "Loan Category: " + this.loan.getLoanCategory() + "\n" +
                 "Loan Amount: " + this.loan.getLoanAmount() + "\n" +
                 "Original Time of loan: " + this.loan.getLoanTotalTime() + "\n" +
                 "Loan Interest: " + this.loan.getTotalLoanInterest() + "\n" +
                 "Payment Interval: " + this.loan.getPaymentInterval() + "\n" +
-                "Loan Status: " + this.loan.getLoanStatus() + "\n" + "\n";
+                "Loan Status: " + this.loan.getLoanStatus();
+
+        /*if(this.getLoanStatus() == BankLoan.Status.PENDING)
+            res +=  "\n" + "\n";
+        */
+        return res;
     }
 
 }

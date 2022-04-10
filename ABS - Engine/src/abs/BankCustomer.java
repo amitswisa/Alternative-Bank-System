@@ -132,4 +132,16 @@ public class BankCustomer {
 
         return null;
     }
+
+    public void addInvestment(BankLoan bankLoan, int totalInvested, int currentInvest) {
+        //add an investment to customer.
+        if(loansInvested.get(bankLoan.getLoanOpeningTime()) == null)
+            loansInvested.put(bankLoan.getLoanOpeningTime(), new HashSet<BankLoan>());
+
+        loansInvested.get(bankLoan.getLoanOpeningTime()).add(bankLoan);
+
+        //add the investment to customer log.
+        customerLog.add(new CustomerOperationData("investment","Invested " + totalInvested + " in " + bankLoan.getLoanID(),this.balance, totalInvested));
+        this.balance -= currentInvest;
+    }
 }

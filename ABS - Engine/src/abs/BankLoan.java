@@ -20,12 +20,12 @@ public class BankLoan {
     private String loanID;
     private String loanCategory;
     private final int loanAmount; // Loan amount of money.
+    private final int loanOpeningTime; // Time in YAZ that customer opened new loan.
     private int loanTotalTime;
-    private int loanOpeningTime; // Time in YAZ that customer opened new loan.
     private int loanStartTime; // in yaz - set value when being active.
     private int loanInterestPerPayment;
     private int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
-    private Map<String, Integer> loanInvestors; // List of investors and their amount of investment;
+    private Map<String, Investor> loanInvestors; // List of investors and their amount of investment;
     private Status loanStatus;
     private List<BankLoanTransaction> transactionList; // hold all transaction's history.
 
@@ -47,22 +47,48 @@ public class BankLoan {
     // Return next payment time for current loan in Yaz.
     public int getNextPaymentTime(){
 
-        // filter list and return new list with objects that their nextPayment is greater then current Yaz and still not payed.
-       List<BankLoanTransaction> tempList = (List<BankLoanTransaction>) transactionList.stream().filter(s -> s.getTransactionStatus()== BankLoanTransaction.Status.NOT_PAYED
-               && s.getPaymentTime() >= BankSystem.getCurrentYaz());
+       int paymentTime = this.loanStartTime + this.paymentInterval;
+       while(paymentTime <= BankSystem.getCurrentYaz())
+           paymentTime += this.paymentInterval;
 
-       if(tempList.get(0) != null)
-           return tempList.get(0).getPaymentTime();
-
-       return 0; // default values for unfound objects after filter.
+       return paymentTime; // default values for unfound objects after filter.
 
     }
 
-    public int invest(String customerName , int avgInvestmentAmount) {
-        //TODO - make invest to loan.
-        // if the invest activate the loan -> change the status to active
-        //TODO - return the amount actually success to invest
-        return 0;
+    public int invest(BankCustomer customer , int InvestmentAmount) {
+
+       int totalInvested = 0;
+       if(loanInvestors.get(customer.getName()) != null) {
+           totalInvested += loanInvestors.get(customer.getName()).getInitialInvestment();
+           loanInvestors.remove(customer.getName());
+       }
+       int amountToActivate = this.getAmountLeftToActivateLoan();
+
+       // If some investment covers loan's funds so activate it.
+      if(InvestmentAmount >= amountToActivate){
+          totalInvested += amountToActivate;
+          this.addInvestor(customer,totalInvested, amountToActivate);
+          //Change status loan
+          this.loanStartTime = BankSystem.getCurrentYaz();
+          this.loanStatus = Status.ACTIVE;
+          return amountToActivate; //return the amount actually success to invest
+      }
+
+      totalInvested += InvestmentAmount;
+      this.addInvestor(customer,totalInvested, InvestmentAmount);
+      return InvestmentAmount;
+    }
+
+    private void addInvestor(BankCustomer customer, int totalInvested, int currentInvest) {
+
+        customer.addInvestment(this, totalInvested, currentInvest);
+
+        //Amount of capital the customer get per payment.
+        int capital = totalInvested / (this.loanTotalTime / this.paymentInterval);
+        //Amount of interest the customer get per payment.
+        int interest = (capital * this.loanInterestPerPayment) / 100;
+
+        loanInvestors.put(customer.getName(),new Investor(customer, capital, interest, totalInvested));
     }
 
     public String getOwner() {
@@ -97,7 +123,7 @@ public class BankLoan {
         return paymentInterval;
     }
 
-    public Map<String, Integer> getLoanInvestors() {
+    public Map<String, Investor> getLoanInvestors() {
         return loanInvestors;
     }
 
@@ -115,14 +141,14 @@ public class BankLoan {
 
     // Return list of all transactions that already payed before current YAZ.
     public List<BankLoanTransaction> getPayedTransactions() {
-        return (List<BankLoanTransaction>) this.transactionList.stream().filter(s -> s.getTransactionStatus() == BankLoanTransaction.Status.PAYED
-                && s.getPaymentTime() <= BankSystem.getCurrentYaz());
+        return this.transactionList.stream().filter(s -> s.getTransactionStatus() == BankLoanTransaction.Status.PAYED
+                && s.getPaymentTime() <= BankSystem.getCurrentYaz()).collect(Collectors.toList());
     }
 
     // Return list of all transactions that didnt payed yet before current YAZ.
     public List<BankLoanTransaction> getUnpayedTransactions() {
-        return (List<BankLoanTransaction>) this.transactionList.stream().filter(s -> s.getTransactionStatus() == BankLoanTransaction.Status.NOT_PAYED
-                && s.getPaymentTime() <= BankSystem.getCurrentYaz());
+        return this.transactionList.stream().filter(s -> s.getTransactionStatus() == BankLoanTransaction.Status.NOT_PAYED
+                && s.getPaymentTime() <= BankSystem.getCurrentYaz()).collect(Collectors.toList());
     }
 
     // Return total unpaied transactions amount of money.
@@ -138,12 +164,12 @@ public class BankLoan {
 
     // Return loan interest total value.
     public int getTotalLoanInterest() {
-        return (this.getLoanTotalTime()/this.getPaymentInterval())*this.getLoanInterestPerPayment();
+        return ((this.loanAmount*this.getLoanInterestPerPayment())/100);
     }
 
     // Return total loan amount minus existing invesments money.
     public int getAmountLeftToActivateLoan() {
-        return this.getLoanAmount() - loanInvestors.values().stream().mapToInt(e -> e).sum();
+        return this.getLoanAmount() - loanInvestors.values().stream().mapToInt(e -> e.getInitialInvestment()).sum();
     }
 
     @Override

@@ -35,9 +35,9 @@ public class CustomerOperationData extends DataTransferObject {
 
     @Override
     public String toString() {
-        return "Operation date: " + this.getTimeInYaz() +".\nAmount: "
-                +Math.abs(getCurrentOptAmount())+".\nOperation: " + getOperationName()
-                        + ".\nBalance before operation: " + this.getBalanceBefore()
-                             + ".\nBalance after operation: "+this.getBalanceAfter() +".\n";
+        return "      Operation date: " + this.getTimeInYaz() +".\n      Amount: "
+                +Math.abs(getCurrentOptAmount())+".\n      Operation: " + getOperationName()
+                        + ".\n      Balance before operation: " + this.getBalanceBefore()
+                             + ".\n      Balance after operation: "+this.getBalanceAfter();
     }
 }

@@ -107,7 +107,7 @@ public class EngineManager {
     }
 
     // Get list of loans to invest.
-    public void makeInvestments(String customerName, int amountToInvest, List<Triple<String,Integer,String>> customerLoansToInvestList) throws DataTransferObject {
-        this.bankSystem.makeInvestments(customerName, amountToInvest, customerLoansToInvestList);
+    public String makeInvestments(String customerName, int amountToInvest, List<Triple<String,Integer,String>> customerLoansToInvestList) throws DataTransferObject {
+        return this.bankSystem.makeInvestments(customerName, amountToInvest, customerLoansToInvestList);
     }
 }
