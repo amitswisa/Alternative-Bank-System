@@ -32,129 +32,52 @@ public class UserInterface {
             this.cleanBuffer(); // Clean '\n' stuck in buffer after reading choice.
 
             // Skip current loop when user chose 2/3/6/7 without loading xml file first.
-            if ((userChoice == 2 || userChoice == 3 || userChoice == 6 || userChoice == 7)
-                    && !this.engine.isFileLoaded()) {
-                System.out.println("Error: Xml file must be loaded first.");
+            if ( this.unvalidFirstChoice(userChoice))
                 continue;
-            }
 
             // Handle user choice by calling relevant function from program engine.
+            this.applyUserChoice(userChoice);
+
+        } while(true);
+
+    }
+
+    private boolean unvalidFirstChoice(int userChoice) {
+
+        if ((userChoice == 2 || userChoice == 3 || userChoice == 6 || userChoice == 7)
+                && !this.engine.isFileLoaded()) {
+            System.out.println("Error: Xml file must be loaded first.");
+           return true;
+        }
+        return false;
+    }
+
+    // Handle user choice by calling relevant function from program engine.
+    private void applyUserChoice(int userChoice) {
+
             switch (userChoice) {
                 case 1: {
-                    System.out.print("Enter full xml file path: ");
-                    String filePathString = scanner.nextLine();
-                    // Try load xml file and validate it, print DTO result.
-                    System.out.println(engine.loadXML(filePathString));
+                    this.loadXml(); //load xml from user
                     break;
                 }
                 case 2: {
-                   // Get all loans in BankSystem.
-                   List<LoanDataObject> allLoans = this.engine.getAllLoansData();
-                   if(allLoans.size() == 0)
-                       System.out.println("There are no loans exist.");
-                   else {
-                       System.out.println("All loans information:");
-                       for (LoanDataObject loanData : allLoans)
-                           loanData.showLoan();
-                   }
-                   break;
+                    this.getAllLoansInformation();// Get all loans information and status in BankSystem.
+                    break;
                 }
                 case 3: {
-                    List<CustomerDataObject> getCustomersLoansData = this.engine.getAllCustomersLoansAndLogs();
-                    if(getCustomersLoansData == null)
-                        System.out.println("There are no customers to report on.");
-                    else {
-                        for(CustomerDataObject data : getCustomersLoansData) {
-                            System.out.println(data.getName() + ":"); // prints customer name.
-
-                            //Print each customer logs.
-                            System.out.println("   Customer operations list: ");
-                            if(data.getLogCustomer() == null || data.getLogCustomer().size() <= 0)
-                                System.out.println("      There are no operations to view.");
-                            else
-                                System.out.println(data.getLogCustomer());
-
-                            //Print eacg customer investments.
-                            System.out.println("   Customer Investments list: ");
-                            if(data.getInvestmentList() == null || data.getInvestmentList().size() <= 0)
-                                System.out.println("      There are no investments to view.");
-                            else {
-                                // Trigger relevant printing function for each of the customer investments.
-                                for(LoanDataObject loanData : data.getInvestmentList())
-                                    System.out.println(loanData.getLoanDetails());
-                            }
-
-                            //Print eacg customer loans taken.
-                            System.out.println("   Customer taken loans list: ");
-                            if(data.getLoanList() == null || data.getLoanList().size() <= 0)
-                                System.out.println("      There are no taken loans to view.");
-                            else {
-                                // Trigger relevant printing function for each of the customer investments.
-                                for(LoanDataObject loanData : data.getLoanList())
-                                    System.out.println(loanData.getLoanDetails());
-                            }
-
-                        }
-                    }
+                    this.getAllCustomerInformation();// Get all customer information in BankSystem.
                     break;
                 }
                 case 4: {
-                    this.printCustomersNames(false); // printing all customers names.
-                    List<String> customersNames = this.engine.getAllCustomersNames();
-                    if(customersNames != null && customersNames.size() > 0) {
-                        String userName = this.readUserNameAndValidateFromList();
-
-                        // Wait for the user to insert a valid amount of money.
-                        int depositeAmount = -1;
-                        do {
-                            System.out.println("Enter amount to deposit: ");
-                            if (scanner.hasNextInt())
-                                depositeAmount = scanner.nextInt();
-
-                            this.cleanBuffer();
-
-                            if (depositeAmount <= 0)
-                                System.out.println("Error: Please enter a valid amount to deposit.");
-
-                        } while (depositeAmount <= 0);
-
-                        this.engine.depositeMoney(userName, depositeAmount);
-                        System.out.println("Bank: " + userName + " deposit made successfully.");
-                    }
+                    this.depositMoneyToCustomer(); //Deposit money to a specific user.
                     break;
                 }
                 case 5: {
-                    this.printCustomersNames(false); // printing all customers names.
-                    List<String> customersNames = this.engine.getAllCustomersNames();
-                    if(customersNames != null && customersNames.size() > 0) {
-                        String userName = this.readUserNameAndValidateFromList();
-
-                        // Wait for the user to insert a valid amount of money.
-                        int withdrawAmount = -1;
-                        do {
-                            System.out.println("Enter amount to withdraw: ");
-
-                            if (scanner.hasNextInt())
-                                withdrawAmount = scanner.nextInt();
-
-                            this.cleanBuffer();
-
-                            if (withdrawAmount <= 0)
-                                System.out.println("Error: Withdraw amount must be greater then 0.");
-
-                        } while (withdrawAmount <= 0);
-
-                        try {
-                            this.engine.withdrawMoney(userName, withdrawAmount);
-                            System.out.println("Bank: " + userName + " withrawal made successfully.");
-                        } catch (DataTransferObject e) {
-                            System.out.println(e);
-                        }
-                    }
+                    this.withrawalMoneyToCustomer(); //Withrawal money to a specific user.
                     break;
                 }
                 case 6: {
-                    this.startInvestmentProccess();
+                    this.startInvestmentProccess(); //customer choose invest money and investments.
                     break;
                 }
                 case 8: {
@@ -165,11 +88,137 @@ public class UserInterface {
                     System.out.println("Error: invalid choice.");
                 }
             }
-
-        } while(true);
     }
 
-    // Belong to case 6 - menu.
+    //***CASE 1***
+    //load xml from user
+    private void loadXml() {
+        System.out.print("Enter full xml file path: ");
+        String filePathString = scanner.nextLine();
+        // Try load xml file and validate it, print DTO result.
+        System.out.println(engine.loadXML(filePathString));
+    }
+
+    //***CASE 2***
+    // Get all loans information and status in BankSystem.
+    private void getAllLoansInformation() {
+
+        List<LoanDataObject> allLoans = this.engine.getAllLoansData();
+        if(allLoans.size() == 0)
+            System.out.println("There are no loans exist.");
+        else {
+            System.out.println("All loans information:");
+            for (LoanDataObject loanData : allLoans)
+                loanData.showLoan();
+        }
+
+    }
+
+    //***CASE 3***
+    // Get all customer information in BankSystem.
+    private void getAllCustomerInformation() {
+
+        List<CustomerDataObject> getCustomersLoansData = this.engine.getAllCustomersLoansAndLogs();
+        if(getCustomersLoansData == null)
+            System.out.println("There are no customers to report on.");
+        else {
+            for(CustomerDataObject data : getCustomersLoansData) {
+                System.out.println(data.getName() + ":"); // prints customer name.
+
+                //Print each customer logs.
+                System.out.println("   Customer operations list: ");
+                if(data.getLogCustomer() == null || data.getLogCustomer().size() <= 0)
+                    System.out.println("      There are no operations to view.");
+                else
+                    System.out.println(data.getLogCustomer());
+
+                //Print eacg customer investments.
+                System.out.println("   Customer Investments list: ");
+                if(data.getInvestmentList() == null || data.getInvestmentList().size() <= 0)
+                    System.out.println("      There are no investments to view.");
+                else {
+                    // Trigger relevant printing function for each of the customer investments.
+                    for(LoanDataObject loanData : data.getInvestmentList())
+                        System.out.println(loanData.getLoanDetails());
+                }
+
+                //Print eacg customer loans taken.
+                System.out.println("   Customer taken loans list: ");
+                if(data.getLoanList() == null || data.getLoanList().size() <= 0)
+                    System.out.println("      There are no taken loans to view.");
+                else {
+                    // Trigger relevant printing function for each of the customer investments.
+                    for(LoanDataObject loanData : data.getLoanList())
+                        System.out.println(loanData.getLoanDetails());
+                }
+
+            }
+        }
+    }
+
+    //***CASE 4***
+    //Deposit money to a specific user.
+    private void depositMoneyToCustomer() {
+
+        this.printCustomersNames(false); // printing all customers names.
+        List<String> customersNames = this.engine.getAllCustomersNames();
+        if(customersNames != null && customersNames.size() > 0) {
+            String userName = this.readUserNameAndValidateFromList();
+
+            // Wait for the user to insert a valid amount of money.
+            int depositeAmount = -1;
+            do {
+                System.out.println("Enter amount to deposit: ");
+                if (scanner.hasNextInt())
+                    depositeAmount = scanner.nextInt();
+
+                this.cleanBuffer();
+
+                if (depositeAmount <= 0)
+                    System.out.println("Error: Please enter a valid amount to deposit.");
+
+            } while (depositeAmount <= 0);
+
+            this.engine.depositeMoney(userName, depositeAmount);
+            System.out.println("Bank: " + userName + " deposit made successfully.");
+        }
+    }
+
+    //***CASE 5***
+    //Withrawal money to a specific user.
+    private void withrawalMoneyToCustomer() {
+
+        this.printCustomersNames(false); // printing all customers names.
+        List<String> customersNames = this.engine.getAllCustomersNames();
+        if(customersNames != null && customersNames.size() > 0) {
+            String userName = this.readUserNameAndValidateFromList();
+
+            // Wait for the user to insert a valid amount of money.
+            int withdrawAmount = -1;
+            do {
+                System.out.println("Enter amount to withdraw: ");
+
+                if (scanner.hasNextInt())
+                    withdrawAmount = scanner.nextInt();
+
+                this.cleanBuffer();
+
+                if (withdrawAmount <= 0)
+                    System.out.println("Error: Withdraw amount must be greater then 0.");
+
+            } while (withdrawAmount <= 0);
+
+            try {
+                this.engine.withdrawMoney(userName, withdrawAmount);
+                System.out.println("Bank: " + userName + " withrawal made successfully.");
+            } catch (DataTransferObject e) {
+                System.out.println(e);
+            }
+        }
+
+    }
+
+    // ***CASE 6***
     // Print customers names list and choose where to invest.
     private void startInvestmentProccess() {
 

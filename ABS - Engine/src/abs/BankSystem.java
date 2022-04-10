@@ -97,28 +97,42 @@ public class BankSystem {
         // Get list of Bank Loans from list of bank loans names.
         List<BankLoan> loansToInvest = this.makeLoansListFromLoansNames(customerLoansToInvestList);
 
-        while(amountToInvest > 0 && loansToInvest.size() > 0) {
+        //Sort the list by  the amount left to activate the loan.
+        this.sortLoanslist(loansToInvest);
 
-            // As long as there are loans that still didnt invest.
-            int leftOver = amountToInvest % loansToInvest.size();
-            int avgInvestmentAmount = amountToInvest / loansToInvest.size(); // Initial average investment in each loan.
+        // go through the list and invest money as much as possible and equally berween all loans.
+        this.investEqually(customerName , amountToInvest , loansToInvest);
 
+    }
 
-            // go through the list and invest money as much as possible and equally berween all loans.
-            for (BankLoan loan : loansToInvest) {
+    // go through the list and invest money as much as possible and equally berween all loans.
+    private void investEqually(String customerName, int amountToInvest, List<BankLoan> loansToInvest) {
 
-                int rest = loan.invest(customerName , avgInvestmentAmount);
-                amountToInvest -= rest;
-
-                if(leftOver <= loan.getAmountLeftToActivateLoan())
-                    amountToInvest -= loan.invest(customerName , leftOver);
-
-                //remove loan from list.
-                if(loan.getLoanStatus() == BankLoan.Status.ACTIVE)
-                    loansToInvest.remove(loan);
+        for (int i = 0 ; i < loansToInvest.size() ; i++) {
+            int avgInvestmentAmount = amountToInvest / (loansToInvest.size() - i ); // Initial average investment in each loan.
+            //for the last investment we try to invest the max amount letf
+            if(i == (loansToInvest.size() -1)) {
+                amountToInvest -= loansToInvest.get(i).invest(customerName , amountToInvest);
             }
-
+            else {
+                amountToInvest -= loansToInvest.get(i).invest(customerName , avgInvestmentAmount);
+            }
         }
+
+        //TODO - think how we handle if not all the money invested, send messege how much money invest
+    }
+
+    //Sort the list by  the amount left to activate the loan.
+    private void sortLoanslist(List<BankLoan> loansToInvest) {
+
+        Collections.sort(loansToInvest, new Comparator<BankLoan>() {
+            @Override
+            public int compare(BankLoan o1, BankLoan o2) {
+                return o1.getAmountLeftToActivateLoan() < o2.getAmountLeftToActivateLoan() ? -1
+                        : o1.getAmountLeftToActivateLoan() == o2.getAmountLeftToActivateLoan() ? 0 : 1;
+            }
+        });
+
     }
 
     // Return list of Bank Loans from list of bank loans names.
