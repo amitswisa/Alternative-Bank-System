@@ -1,4 +1,4 @@
-package dto.infoholder;
+package dto.objectdata;
 
 import abs.BankCustomer;
 

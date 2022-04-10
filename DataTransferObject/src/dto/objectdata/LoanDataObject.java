@@ -1,13 +1,10 @@
-package dto.infoholder;
+package dto.objectdata;
 
 import abs.BankLoan;
 import abs.BankLoanTransaction;
-import dto.DataTransferObject;
+import dto.infodata.DataTransferObject;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class LoanDataObject extends DataTransferObject {
 
@@ -111,6 +108,26 @@ public class LoanDataObject extends DataTransferObject {
             }
         }
         return res;
+    }
+
+    public String getLoanOwnerName() {
+        return this.loan.getOwner();
+    }
+
+    public int getLoanTotalTime() {
+        return this.loan.getLoanTotalTime();
+    }
+
+    public int getLoanInterest() {return this.loan.getLoanInterestPerPayment();}
+
+    public String getLoanCatgory() {return this.loan.getLoanCategory();}
+
+    public BankLoan.Status getLoanStatus() {return this.loan.getLoanStatus();}
+
+    public String getLoanName() {return this.loan.getLoanID(); }
+
+    public int getLoanOpeningTime() {
+        return this.loan.getLoanOpeningTime();
     }
 
     @Override

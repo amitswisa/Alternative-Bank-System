@@ -1,15 +1,14 @@
 package abs;
 
-import dto.DataTransferObject;
-import dto.infoholder.CustomerDataObject;
-import dto.infoholder.LoanDataObject;
+import dto.infodata.DataTransferObject;
+import dto.objectdata.CustomerDataObject;
+import dto.objectdata.LoanDataObject;
 import engine.convertor.Convertor;
+import generalObjects.Triple;
+import javafx.util.Pair;
 import xmlgenerated.AbsDescriptor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BankSystem {
 
@@ -81,5 +80,54 @@ public class BankSystem {
     // Makes a deposite for given user.
     public void makeWithdrawByName(String nameOfUserToDeposite, int depositeAmount) throws DataTransferObject {
         customers.get(nameOfUserToDeposite).withdraw(depositeAmount);
+    }
+
+    // Return customer if found by name.
+    public BankCustomer getCustomerByName(String customerName) {
+        return customers.get(customerName);
+    }
+
+    public Set<String> getBankCategories() {
+        return this.categories.getBankCategories();
+    }
+
+    //Section 6 - from menu.
+    public void makeInvestments(String customerName, int amountToInvest, List<Triple<String,Integer,String>> customerLoansToInvestList) {
+
+        // Get list of Bank Loans from list of bank loans names.
+        List<BankLoan> loansToInvest = this.makeLoansListFromLoansNames(customerLoansToInvestList);
+
+        while(amountToInvest > 0 && loansToInvest.size() > 0) {
+
+            // As long as there are loans that still didnt invest.
+            int leftOver = amountToInvest % loansToInvest.size();
+            int avgInvestmentAmount = amountToInvest / loansToInvest.size(); // Initial average investment in each loan.
+
+
+            // go through the list and invest money as much as possible and equally berween all loans.
+            for (BankLoan loan : loansToInvest) {
+
+                int rest = loan.invest(customerName , avgInvestmentAmount);
+                amountToInvest -= rest;
+
+                if(leftOver <= loan.getAmountLeftToActivateLoan())
+                    amountToInvest -= loan.invest(customerName , leftOver);
+
+                //remove loan from list.
+                if(loan.getLoanStatus() == BankLoan.Status.ACTIVE)
+                    loansToInvest.remove(loan);
+            }
+
+        }
+    }
+
+    // Return list of Bank Loans from list of bank loans names.
+    private List<BankLoan> makeLoansListFromLoansNames(List<Triple<String,Integer,String>> customerLoansToInvestList) {
+        List<BankLoan> loansToInvest = new ArrayList<>(customerLoansToInvestList.size());
+        customerLoansToInvestList.stream().forEach(loan -> {
+            loansToInvest.add(customers.get(loan.getKey()).getLoanByNameAndYaz(loan.getValue(), loan.getExtraData()));
+        });
+
+        return loansToInvest;
     }
 }

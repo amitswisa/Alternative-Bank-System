@@ -1,11 +1,10 @@
 package abs;
 
-import dto.DataTransferObject;
-import dto.infoholder.CustomerOperationData;
-import dto.infoholder.LoanDataObject;
+import dto.infodata.DataTransferObject;
+import dto.objectdata.CustomerOperationData;
+import dto.objectdata.LoanDataObject;
 import xmlgenerated.AbsCustomer;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class BankCustomer {
@@ -123,5 +122,14 @@ public class BankCustomer {
                 loansInvestedList.add(new LoanDataObject(currentBankLoan));
 
         return loansInvestedList;
+    }
+
+    // Get loan name and opening date (Yaz time) and return it.
+    public BankLoan getLoanByNameAndYaz(String loanName, Integer openingTime) {
+        for(BankLoan oneLoan : loansTaken.get(openingTime))
+            if(oneLoan.getLoanID().equals(loanName))
+                return oneLoan;
+
+        return null;
     }
 }

@@ -17,4 +17,8 @@ public class BankCategories {
         this.bankCategories = setOfCategories;
     }
 
+    public Set<String> getBankCategories() {
+        return this.bankCategories;
+    }
+
 }

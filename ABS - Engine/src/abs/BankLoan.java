@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 public class BankLoan {
 
+
+
     public enum Status {
         PENDING,
         ACTIVE,
@@ -14,10 +16,12 @@ public class BankLoan {
         FINISHED
     }
 
+    private String owner;
     private String loanID;
     private String loanCategory;
     private final int loanAmount; // Loan amount of money.
     private int loanTotalTime;
+    private int loanOpeningTime; // Time in YAZ that customer opened new loan.
     private int loanStartTime; // in yaz - set value when being active.
     private int loanInterestPerPayment;
     private int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
@@ -26,10 +30,12 @@ public class BankLoan {
     private List<BankLoanTransaction> transactionList; // hold all transaction's history.
 
     public BankLoan(AbsLoan absLoan) {
+        this.owner = absLoan.getAbsOwner();
         this.loanID = absLoan.getId();
         this.loanCategory = absLoan.getAbsCategory();
         this.loanAmount = absLoan.getAbsCapital();
         this.loanTotalTime = absLoan.getAbsTotalYazTime();
+        this.loanOpeningTime = 1;
         this.loanStartTime = 0;
         this.loanInterestPerPayment = absLoan.getAbsIntristPerPayment();
         this.paymentInterval = absLoan.getAbsPaysEveryYaz();
@@ -50,6 +56,17 @@ public class BankLoan {
 
        return 0; // default values for unfound objects after filter.
 
+    }
+
+    public int invest(String customerName , int avgInvestmentAmount) {
+        //TODO - make invest to loan.
+        // if the invest activate the loan -> change the status to active
+        //TODO - return the amount actually success to invest
+        return 0;
+    }
+
+    public String getOwner() {
+        return owner;
     }
 
     public String getLoanID() {
@@ -90,6 +107,10 @@ public class BankLoan {
 
     public List<BankLoanTransaction> getTransactionList() {
         return transactionList;
+    }
+
+    public int getLoanOpeningTime() {
+        return this.loanOpeningTime;
     }
 
     // Return list of all transactions that already payed before current YAZ.

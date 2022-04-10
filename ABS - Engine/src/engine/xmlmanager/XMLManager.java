@@ -1,6 +1,6 @@
 package engine.xmlmanager;
 
-import dto.DataTransferObject;
+import dto.infodata.DataTransferObject;
 import xmlgenerated.*;
 
 import javax.xml.bind.JAXBContext;

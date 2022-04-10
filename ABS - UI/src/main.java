@@ -1,4 +1,3 @@
-import dto.DataTransferObject;
 import userinterface.UserInterface;
 
 public class main {

@@ -1,6 +1,6 @@
-package dto.infoholder;
+package dto.objectdata;
 
-import dto.DataTransferObject;
+import dto.infodata.DataTransferObject;
 
 public class CustomerOperationData extends DataTransferObject {
 
