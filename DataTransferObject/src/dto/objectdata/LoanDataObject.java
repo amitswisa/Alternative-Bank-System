@@ -2,6 +2,7 @@ package dto.objectdata;
 
 import abs.BankLoan;
 import abs.BankLoanTransaction;
+import abs.BankSystem;
 import abs.Investor;
 import dto.infodata.DataTransferObject;
 
@@ -57,7 +58,12 @@ public class LoanDataObject extends DataTransferObject {
 
     private void presentActiveStatusData() {
         System.out.println("Started YAZ:" + this.loan.getLoanStartTime()); //print the YAZ start to be active
-        System.out.println("Next YAZ payment: " + this.loan.getNextPaymentTime());
+
+        // Calculate next payment in yaz.
+        int nextYaz = this.loan.getNextPaymentTime();
+        if(nextYaz <= BankSystem.getCurrentYaz())
+            nextYaz += + this.loan.getPaymentInterval();
+        System.out.println("Next YAZ payment: " + nextYaz);
 
         int totalInterestPayed = 0;
         int totalLoanPayment = 0;
@@ -71,12 +77,12 @@ public class LoanDataObject extends DataTransferObject {
         System.out.println("Total interest already payed: " + totalInterestPayed);
         System.out.println("Total payments left to pay: " + (this.loan.getLoanAmount()-totalLoanPayment));
         System.out.println("Total interest left to pay: "
-                + (this.loan.getTotalLoanInterest()-totalInterestPayed));
+                + (this.loan.getTotalLoanInterestInMoney()-totalInterestPayed));
     }
 
     private void presentRiskStatusData() {
-        System.out.println("There are " + this.loan.getUnpayedTransactions().size() + " unpayed payments.");
-        System.out.println("Total payments payed so far: "
+        System.out.println("There are " + this.loan.getUnpayedTransactions().size() + " unpaied payments.");
+        System.out.println("Total unpaid payments so far: "
                 + this.loan.getUnpayedTransactions().stream().mapToInt(value -> value.getPaymentValue()).sum());
     }
 
@@ -87,7 +93,7 @@ public class LoanDataObject extends DataTransferObject {
                 "      Loan Amount: " + this.loan.getLoanAmount() + ".\n" +
                 "      Payment Interval: " + this.loan.getPaymentInterval() + ".\n" +
                 "      Loan Interest Per Payment: " + this.loan.getLoanInterestPerPayment() + ".\n" +
-                "      Loan total (interest+capital): " + (this.loan.getTotalLoanInterest()+this.loan.getLoanAmount()) + ".\n" +
+                "      Loan total (interest+capital): " + (this.loan.getTotalLoanInterestInMoney()+this.loan.getLoanAmount()) + ".\n" +
                 "      Loan Status: " + this.loan.getLoanStatus() + ".\n" +
                 this.getLoanDetailsAccordingToStatus();
     }
@@ -143,7 +149,7 @@ public class LoanDataObject extends DataTransferObject {
                 "Loan Category: " + this.loan.getLoanCategory() + "\n" +
                 "Loan Amount: " + this.loan.getLoanAmount() + "\n" +
                 "Original Time of loan: " + this.loan.getLoanTotalTime() + "\n" +
-                "Loan Interest: " + this.loan.getTotalLoanInterest() + "\n" +
+                "Loan Interest: " + this.loan.getTotalLoanInterestInMoney() + "\n" +
                 "Payment Interval: " + this.loan.getPaymentInterval() + "\n" +
                 "Loan Status: " + this.loan.getLoanStatus();
 

@@ -6,6 +6,7 @@ import dto.objectdata.LoanDataObject;
 import xmlgenerated.AbsCustomer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BankCustomer {
 
@@ -96,6 +97,11 @@ public class BankCustomer {
         return balance;
     }
 
+    public void addInvestmentMoneyToBalance(String payerName, String loanName, int investmentMoney) {
+        this.balance += investmentMoney;
+        customerLog.add(new CustomerOperationData("Investment Payment", "You received payment from " + payerName + ", from loan: " + loanName, this.getBalance(), investmentMoney));
+    }
+
     public List<CustomerOperationData> getCustomerLog() {
         return customerLog;
     }
@@ -133,15 +139,35 @@ public class BankCustomer {
         return null;
     }
 
-    public void addInvestment(BankLoan bankLoan, int totalInvested, int currentInvest) {
+    public void addInvestment(BankLoan bankLoan, int investment) {
+
         //add an investment to customer.
         if(loansInvested.get(bankLoan.getLoanOpeningTime()) == null)
             loansInvested.put(bankLoan.getLoanOpeningTime(), new HashSet<BankLoan>());
 
-        loansInvested.get(bankLoan.getLoanOpeningTime()).add(bankLoan);
+        Set<BankLoan> setOfLoans = loansInvested.get(bankLoan.getLoanOpeningTime());
+        if(!setOfLoans.contains(bankLoan))
+            loansInvested.get(bankLoan.getLoanOpeningTime()).add(bankLoan);
 
         //add the investment to customer log.
-        customerLog.add(new CustomerOperationData("investment","Invested " + totalInvested + " in " + bankLoan.getLoanID(),this.balance, totalInvested));
-        this.balance -= currentInvest;
+        customerLog.add(new CustomerOperationData("investment","Invested " + investment + " in " + bankLoan.getLoanID(),this.balance, investment));
+        this.balance -= investment;
+    }
+
+    // Section 7 - pay loans.
+    public void payCustomerTakenLoans() {
+        List<BankLoan> loansToPay = new ArrayList<>();
+        for(Set<BankLoan> setLoans : loansTaken.values()) {
+            setLoans.forEach(loan -> {
+                if((loan.getLoanStatus() == BankLoan.Status.ACTIVE || loan.getLoanStatus() == BankLoan.Status.RISK) && loan.getNextPaymentTime() == BankSystem.getCurrentYaz())
+                    loansToPay.add(loan);
+            });
+        }
+
+        // make each loan payment.
+        loansToPay.forEach(loan ->  {
+            this.balance -= loan.makePayment(this);
+        });
+
     }
 }

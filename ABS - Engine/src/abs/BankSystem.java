@@ -12,7 +12,7 @@ import java.util.*;
 
 public class BankSystem {
 
-    private static int currentYaz;
+    private static int currentYaz = 0;
     private BankCategories categories;
     private Map<String, BankCustomer> customers;
 
@@ -26,6 +26,15 @@ public class BankSystem {
 
     public static int getCurrentYaz() {
         return currentYaz;
+    }
+
+    public void increaseYazDate() {
+        currentYaz++; // increase YAZ date by 1.
+
+        // make relevant investments payment.
+        customers.values().forEach(customer -> {
+            customer.payCustomerTakenLoans();
+        });
     }
 
     // Return list of LoanDataObject -> all customers loans data goes inside that list.

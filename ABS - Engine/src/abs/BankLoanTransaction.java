@@ -4,12 +4,13 @@ public class BankLoanTransaction {
 
     enum Status {
         PAYED,
+        DEPT_COVERED,
         NOT_PAYED
     }
 
     private final int paymentTime; // Displayed in yaz.
-    private final int paymentValue; // Amount of payment.
-    private final int interestValue; // Amount of interest.
+    private int paymentValue; // Amount of payment.
+    private int interestValue; // Amount of interest.
     private Status transactionStatus;
 
     public BankLoanTransaction(int paymentTime, int paymentValue, int interestValue, Status transactionStatus) {
@@ -37,6 +38,11 @@ public class BankLoanTransaction {
 
     public void setTransactionStatus(Status transactionStatus) {
         this.transactionStatus = transactionStatus;
+    }
+
+    public void addDebt(int capital, int interest) {
+        paymentValue += capital;
+        interestValue += interest;
     }
 
     @Override

@@ -110,4 +110,9 @@ public class EngineManager {
     public String makeInvestments(String customerName, int amountToInvest, List<Triple<String,Integer,String>> customerLoansToInvestList) throws DataTransferObject {
         return this.bankSystem.makeInvestments(customerName, amountToInvest, customerLoansToInvestList);
     }
+
+    // Increase YAZ date by 1.
+    public void increaseYazDate() {
+        this.bankSystem.increaseYazDate();
+    }
 }

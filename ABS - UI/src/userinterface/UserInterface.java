@@ -1,5 +1,6 @@
 package userinterface;
 
+import abs.BankSystem;
 import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
@@ -78,6 +79,10 @@ public class UserInterface {
                 }
                 case 6: {
                     this.startInvestmentProccess(); //customer choose invest money and investments.
+                    break;
+                }
+                case 7: {
+                    this.increaseYazDate();
                     break;
                 }
                 case 8: {
@@ -229,8 +234,18 @@ public class UserInterface {
         if(chosenCustomer.equals(""))
             System.out.println("Error: there are no customers in the system.");
         else {
+            // Check chosen custoemr balance.
+            if(this.engine.getBalanceOfCustomerByName(chosenCustomer) == 0) {
+                System.out.println("Error: Cant choose customer with no money in balance.");
+                return;
+            }
+
             // Read amount to invest from customer.
             int amountToInvest = this.readUserInvestmentAmount(chosenCustomer);
+            if(amountToInvest == 0) {
+                System.out.println("Error: Cant invest 0 money, please try again later.");
+                return;
+            }
 
             // Proccess of letting customer choose to which category he would like to invest.
             int categoriesCounter = 0;
@@ -288,6 +303,14 @@ public class UserInterface {
             }
         }
     }
+
+    //***CASE 7***
+    // Increase YAZ date in 1.
+    private void increaseYazDate() {
+        this.engine.increaseYazDate();
+        System.out.println("Current YAZ: " + BankSystem.getCurrentYaz() + ", previouse YAZ: " + (BankSystem.getCurrentYaz() - 1));
+    }
+
 
     // Gets string of loan ids to invest (Ex 1,2,3 ...) and return list of loans names.
     private List<Triple<String,Integer,String>> makeListOfLoansToInvest(List<LoanDataObject> pendingLoans, String customerChoiceToInvest) {
@@ -385,7 +408,7 @@ public class UserInterface {
                 int amountHolder = scanner.nextInt();
                 this.cleanBuffer();
 
-                if (amountHolder <= 0)
+                if (amountHolder < 0)
                     System.out.println("Error: Investment money must be a positive number.");
                 else if (amountHolder > this.engine.getBalanceOfCustomerByName(chosenCustomer))
                     System.out.println("Error: Investment money is greater then customer balance.");
@@ -393,7 +416,7 @@ public class UserInterface {
                     amount = amountHolder;
             }
 
-        } while(amount <= 0 || amount > this.engine.getBalanceOfCustomerByName(chosenCustomer));
+        } while(amount < 0 || amount > this.engine.getBalanceOfCustomerByName(chosenCustomer));
 
         return amount;
     }
@@ -427,7 +450,9 @@ public class UserInterface {
 
     // presentMenu -> Print menu to screen.
     private void presentMenu() {
-        System.out.println("Current Time Unit: 1.");
+        if(BankSystem.getCurrentYaz() != 0)
+            System.out.println("Current Time Unit: " + BankSystem.getCurrentYaz() + ".");
+
         System.out.println("1. Load XML file.");
         System.out.println("2. Get available information about loans and status.");
         System.out.println("3. Present members information.");

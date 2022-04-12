@@ -33,6 +33,17 @@ public class Investor {
         return initialInvestment;
     }
 
+    public int getPaymentAmount() {
+        return this.getCapital() + this.getInterest();
+    }
+
+    public void addFundsToInvestment(int investment, int capital, int interest) {
+        this.initialInvestment += investment;
+        this.currentDebt += investment;
+        this.capital += capital;
+        this.interest += interest;
+    }
+
     public void setInitialInvestment(int initialInvestment) {
         this.initialInvestment = initialInvestment;
     }
