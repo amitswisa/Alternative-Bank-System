@@ -152,7 +152,7 @@ public class UserInterface {
                 //Print eacg customer loans taken.
                 System.out.println("   Customer taken loans list: ");
                 if(data.getLoanList() == null || data.getLoanList().size() <= 0)
-                    System.out.println("      There are no taken loans to view.");
+                    System.out.println("      There are no taken loans to view.\n");
                 else {
                     // Trigger relevant printing function for each of the customer investments.
                     for(LoanDataObject loanData : data.getLoanList())

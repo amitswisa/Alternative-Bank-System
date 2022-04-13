@@ -73,11 +73,18 @@ public class LoanDataObject extends DataTransferObject {
             totalInterestPayed += tranc.getInterestValue();
             totalLoanPayment += tranc.getPaymentValue();
         }
+
         System.out.println("Total payments already payed: " + totalLoanPayment);
         System.out.println("Total interest already payed: " + totalInterestPayed);
         System.out.println("Total payments left to pay: " + (this.loan.getLoanAmount()-totalLoanPayment));
         System.out.println("Total interest left to pay: "
                 + (this.loan.getTotalLoanInterestInMoney()-totalInterestPayed));
+
+        System.out.println("-----------------\n");
+        System.out.println("Payment every yaz:");
+        for(BankLoanTransaction x : loan.getTransactionList()) {
+            System.out.println("loan payment " + x.getPaymentValue() + ", interest value: " + x.getInterestValue());
+        }
     }
 
     private void presentRiskStatusData() {
