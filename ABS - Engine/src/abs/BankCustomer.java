@@ -150,7 +150,7 @@ public class BankCustomer {
             loansInvested.get(bankLoan.getLoanOpeningTime()).add(bankLoan);
 
         //add the investment to customer log.
-        customerLog.add(new CustomerOperationData("investment","Invested " + investment + " in " + bankLoan.getLoanID(),this.balance, investment));
+        customerLog.add(new CustomerOperationData("investment","Invested " + investment + " in " + bankLoan.getLoanID(),this.balance, investment*(-1)));
         this.balance -= investment;
     }
 

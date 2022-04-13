@@ -25,7 +25,7 @@ public class BankLoan {
     private int loanInterestPerPayment;
     private int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
     private Status loanStatus;
-    private Map<String, Investor> loanInvestors; // List of investors and their amount of investment;
+    private Map<String, Investor> loanInvestors; // List of investors and their amount of investment.
     private List<BankLoanTransaction> transactionList; // hold all transaction's history.
 
     public BankLoan(AbsLoan absLoan) {
@@ -243,8 +243,12 @@ public class BankLoan {
         if(loanOwner.getBalance() >= (loanToPay.getPaymentValue() + loanToPay.getInterestValue())) {
 
             // go through ivestors list and pay them accordingly
+            int amountToPay = this.transactionList.stream().filter(e ->
+                    e.getTransactionStatus() == BankLoanTransaction.Status.NOT_PAYED
+                        && e.getPaymentTime() <= BankSystem.getCurrentYaz()).collect(Collectors.toList()).size();
+
             loanInvestors.values().forEach(investor -> {
-                investor.getInvestor().addInvestmentMoneyToBalance(this.owner, this.getLoanID(), investor.getPaymentAmount());
+                investor.getInvestor().addInvestmentMoneyToBalance(this.owner, this.getLoanID(), investor.getPaymentAmount() * amountToPay);
             });
 
             // change current payment to payed.
