@@ -44,7 +44,7 @@ public class LoanDataObject extends DataTransferObject {
             }
             case FINISHED: {
                 System.out.println("Starting loan time: " + this.loan.getLoanStartTime());
-                System.out.println("Ending loan time: " + this.loan.getLoanStartTime()+this.loan.getLoanTotalTime());
+                System.out.println("Ending loan time: " + this.loan.getLoanEndTime());
                 break;
             }
             default: {

@@ -98,8 +98,8 @@ public class BankCustomer {
     }
 
     public void addInvestmentMoneyToBalance(String payerName, String loanName, int investmentMoney) {
-        this.balance += investmentMoney;
         customerLog.add(new CustomerOperationData("Investment Payment", "You received payment from " + payerName + ", from loan: " + loanName, this.getBalance(), investmentMoney));
+        this.balance += investmentMoney;
     }
 
     public List<CustomerOperationData> getCustomerLog() {
@@ -150,7 +150,7 @@ public class BankCustomer {
             loansInvested.get(bankLoan.getLoanOpeningTime()).add(bankLoan);
 
         //add the investment to customer log.
-        customerLog.add(new CustomerOperationData("investment","Invested " + investment + " in " + bankLoan.getLoanID(),this.balance, investment));
+        customerLog.add(new CustomerOperationData("investment","Invested " + investment + " in " + bankLoan.getLoanID(),this.balance, investment*(-1)));
         this.balance -= investment;
     }
 

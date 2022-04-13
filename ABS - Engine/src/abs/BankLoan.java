@@ -75,30 +75,16 @@ public class BankLoan {
     // Update list to contain all future payments & updates status to not_paied.
     private void updateBankLoansTransactionsList() {
 
-        int lengthOfPayment = this.getLoanNumberOfPayments();
+        for(int i = 0;i<this.getLoanNumberOfPayments();i++) {
 
-        // Calculate initial interet and payment leftovers.
-        int leftOverFromPaymentValue = (this.getLoanAmount() % lengthOfPayment) / lengthOfPayment;
-        int leftOverFromInterestValue = (this.getTotalLoanInterestInMoney() % lengthOfPayment) / lengthOfPayment;
-
-        for(int i = 0;i<lengthOfPayment;i++) {
-
-            // Make sure the whole amount will be paied and if neccessry add leftover to last payment.
             int paymentValue = this.getLoanAmount()/this.getLoanNumberOfPayments();
             int paymentInterest = this.getTotalLoanInterestInMoney() / this.getLoanNumberOfPayments();
 
-            // If too small for current amount of left payment
-            // -> keep calculating until find number of payment to divide it between them equally.
-            if(leftOverFromPaymentValue == 0)
-                leftOverFromPaymentValue = (this.getLoanAmount() % lengthOfPayment) / (lengthOfPayment-i);
-
-            if(leftOverFromInterestValue == 0)
-                leftOverFromInterestValue = (this.getTotalLoanInterestInMoney() % lengthOfPayment) / (lengthOfPayment-i);
-
-            // Divide equally leftovers from payment.
-            paymentValue += leftOverFromPaymentValue;
-            paymentInterest += leftOverFromInterestValue;
-
+            // Make sure the whole amount will be paied and if neccessry add leftover to last payment.
+            if(i == transactionList.size()-1) {
+                paymentValue = this.getLoanAmount() - ((this.getLoanNumberOfPayments() - 1) * this.getLoanAmount() / this.getLoanNumberOfPayments());
+                paymentInterest = this.getTotalLoanInterestInMoney() - ((this.getLoanNumberOfPayments() - 1) * this.getTotalLoanInterestInMoney() / this.getLoanNumberOfPayments());
+            }
 
             this.transactionList.add(i,
                     new BankLoanTransaction(this.getLoanStartTime() + (this.getPaymentInterval()*(i+1)),paymentValue, paymentInterest, BankLoanTransaction.Status.NOT_PAYED));
@@ -244,7 +230,9 @@ public class BankLoan {
 
             // go through ivestors list and pay them accordingly
             loanInvestors.values().forEach(investor -> {
-                investor.getInvestor().addInvestmentMoneyToBalance(this.owner, this.getLoanID(), investor.getPaymentAmount());
+
+                int numberOfUnPaidPayments = this.transactionList.stream().filter(e -> e.getTransactionStatus() == BankLoanTransaction.Status.NOT_PAYED && e.getPaymentTime() <= BankSystem.getCurrentYaz()).collect(Collectors.toList()).size();
+                investor.getInvestor().addInvestmentMoneyToBalance(this.owner, this.getLoanID(), investor.getPaymentAmount() * numberOfUnPaidPayments);
             });
 
             // change current payment to payed.
