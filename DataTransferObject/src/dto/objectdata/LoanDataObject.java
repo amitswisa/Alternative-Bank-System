@@ -80,17 +80,12 @@ public class LoanDataObject extends DataTransferObject {
         System.out.println("Total interest left to pay: "
                 + (this.loan.getTotalLoanInterestInMoney()-totalInterestPayed));
 
-        System.out.println("-----------------\n");
-        System.out.println("Payment every yaz:");
-        for(BankLoanTransaction x : loan.getTransactionList()) {
-            System.out.println("loan payment " + x.getPaymentValue() + ", interest value: " + x.getInterestValue());
-        }
     }
 
     private void presentRiskStatusData() {
         System.out.println("There are " + this.loan.getUnpayedTransactions().size() + " unpaied payments.");
         System.out.println("Total unpaid payments so far: "
-                + this.loan.getUnpayedTransactions().stream().mapToInt(value -> value.getPaymentValue()).sum());
+                + (this.loan.getLastUnPaidTransaction().getPaymentValue() + this.loan.getLastUnPaidTransaction().getInterestValue()));
     }
 
     // Part of section 3 from menu.
@@ -123,7 +118,7 @@ public class LoanDataObject extends DataTransferObject {
             }
             case FINISHED: {
                 res = "      Loan started at: " + this.loan.getLoanStartTime() +
-                        ".\n      Loan ending time: " + (this.loan.getLoanStartTime() + this.loan.getLoanTotalTime()) + "\n";
+                        ".\n      Loan ending time: " + (this.loan.getLoanEndTime()) + "\n";
                 break;
             }
         }
@@ -152,18 +147,13 @@ public class LoanDataObject extends DataTransferObject {
 
     @Override
     public String toString() {
-        String res =  "Loan ID: " + this.loan.getLoanID() + "\n" +
+        return  "Loan ID: " + this.loan.getLoanID() + "\n" +
                 "Loan Category: " + this.loan.getLoanCategory() + "\n" +
                 "Loan Amount: " + this.loan.getLoanAmount() + "\n" +
                 "Original Time of loan: " + this.loan.getLoanTotalTime() + "\n" +
                 "Loan Interest: " + this.loan.getTotalLoanInterestInMoney() + "\n" +
                 "Payment Interval: " + this.loan.getPaymentInterval() + "\n" +
                 "Loan Status: " + this.loan.getLoanStatus();
-
-        /*if(this.getLoanStatus() == BankLoan.Status.PENDING)
-            res +=  "\n" + "\n";
-        */
-        return res;
     }
 
 }

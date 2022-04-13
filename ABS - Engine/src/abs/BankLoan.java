@@ -21,6 +21,7 @@ public class BankLoan {
     private final int loanOpeningTime; // Time in YAZ that customer opened new loan.
     private int loanTotalTime;
     private int loanStartTime; // in yaz - set value when being active.
+    private int loanEndTime;
     private int loanInterestPerPayment;
     private int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
     private Status loanStatus;
@@ -184,6 +185,16 @@ public class BankLoan {
                 && s.getPaymentTime() <= BankSystem.getCurrentYaz()).collect(Collectors.toList());
     }
 
+    public BankLoanTransaction getLastUnPaidTransaction() {
+        for(int i = this.transactionList.size();i > 0;i--) {
+            BankLoanTransaction temp = transactionList.get(i-1);
+            if(temp.getTransactionStatus() == BankLoanTransaction.Status.NOT_PAYED
+                    && temp.getPaymentTime() <= BankSystem.getCurrentYaz())
+                return temp;
+        }
+        return null;
+    }
+
     // Return total unpaied transactions amount of money.
     public int getUnpayedTransactionsAmountOfMoney() {
         List<BankLoanTransaction> unPayedTransactions = this.getUnpayedTransactions();
@@ -209,6 +220,10 @@ public class BankLoan {
         this.loanStatus = loanStatus;
     }
 
+    public int getLoanEndTime() {
+        return this.loanEndTime;
+    }
+
     private int getLastPaymentDate() {
         return this.getLoanStartTime() + this.getLoanTotalTime();
     }
@@ -218,8 +233,9 @@ public class BankLoan {
 
         // if customer has enough money in his balance to make the payment of this loan.
         int paymentNumber = (BankSystem.getCurrentYaz() - this.getLoanStartTime()) / this.getPaymentInterval();
-        if(paymentNumber > this.getLastPaymentDate())
-            paymentNumber = this.getLastPaymentDate();
+        int lastPaymentIndex = this.getLastPaymentDate() / this.getPaymentInterval();
+        if(paymentNumber > lastPaymentIndex)
+            paymentNumber = lastPaymentIndex;
 
         BankLoanTransaction loanToPay = transactionList.get(paymentNumber - 1);
 
@@ -235,9 +251,10 @@ public class BankLoan {
             loanToPay.setTransactionStatus(BankLoanTransaction.Status.PAYED);
 
             // Change loan status to finish when last payment is made.
-            if (paymentNumber == this.getLoanNumberOfPayments())
+            if (paymentNumber == this.getLoanNumberOfPayments()) {
                 this.setStatus(Status.FINISHED);
-            else if (this.getLoanStatus() == Status.RISK) {
+                this.loanEndTime = BankSystem.getCurrentYaz();
+            } else if (this.getLoanStatus() == Status.RISK) {
                 this.setStatus(Status.ACTIVE);
 
                 // change previouse unpaid payments status from UN_PAID to DEBT_COVERED
@@ -254,7 +271,7 @@ public class BankLoan {
         // If balance is not enough to make the payment.
         this.setStatus(Status.RISK); // set status to RISK.
         // if this is not the last payment add this debt to next payment.
-        if(paymentNumber < this.getLastPaymentDate())
+        if(paymentNumber < lastPaymentIndex)
             transactionList.get(paymentNumber).addDebt(loanToPay.getPaymentValue(), loanToPay.getInterestValue());
 
         return 0;
