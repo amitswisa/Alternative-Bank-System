@@ -266,13 +266,9 @@ public class UserInterface {
                 System.out.println("0. All categories.");
 
                 // Reads proccess required arguments.
-                int catChoice = this.readUserCategoryChoice(catCounter);
+                List<String> catToSend = this.readUserCategoryChoice(categoriesNames);
                 int interest = this.readUserRelevantInterest();
                 int totalTime = this.readUserTotalTimeOfInvestment();
-
-                String catToSend = "";
-                if(catChoice != 0)
-                    catToSend = categoriesNames.get(catChoice-1);
 
                 List<LoanDataObject> pendingLoans
                         = this.engine.getRelevantPendingLoansList(chosenCustomer, catToSend, interest, totalTime);
@@ -377,23 +373,58 @@ public class UserInterface {
     }
 
     // Reads customer's category choice.
-    private int readUserCategoryChoice(int optionsLength) {
+    private List<String> readUserCategoryChoice(List<String> catNames) {
 
-        int userChoice = -1;
+        boolean choiseIsValid;
+        int optionsLength = catNames.size() + 1;
+        List<String> result = new ArrayList<>();
         do {
-            System.out.println("Choose category id: ");
-            if(!scanner.hasNextInt())
-                System.out.println("Error: Invalid category id.");
-            else {
-                userChoice = scanner.nextInt();
-                this.cleanBuffer();
+            choiseIsValid = true;
+            result.clear(); // clear prev choices.
+            System.out.println("Choose categories id (1,2,3,...): ");
 
-                if(userChoice < 0 || userChoice > optionsLength-1)
-                    System.out.println("Error: Invalid category id.");
+            // Read user input and do validation.
+            String lineRead = scanner.nextLine();
+            if(lineRead == null || lineRead.equals(""))
+            {
+                choiseIsValid = false;
+                continue;
             }
-        }while(userChoice < 0 || userChoice > optionsLength-1);
 
-        return userChoice;
+            String[] userChoice = lineRead.split(",");
+
+            // Go over user multiple choice and valid them.
+            for(String choice : userChoice) {
+                try {
+                    int curIntChoice = Integer.parseInt(choice);
+
+                    // Check chosen id.
+                    if(curIntChoice < 0 || curIntChoice > optionsLength) {
+                        System.out.println("Error: invalid categories choice.");
+                        choiseIsValid = false;
+                        break;
+                    }
+
+                    // if user chose All categories as a option, return just all categories.
+                    if(curIntChoice != 0)
+                        result.add(catNames.get(curIntChoice-1)); // Adding cat name to list.
+                    else {
+                        // If user chose all so return just all.
+                        result.clear();
+                        result.add("All");
+                        return result;
+                    }
+
+                } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                    System.out.println("Error: invalid categories choice.");
+                    choiseIsValid = false;
+                    break;
+                }
+            }
+
+        }while(!choiseIsValid);
+
+        return result;
     }
 
     // Reading investment amount of money and validate customer have enough money.

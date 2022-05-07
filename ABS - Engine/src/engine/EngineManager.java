@@ -12,6 +12,7 @@ import javafx.util.Pair;
 import xmlgenerated.AbsDescriptor;
 
 import javax.xml.crypto.Data;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -81,29 +82,32 @@ public class EngineManager {
         return this.bankSystem.getBankCategories();
     }
 
-    public List<LoanDataObject> getRelevantPendingLoansList(String chosenCustomer, String catChoice, int interest, int totalTime) {
+    public List<LoanDataObject> getRelevantPendingLoansList(String chosenCustomer, List<String> catChoice, int interest, int totalTime) {
         List<LoanDataObject> pendingLoans = this.getAllLoansData();
 
         if(pendingLoans == null)
             return null;
 
-        // filter loans list -> only loans with status PENDING & loan's owner is other then current customer.
+        List<LoanDataObject> resData = new ArrayList<>(); // result list.
+
+        // filter loans list -> only loans with status PENDING or NEW & loan's owner is other then current customer.
         pendingLoans = pendingLoans.stream().filter(loan -> !loan.getLoanOwnerName().equals(chosenCustomer)
-                && loan.getLoanStatus() == BankLoan.Status.PENDING ).collect(Collectors.toList());
+                && (loan.getLoanStatus() == BankLoan.Status.PENDING || loan.getLoanStatus() == BankLoan.Status.NEW)).collect(Collectors.toList());
 
         // filter loans list -> if customer chose specific category then the list will hold loans from that category.
-        if(!catChoice.equals(""))
-            pendingLoans = pendingLoans.stream().filter(loan -> loan.getLoanCatgory().equals(catChoice)).collect(Collectors.toList());
+        if(!catChoice.get(0).equals("All"))
+            for(String ch : catChoice)
+                resData.addAll(pendingLoans.stream().filter(loan -> loan.getLoanCatgory().equals(ch)).collect(Collectors.toList()));
 
         // filter loans lost -> if interent isnt equal to 0 -> hold loans with interest greater or equal to given interest.
         if(interest > 0)
-            pendingLoans = pendingLoans.stream().filter(loan -> loan.getLoanInterest() >= interest).collect(Collectors.toList());
+            resData = resData.stream().filter(loan -> loan.getLoanInterest() >= interest).collect(Collectors.toList());
 
         // filter loans list -> filter list by total time left to loans.
         if(totalTime > 0)
-            pendingLoans = pendingLoans.stream().filter(loan -> loan.getLoanTotalTime() <= totalTime).collect(Collectors.toList());
+            resData = resData.stream().filter(loan -> loan.getLoanTotalTime() <= totalTime).collect(Collectors.toList());
 
-        return pendingLoans;
+        return resData;
     }
 
     // Get list of loans to invest.

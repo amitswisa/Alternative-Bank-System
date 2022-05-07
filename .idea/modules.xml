@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/ABS - Engine/ABS - Engine.iml" filepath="$PROJECT_DIR$/ABS - Engine/ABS - Engine.iml" />
       <module fileurl="file://$PROJECT_DIR$/ABS - UI/ABS - UI.iml" filepath="$PROJECT_DIR$/ABS - UI/ABS - UI.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataTransferObject/DataTransferObject.iml" filepath="$PROJECT_DIR$/DataTransferObject/DataTransferObject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GUI/GUI.iml" filepath="$PROJECT_DIR$/GUI/GUI.iml" />
     </modules>
   </component>
 </project>

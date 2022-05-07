@@ -48,7 +48,7 @@ public class LoanDataObject extends DataTransferObject {
                 break;
             }
             default: {
-                if(status != BankLoan.Status.PENDING) // if current loan status is not pending or any of the above.
+                if(status != BankLoan.Status.PENDING && status != BankLoan.Status.NEW) // if current loan status is not pending or any of the above.
                     System.out.println("Error: invalid loan status.");
             }
 

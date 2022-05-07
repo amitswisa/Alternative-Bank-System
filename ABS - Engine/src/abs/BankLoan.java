@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 public class BankLoan {
 
     public enum Status {
+        NEW,
         PENDING,
         ACTIVE,
         RISK,
@@ -39,7 +40,7 @@ public class BankLoan {
         this.loanInterestPerPayment = absLoan.getAbsIntristPerPayment();
         this.paymentInterval = absLoan.getAbsPaysEveryYaz();
         this.loanInvestors = new HashMap<>();
-        this.loanStatus = Status.PENDING;
+        this.loanStatus = Status.NEW;
         transactionList = new ArrayList<>();
     }
 
@@ -67,6 +68,9 @@ public class BankLoan {
           this.updateBankLoansTransactionsList(); // Update list to contain all future payments & updates status to not_paied.
           return amountToActivate; //return the amount actually success to invest
       }
+
+      if(this.loanStatus == Status.NEW)
+          this.setStatus(Status.PENDING);
 
       this.addInvestor(customer, InvestmentAmount);
       return InvestmentAmount;
