@@ -1,33 +1,43 @@
 package main_screen;
 
+import engine.EngineManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class mainScreen {
+public class mainScreen implements Initializable {
 
-    @FXML AnchorPane addBody;
-    @FXML ChoiceBox<String> userTypeChoice;
+    private EngineManager engineManager;
+    private String currentUser;
+
+    // FXML
+    @FXML private AnchorPane addBody;
+    @FXML private ChoiceBox<String> userTypeChoice;
 
     public mainScreen() {
-
+        this.currentUser = "Admin";
     }
 
-    @FXML
-    public void initialize() throws IOException {
-        // Adding admin fxml as default app body.
-        Node node = (Node) FXMLLoader.load(getClass().getResource("/admin_screen/adminScreen.fxml"));
-        addBody.getChildren().setAll(node);
-
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         //Add Values to ChoiceBox.
         ObservableList<String> userChoiceList = FXCollections.observableArrayList();
-        userChoiceList.add("Admin");
+        userChoiceList.add(this.currentUser);
+        userTypeChoice.setItems(userChoiceList);
+
+        userTypeChoice.setValue(this.currentUser);
     }
 
+    public void setEngine(EngineManager engineManager) {
+        this.engineManager = engineManager;
+    }
 }

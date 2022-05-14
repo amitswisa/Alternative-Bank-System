@@ -5,13 +5,15 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main_screen.mainScreen;
 
 public class main extends Application {
 
     private final EngineManager engineManager;
+    private mainScreen mainscreen;
 
     public main() {
-        engineManager = new EngineManager();
+       engineManager = new EngineManager();
     }
 
     @Override
@@ -21,5 +23,10 @@ public class main extends Application {
         primaryStage.setScene(firstScene);
         primaryStage.setTitle("Alternative Banking System");
         primaryStage.show();
+
+        // get mainScreen controller
+        mainscreen = loader.getController();
+        mainscreen.setEngine(this.engineManager);
+
     }
 }
