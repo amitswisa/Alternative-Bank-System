@@ -19,6 +19,10 @@
     -fx-background-color: #0D1B2A;
 }
 
+.choice-box .label {
+    -fx-text-fill: #FFF;
+}
+
 #pathLabel {
     -fx-background-color: #adadad;
 }

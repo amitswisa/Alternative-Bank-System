@@ -1,20 +1,11 @@
 // Pallete https://coolors.co/palette/ffd6ff-e7c6ff-c8b6ff-b8c0ff-bbd0ff
 
-import engine.EngineManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main_screen.mainScreen;
 
 public class main extends Application {
-
-    private final EngineManager engineManager;
-    private mainScreen mainscreen;
-
-    public main() {
-       engineManager = new EngineManager();
-    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -23,10 +14,5 @@ public class main extends Application {
         primaryStage.setScene(firstScene);
         primaryStage.setTitle("Alternative Banking System");
         primaryStage.show();
-
-        // get mainScreen controller
-        mainscreen = loader.getController();
-        mainscreen.setEngine(this.engineManager);
-
     }
 }

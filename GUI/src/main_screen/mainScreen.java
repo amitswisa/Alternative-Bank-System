@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class mainScreen implements Initializable {
 
-    private EngineManager engineManager;
+    private final EngineManager engineManager;
     private String currentUser;
 
     // FXML
@@ -24,6 +24,7 @@ public class mainScreen implements Initializable {
     @FXML private ChoiceBox<String> userTypeChoice;
 
     public mainScreen() {
+        engineManager = new EngineManager();
         this.currentUser = "Admin";
     }
 
@@ -33,11 +34,6 @@ public class mainScreen implements Initializable {
         ObservableList<String> userChoiceList = FXCollections.observableArrayList();
         userChoiceList.add(this.currentUser);
         userTypeChoice.setItems(userChoiceList);
-
         userTypeChoice.setValue(this.currentUser);
-    }
-
-    public void setEngine(EngineManager engineManager) {
-        this.engineManager = engineManager;
     }
 }
