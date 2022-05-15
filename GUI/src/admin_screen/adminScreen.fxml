@@ -30,7 +30,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" prefWidth="230.0" text="Increase YAZ" textAlignment="CENTER">
+                  <Button fx:id="increaseYazBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="50.0" mnemonicParsing="false" prefWidth="230.0" text="Increase YAZ" textAlignment="CENTER" onMouseClicked="#increaseYaz" disable="true">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin></Button>

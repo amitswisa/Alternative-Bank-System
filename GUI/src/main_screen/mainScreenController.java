@@ -23,6 +23,7 @@ public class mainScreenController implements Initializable {
     // FXML members
     @FXML private ChoiceBox<String> userTypeChoice;
     @FXML private Label pathLabel;
+    @FXML private Label yazLabel;
 
     public mainScreenController() {
         engineManager = new EngineManager();
@@ -52,5 +53,9 @@ public class mainScreenController implements Initializable {
 
     public void setCurrentUser(String currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public void setYazLabelText(String yazString) {
+        this.yazLabel.setText(yazString);
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<TableView fx:controller="loan_tableview.loanTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="972.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16">
+  <columns>
+      <TableColumn prefWidth="293.33332312107086" text="Loan Name" />
+      <TableColumn prefWidth="147.33331298828125" text="Owner" />
+      <TableColumn prefWidth="178.0" text="Category" />
+      <TableColumn prefWidth="107.3333740234375" text="Capital" />
+      <TableColumn prefWidth="111.33331298828125" text="Interest" />
+      <TableColumn minWidth="0.0" prefWidth="76.666748046875" text="Total time" />
+      <TableColumn prefWidth="57.33331298828125" text="Enter" />
+  </columns>
+</TableView>

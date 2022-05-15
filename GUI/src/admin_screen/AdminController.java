@@ -1,5 +1,6 @@
 package admin_screen;
 
+import abs.BankSystem;
 import dto.infodata.DataTransferObject;
 import engine.EngineManager;
 import javafx.beans.property.SimpleStringProperty;
@@ -28,7 +29,8 @@ public class AdminController {
     private SimpleStringProperty xmlFilePathTextProperty;
 
     // @FXML
-    @FXML Button loadXmlFileBtn;
+    @FXML private Button loadXmlFileBtn;
+    @FXML private Button increaseYazBtn;
 
     public AdminController() {
         fileChooser  = new FileChooser();
@@ -52,7 +54,9 @@ public class AdminController {
             // XML file load successfully process.
             if(response.isSuccess()) {
                 this.fileToLoad = selectedFile;
+                increaseYazBtn.setDisable(false); // Set increase yaz btn enable when xml file loaded successfully.
                 xmlFilePathTextProperty.set(selectedFile.getAbsolutePath()); // Change pathText
+                mainPage.setYazLabelText(BankSystem.getCurrentYaz()+""); //Set yaz and transfer to text
                 this.setCustomersNamesChoiceBox();
             }
 
@@ -82,5 +86,11 @@ public class AdminController {
 
     public SimpleStringProperty getPathTextProperty() {
         return this.xmlFilePathTextProperty;
+    }
+
+    // Called when "increase yaz" btn clicked.
+    public void increaseYaz(MouseEvent mouseEvent) {
+        engineManager.increaseYazDate();
+        mainPage.setYazLabelText(BankSystem.getCurrentYaz()+"");
     }
 }

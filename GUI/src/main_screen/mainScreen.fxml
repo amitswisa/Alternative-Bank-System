@@ -7,7 +7,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -49,8 +48,8 @@
                   <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                </padding>
                <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Current YAZ:" />
-                  <Label text="#" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="YAZ:" />
+                  <Label text="#" fx:id="yazLabel" />
                </children>
             </HBox>
             <HBox alignment="CENTER" minWidth="20.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #0D1B2A; -fx-cursor: hand;" GridPane.columnIndex="3">
