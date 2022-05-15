@@ -1,5 +1,3 @@
-#adminDiv .button {
-    -fx-background-color: #778DA9;
-    -fx-cursor: hand;
-    -fx-text-fill: #FFF;
+.flowPane {
+    -fx-background-color: #cecfcc;
 }

@@ -30,6 +30,10 @@ public class EngineManager {
     # arg::String filePath - path of xml file.
     # return value - DataTransferObject Object.*/
     public DataTransferObject loadXML(String filePath) {
+
+        if(filePath.isEmpty())
+            return new DataTransferObject("Please choose a file!");
+
         AbsDescriptor xmlObject;
         try {
             xmlObject = this.xmlManager.loadXMLfile(filePath); // Try loading xml file and return AbdDescriptor.
@@ -38,7 +42,7 @@ public class EngineManager {
         }
 
         bankSystem = new BankSystem(xmlObject); // Creating bank system from AbsDescriptor.
-        return new DataTransferObject("File loaded successfully!");
+        return new DataTransferObject("File loaded successfully!", true);
     }
 
     public boolean isFileLoaded() {
