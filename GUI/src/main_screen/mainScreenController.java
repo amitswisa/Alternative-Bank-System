@@ -2,8 +2,6 @@ package main_screen;
 
 import admin_screen.AdminController;
 import engine.EngineManager;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -12,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class mainScreen implements Initializable {
+public class mainScreenController implements Initializable {
 
     // Data members
     private final EngineManager engineManager;
@@ -26,7 +24,7 @@ public class mainScreen implements Initializable {
     @FXML private ChoiceBox<String> userTypeChoice;
     @FXML private Label pathLabel;
 
-    public mainScreen() {
+    public mainScreenController() {
         engineManager = new EngineManager();
         this.currentUser = "Admin";
     }
@@ -35,12 +33,24 @@ public class mainScreen implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         // Transfer engine to included fxmls.
-        adminPageComponentController.setEngineManager(this.engineManager);
+        adminPageComponentController.setInitData(this.engineManager, this);
 
-        //Add Values to ChoiceBox.
-        ObservableList<String> userChoiceList = FXCollections.observableArrayList();
-        userChoiceList.add(this.currentUser);
-        userTypeChoice.setItems(userChoiceList);
-        userTypeChoice.setValue(this.currentUser);
+        // Bind data-members
+        this.pathLabel.textProperty().bind(adminPageComponentController.getPathTextProperty());
+
+        //Set init values for choice-box (only admin).
+        adminPageComponentController.setCustomersNamesChoiceBox();
+    }
+
+    public ChoiceBox<String> getUserTypeChoice() {
+        return userTypeChoice;
+    }
+
+    public String getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(String currentUser) {
+        this.currentUser = currentUser;
     }
 }

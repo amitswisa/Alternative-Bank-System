@@ -20,7 +20,12 @@
 }
 
 .choice-box .label {
-    -fx-text-fill: #FFF;
+    -fx-text-fill: #fff;
+    -fx-font-weight: bold;
+}
+
+.choice-box .menu-item .label {
+    -fx-text-fill: #000;
 }
 
 #pathLabel {

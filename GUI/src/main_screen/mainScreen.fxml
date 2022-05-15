@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@mainScreen.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_screen.mainScreen">
+<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@mainScreen.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_screen.mainScreenController">
    <children>
       <GridPane id="header" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="43.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -33,7 +33,7 @@
                   <Insets bottom="5.0" left="8.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </ChoiceBox>
-            <Label id="pathLabel" maxWidth="1.7976931348623157E308" minWidth="50.0" text="No xml file was loaded!" textAlignment="CENTER" GridPane.columnIndex="1">
+            <Label id="pathLabel" fx:id="pathLabel" maxWidth="1.7976931348623157E308" minWidth="50.0" text="No xml file was loaded!" textAlignment="CENTER" GridPane.columnIndex="1">
                <padding>
                   <Insets bottom="5.0" left="10.0" top="5.0" />
                </padding>
@@ -50,7 +50,7 @@
                </padding>
                <children>
                   <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Current YAZ:" />
-                  <Label text="1" />
+                  <Label text="#" />
                </children>
             </HBox>
             <HBox alignment="CENTER" minWidth="20.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #0D1B2A; -fx-cursor: hand;" GridPane.columnIndex="3">
