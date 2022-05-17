@@ -11,11 +11,58 @@ import java.util.Map;
 public class LoanDataObject extends DataTransferObject {
 
     private BankLoan loan;
+    private String id;
+    private String owner;
+    private String category;
+    private int capital;
+    private int interest;
+    private int totalTime;
+    private int loanInterval;
+    private String status;
 
-    public LoanDataObject(BankLoan loan){
+    public LoanDataObject(BankLoan loan, String ownerName){
         super();
-        this.loan = loan;
+        this.id = loan.getLoanID();
+        this.owner = ownerName;
+        this.category = loan.getLoanCategory();
+        this.capital = loan.getLoanAmount();
+        this.interest = loan.getTotalLoanInterestInMoney();
+        this.totalTime = loan.getLoanTotalTime();
+        this.loanInterval = loan.getPaymentInterval();
+        this.status = loan.getLoanStatus().toString();
+
+        // Extra data from loan will be created from engine by given id.
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public int getCapital() {
+        return capital;
+    }
+
+    public String getStatus() {
+        return this.status.toString();
+    }
+
+    public int getInterest() {
+        return interest;
+    }
+
+    public int getTotalTime() {
+        return totalTime;
+    }
+
+    public int getLoanInterval() {return this.loanInterval; }
 
     // Section 2 from menu.
     public void showLoan() {

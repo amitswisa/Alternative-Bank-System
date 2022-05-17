@@ -41,7 +41,7 @@ public class BankCustomer {
         List<LoanDataObject> myListOfLoans = new ArrayList<>();
         for(Map.Entry<Integer, Set<BankLoan>> loan : loansTaken.entrySet())
            for(BankLoan bankLoan : loan.getValue())
-                myListOfLoans.add(new LoanDataObject(bankLoan));
+                myListOfLoans.add(new LoanDataObject(bankLoan, this.name));
 
         return myListOfLoans;
     }
@@ -113,7 +113,7 @@ public class BankCustomer {
         List<LoanDataObject> loansTakenList = new ArrayList<>();
         for( Map.Entry<Integer,Set<BankLoan>> loan: loansTaken.entrySet())
             for (BankLoan currentBankLoan : loan.getValue())
-                loansTakenList.add(new LoanDataObject(currentBankLoan));
+                loansTakenList.add(new LoanDataObject(currentBankLoan, this.name));
 
         return loansTakenList;
     }
@@ -125,7 +125,7 @@ public class BankCustomer {
         List<LoanDataObject> loansInvestedList = new ArrayList<>();
         for( Map.Entry<Integer,Set<BankLoan>> loan: loansInvested.entrySet())
             for (BankLoan currentBankLoan : loan.getValue())
-                loansInvestedList.add(new LoanDataObject(currentBankLoan));
+                loansInvestedList.add(new LoanDataObject(currentBankLoan, this.name));
 
         return loansInvestedList;
     }
