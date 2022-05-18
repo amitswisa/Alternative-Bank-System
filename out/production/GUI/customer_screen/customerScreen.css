@@ -1,0 +1,29 @@
+.MyTabPane {
+    -fx-background-color: #cecfcc;
+
+}
+
+.MyTabPane .tab
+{
+    -fx-background-color: #778DA9;
+}
+
+.MyTabPane .tab:selected
+{
+    -fx-background-color: #415A77;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #3c3c3c;
+    -fx-font-size: 12px;
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: white;
+}
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-width: 0;
+    -fx-border-color: -fx-focus-color;
+}
