@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.TextFlow?>
-
 
 <AnchorPane prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="popups.loan_information.LoanInfoController">
    <children>
@@ -105,11 +104,15 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextFlow layoutX="10.0" layoutY="267.0" prefHeight="220.0" prefWidth="379.0" style="-fx-background-color: #dcdcdc;" />
       <Label alignment="CENTER" layoutX="11.0" layoutY="240.0" prefHeight="20.0" prefWidth="379.0" text="Status details" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
+      <ScrollPane fx:id="scrollPane" layoutX="11.0" layoutY="268.0" prefHeight="218.0" prefWidth="379.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+        </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

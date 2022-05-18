@@ -62,6 +62,13 @@ public class EngineManager {
         return null;
     }
 
+    public CustomerDataObject getCustomerByName(String customerName) {
+        if(bankSystem != null)
+            return new CustomerDataObject(this.bankSystem.getCustomerByName(customerName));
+
+        return null;
+    }
+
     // Section 3
     public List<CustomerDataObject> getAllCustomersLoansAndLogs() {
         return this.bankSystem.getAllCustomersLoansAndLogs();

@@ -24,7 +24,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ChoiceBox fx:id="userTypeChoice" maxHeight="25.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="10.0">
+            <ChoiceBox onAction="#changeUserType" fx:id="userTypeChoice" maxHeight="25.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="10.0">
                 <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -66,6 +66,7 @@
        <AnchorPane fx:id="dataDiv" layoutY="43.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="43.0">
            <children>
                <fx:include fx:id="adminPageComponent" source="../admin_screen/adminScreen.fxml" />
+               <fx:include fx:id="customerPageComponent" source="../customer_screen/customerScreen.fxml" />
            </children>
        </AnchorPane>
    </children>

@@ -93,7 +93,12 @@ public class loansTableView implements Initializable {
     }
 
     public void setLoanItems(List<LoanDataObject> loansList) {
+
         list.clear();
+
+        if(loansList == null || loansList.isEmpty())
+            return;
+
         list.addAll(loansList);
         loansTable.setItems(list);
     }

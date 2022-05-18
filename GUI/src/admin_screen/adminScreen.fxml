@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
@@ -49,10 +47,15 @@
           <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" percentHeight="50.0" prefHeight="30.0" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <FlowPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="10.0" prefHeight="230.0" prefWidth="972.0" styleClass="flowPane">
+            <FlowPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="flowPane">
                <children>
-                  <fx:include fx:id="loanTable" source="../loan_tableview/loanTableView.fxml" />
-               </children></FlowPane>
+                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="233.0" prefWidth="972.0">
+                     <children>
+                        <fx:include fx:id="loanTable" source="../loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </FlowPane>
             <FlowPane minHeight="10.0" prefHeight="230.0" prefWidth="200.0" styleClass="flowPane" GridPane.rowIndex="1" />
          </children>
       </GridPane>
