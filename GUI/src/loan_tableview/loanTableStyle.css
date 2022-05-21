@@ -24,7 +24,7 @@
 }
 
 .table-row-cell{
-    -fx-background-color: -fx-table-cell-border-color, #ececec;
+    -fx-background-color: -fx-table-cell-border-color, #ffe9ec;
     -fx-background-insets: 0, 0 0 0 0;
     -fx-padding: 0.0em;
 }

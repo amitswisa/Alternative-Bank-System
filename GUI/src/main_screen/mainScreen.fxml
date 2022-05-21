@@ -52,11 +52,11 @@
                   <Label text="#" fx:id="yazLabel" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" minWidth="20.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #0D1B2A; -fx-cursor: hand;" GridPane.columnIndex="3">
+            <HBox alignment="CENTER" minWidth="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-cursor: hand;" GridPane.columnIndex="3">
                <children>
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../resources/paint.png" />
+                        <Image url="@../resources/settings.png" />
                      </image>
                   </ImageView>
                </children>
