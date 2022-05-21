@@ -73,7 +73,7 @@ public class BankSystem {
 
         List<CustomerDataObject> customerData = new ArrayList<>();
         for(Map.Entry<String, BankCustomer> customer : customers.entrySet()) {
-            customerData.add(new CustomerDataObject(customer.getValue().getName(), customer.getValue().getCustomerLog(), customer.getValue().getLoansInvested(), customer.getValue().getLoansTaken()));
+            customerData.add(new CustomerDataObject(customer.getValue().getName(), customer.getValue().getCustomerLog(), customer.getValue().getLoansInvested(), customer.getValue().getLoansTaken(), customer.getValue().getBalance()));
         }
 
         return customerData;
