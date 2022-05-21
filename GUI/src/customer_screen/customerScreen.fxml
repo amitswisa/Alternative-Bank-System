@@ -10,8 +10,6 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -35,7 +33,7 @@
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
                                  <children>
                                     <fx:include fx:id="myLoansTable" source="../tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
-                                    <Label alignment="CENTER" layoutX="308.0" layoutY="1.0" text="My loans" AnchorPane.leftAnchor="308.0" AnchorPane.rightAnchor="308.0" AnchorPane.topAnchor="1.0">
+                                    <Label alignment="CENTER" layoutX="6.0" layoutY="1.0" prefHeight="25.0" prefWidth="668.0" text="My loans" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="1.0">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -45,7 +43,7 @@
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
                                  <children>
                                     <fx:include fx:id="myInvestmentsLoans" source="../tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
-                                    <Label alignment="CENTER" layoutX="268.0" layoutY="1.0" prefHeight="25.0" prefWidth="143.0" text="My lnvestments" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="270.0" AnchorPane.topAnchor="1.0">
+                                    <Label alignment="CENTER" layoutX="7.0" layoutY="1.0" prefHeight="25.0" prefWidth="667.0" text="My lnvestments" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="1.0">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -56,7 +54,7 @@
                         </SplitPane>
                       <AnchorPane maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #FFF;">
                            <children>
-                              <Label alignment="CENTER" layoutX="71.0" layoutY="1.0" text="Account transactions" AnchorPane.leftAnchor="71.0" AnchorPane.rightAnchor="71.0">
+                              <Label alignment="CENTER" layoutX="2.0" layoutY="1.0" prefHeight="25.0" prefWidth="286.0" text="Account transactions" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -90,16 +88,21 @@
             <content>
               <AnchorPane id="scramble" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #FFF;">
                      <children>
-                        <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+                        <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFF;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
                            <top>
                               <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="976.0" spacing="10.0" BorderPane.alignment="CENTER">
                                  <children>
                                     <Label id="labelFilter" text="Filter:" />
                                     <MenuButton alignment="CENTER" mnemonicParsing="false" styleClass="filterMenuBtn" text="*Investment amount">
                                        <items>
-                                          <MenuItem mnemonicParsing="false" text="0">
+                                          <MenuItem mnemonicParsing="false">
                                              <graphic>
-                                                <Slider />
+                                                <HBox alignment="CENTER">
+                                                   <children>
+                                                      <Slider fx:id="investmentAmount" />
+                                                      <Label fx:id="amountLabel" text="0" />
+                                                   </children>
+                                                </HBox>
                                              </graphic>
                                           </MenuItem>
                                        </items>
@@ -107,7 +110,7 @@
                                           <Insets bottom="5.0" top="5.0" />
                                        </padding>
                                     </MenuButton>
-                                    <CheckComboBox prefHeight="37.333333333333336" styleClass="filterMenuBtn" title="Choose categories" HBox.hgrow="ALWAYS">
+                                    <CheckComboBox fx:id="filterCats" prefHeight="37.333333333333336" styleClass="filterMenuBtn" title="Choose categories" HBox.hgrow="ALWAYS">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -116,7 +119,7 @@
                                       <items>
                                         <MenuItem mnemonicParsing="false" text="\%">
                                              <graphic>
-                                                <TextField promptText="Minimum interest value" text="0" />
+                                                <TextField fx:id="minInterest" promptText="Minimum interest value" text="0" />
                                              </graphic>
                                           </MenuItem>
                                       </items>
@@ -124,11 +127,11 @@
                                           <Insets bottom="5.0" top="5.0" />
                                        </padding>
                                     </MenuButton>
-                                    <MenuButton mnemonicParsing="false" styleClass="filterMenuBtn" text="Min Yaz">
+                                    <MenuButton fx:id="minYaz" mnemonicParsing="false" styleClass="filterMenuBtn" text="Min Yaz">
                                        <items>
                                           <MenuItem mnemonicParsing="false">
                                              <graphic>
-                                                <TextField promptText="Loan total time" text="0" />
+                                                <TextField fx:id="minYaz" promptText="Loan total time" text="0" />
                                              </graphic>
                                           </MenuItem>
                                        </items>
@@ -140,12 +143,12 @@
                                        <items>
                                           <MenuItem mnemonicParsing="false">
                                              <graphic>
-                                                <TextField promptText="Max open loans for loaner" />
+                                                <TextField fx:id="maxOpenLoans" promptText="Max open loans for loaner" />
                                              </graphic>
                                           </MenuItem>
                                           <MenuItem mnemonicParsing="false">
                                              <graphic>
-                                                <TextField promptText="Max ownership precent (1-100)" />
+                                                <TextField fx:id="ownershipPrecent" promptText="Max ownership precent (1-100)" />
                                              </graphic>
                                           </MenuItem>
                                        </items>
@@ -163,14 +166,10 @@
                               </HBox>
                            </top>
                            <center>
-                              <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                <columns>
-                                  <TableColumn prefWidth="168.0" text="Name" />
-                                  <TableColumn prefWidth="124.66665649414062" text="Category" />
-                                </columns>
-                              </TableView>
+                              <fx:include fx:id="loansToInvestTable" source="../tableview/loan_tableview/loanTableView.fxml" />
                            </center>
                         </BorderPane>
+                        <Button fx:id="makeInvestment" layoutX="830.0" layoutY="461.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="132.0" styleClass="filterMenuBtn" text="Make investment" AnchorPane.bottomAnchor="14.333333333333371" AnchorPane.rightAnchor="14.0" />
                      </children>
               </AnchorPane>
             </content>
