@@ -3,7 +3,7 @@ package customer_screen;
 import Utils.*;
 import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerDataObject;
-import dto.objectdata.LoanDataObject;
+import dto.objectdata.CustomerOperationData;
 import engine.EngineManager;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,7 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.StageStyle;
-import loan_tableview.loansTableView;
+import tableview.loan_tableview.loansTableView;
+import tableview.transactions_view.TransactionTable;
 
 import java.net.URL;
 import java.util.Optional;
@@ -32,6 +33,7 @@ public class customerScreenController implements Initializable {
     @FXML private User currentUser;
     @FXML private loansTableView myLoansTableController;
     @FXML private loansTableView myInvestmentsLoansController;
+    @FXML private TransactionTable myTransactionListController;
     @FXML private Label currentBalance;
     @FXML private Button depositBtn;
     @FXML private Button withdrawalBtn;
@@ -77,7 +79,10 @@ public class customerScreenController implements Initializable {
                     throw new NumberFormatException("Negative");
                 }
 
+                // Deposite money and refresh view.
                 this.engineManager.depositeMoney(this.currentUser.getUsername(), valueOfInput);
+                this.updateCustomerInfo(this.currentUser.getUsername());
+
                 currentBalance.setText("Current balance: " + this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
             } catch(NumberFormatException nfe) {
 
@@ -109,7 +114,10 @@ public class customerScreenController implements Initializable {
                     throw new NumberFormatException("Cant Withdrawal negative numbers.");
                 }
 
+                // Withdraw money and refresh view.
                 this.engineManager.withdrawMoney(this.currentUser.getUsername(), valueOfInput);
+                this.updateCustomerInfo(this.currentUser.getUsername());
+
                 currentBalance.setText("Current balance: " + this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
             } catch(NumberFormatException | DataTransferObject nfe) {
 
@@ -135,6 +143,7 @@ public class customerScreenController implements Initializable {
         return this.currentUser;
     }
 
+    // When changings customer view rerender all customer details.
     private void updateCustomerInfo(String newName) {
 
         // update current user Customer information DTO when selected user changes.
@@ -144,6 +153,8 @@ public class customerScreenController implements Initializable {
 
         myLoansTableController.setLoanItems(this.currentCustomer.getLoanList());
         myInvestmentsLoansController.setLoanItems(this.currentCustomer.getInvestmentList());
+        myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
+
 
     }
 }

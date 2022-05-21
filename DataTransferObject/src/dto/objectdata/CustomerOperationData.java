@@ -34,6 +34,11 @@ public class CustomerOperationData extends DataTransferObject {
     }
 
     @Override
+    public String getMessage() {
+        return super.getMessage();
+    }
+
+    @Override
     public String toString() {
         return "      Operation date: " + this.getTimeInYaz() +".\n      Amount: "
                 +Math.abs(getCurrentOptAmount())+".\n      Operation: " + getOperationName()

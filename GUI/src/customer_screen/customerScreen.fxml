@@ -25,7 +25,7 @@
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
                                  <children>
-                                    <fx:include fx:id="myLoansTable" source="../loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+                                    <fx:include fx:id="myLoansTable" source="../tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
                                     <Label alignment="CENTER" layoutX="308.0" layoutY="1.0" text="My loans" AnchorPane.leftAnchor="308.0" AnchorPane.rightAnchor="308.0" AnchorPane.topAnchor="1.0">
                                        <font>
                                           <Font size="16.0" />
@@ -35,7 +35,7 @@
                               </AnchorPane>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
                                  <children>
-                                    <fx:include fx:id="myInvestmentsLoans" source="../loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+                                    <fx:include fx:id="myInvestmentsLoans" source="../tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
                                     <Label alignment="CENTER" layoutX="268.0" layoutY="1.0" prefHeight="25.0" prefWidth="143.0" text="My lnvestments" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="270.0" AnchorPane.topAnchor="1.0">
                                        <font>
                                           <Font size="16.0" />
@@ -45,21 +45,32 @@
                               </AnchorPane>
                           </items>
                         </SplitPane>
-                      <AnchorPane maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                      <AnchorPane maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #FFF;">
                            <children>
                               <Label alignment="CENTER" layoutX="71.0" layoutY="1.0" text="Account transactions" AnchorPane.leftAnchor="71.0" AnchorPane.rightAnchor="71.0">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Label>
-                              <ScrollPane id="transactionsList" fx:id="transactionsScrollPane" layoutX="44.0" layoutY="88.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="30.0" />
+                              <ScrollPane id="transactionsList" layoutX="44.0" layoutY="88.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFF;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="30.0">
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="394.0" prefWidth="258.0" style="-fx-background-color: #FFF;">
+                                      <children>
+                                          <fx:include fx:id="myTransactionList" source="../tableview/transactions_view/transactionTable.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <Label alignment="CENTER" layoutX="308.0" layoutY="1.0" text="My loans" AnchorPane.leftAnchor="308.0" AnchorPane.rightAnchor="308.0" AnchorPane.topAnchor="1.0">
+                                              <font>
+                                                  <Font size="16.0" />
+                                              </font>
+                                          </Label>
+                                      </children>
+                                  </AnchorPane>
+                              </ScrollPane>
                               <HBox alignment="CENTER" layoutX="14.0" layoutY="463.0" prefHeight="39.0" prefWidth="262.0" spacing="30.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="462.33333333333337">
                                  <children>
-                                    <Button mnemonicParsing="false" fx:id="depositBtn" text="Deposit" />
-                                    <Button mnemonicParsing="false" fx:id="withdrawalBtn" text="Withdrawal" />
+                                    <Button fx:id="depositBtn" mnemonicParsing="false" text="Deposit" />
+                                    <Button fx:id="withdrawalBtn" mnemonicParsing="false" text="Withdrawal" />
                                  </children>
                               </HBox>
-                              <Label id="currentBalance" alignment="CENTER" fx:id="currentBalance" layoutX="13.0" layoutY="444.0" prefHeight="17.0" prefWidth="265.0" text="Current balance: " AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" />
+                              <Label id="currentBalance" fx:id="currentBalance" alignment="CENTER" layoutX="13.0" layoutY="444.0" prefHeight="17.0" prefWidth="265.0" text="Current balance: " AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" />
                            </children></AnchorPane>
                     </items>
                   </SplitPane>

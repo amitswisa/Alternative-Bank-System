@@ -4,7 +4,7 @@
 
 #header {
     -fx-background-color: #FFF;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 4, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, #dcdcdc, 6, 0, 0, 0);
 }
 
 #header #timeSpan {

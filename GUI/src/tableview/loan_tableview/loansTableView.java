@@ -1,4 +1,4 @@
-package loan_tableview;
+package tableview.loan_tableview;
 
 import dto.objectdata.LoanDataObject;
 import javafx.collections.FXCollections;

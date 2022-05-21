@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import loan_tableview.loansTableView;
+import tableview.loan_tableview.loansTableView;
 import main_screen.mainScreenController;
 
 import java.io.File;
