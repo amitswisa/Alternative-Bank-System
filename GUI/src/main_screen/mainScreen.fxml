@@ -24,7 +24,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ChoiceBox onAction="#changeUserType" fx:id="userTypeChoice" maxHeight="25.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="10.0">
+            <ChoiceBox fx:id="userTypeChoice" maxHeight="25.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="10.0" onAction="#changeUserType">
                 <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -49,19 +49,22 @@
                </padding>
                <children>
                   <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="YAZ:" />
-                  <Label text="#" fx:id="yazLabel" />
+                  <Label fx:id="yazLabel" text="#" />
                </children>
             </HBox>
             <HBox alignment="CENTER" minWidth="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-cursor: hand;" GridPane.columnIndex="3">
                <children>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../resources/settings.png" />
+                        <Image url="@../resources/images/settings.png" />
                      </image>
                   </ImageView>
                </children>
             </HBox>
          </children>
+         <padding>
+            <Insets bottom="10.0" top="10.0" />
+         </padding>
       </GridPane>
        <AnchorPane fx:id="dataDiv" layoutY="43.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="43.0">
            <children>

@@ -1,5 +1,16 @@
+@font-face {
+    font-family: Roboto;
+    src: url('../resources/fonts/Roboto-Regular.ttf');
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url('../resources/fonts/Roboto-Bold.ttf');
+}
+
 #mainPane {
     -fx-background-color: #FFF;
+    -fx-font-family: Roboto;
 }
 
 #header {

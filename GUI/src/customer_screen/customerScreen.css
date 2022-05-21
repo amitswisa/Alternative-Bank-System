@@ -45,3 +45,28 @@
     -fx-font-weight: bold;
     -fx-fint-size: 14px;
 }
+
+/* SCRAMNLE */
+
+#labelFilter {
+    font-weight:bold;
+}
+
+.filterMenuBtn {
+    -fx-background-color: #FFF;
+    -fx-border-color: #cf6a87;
+    -fx-cursor: hand;
+    -fx-border-radius: 2px;
+    -fx-text-alignment: center;
+    -fx-text-fill: #cf6a87;
+    -fx-font-weight: bold;
+}
+
+.menu-item {
+    -fx-background-color: #FFF;
+}
+
+.menu-item:hover, .menu-item:selected {
+    -fx-background-color: transparent;
+    -fx-text-fill: #000;
+}
