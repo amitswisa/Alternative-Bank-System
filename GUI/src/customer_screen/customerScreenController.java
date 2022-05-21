@@ -188,7 +188,7 @@ public class customerScreenController implements Initializable {
     private void updateScramble() {
         // Get all loans and exclude current user's ones.
         List<LoanDataObject> listOfLoansExcludedCurrentUser = this.engineManager.getAllLoansData().stream()
-                .filter(e -> !e.getOwner().equals(this.currentUser.getUsername())).collect(Collectors.toList());
+                .filter(e -> (e.getLoanStatus() == LoanDataObject.Status.NEW || e.getLoanStatus() == LoanDataObject.Status.PENDING) && !e.getOwner().equals(this.currentUser.getUsername())).collect(Collectors.toList());
         loansToInvestTableController.setLoanItems(listOfLoansExcludedCurrentUser);
 
         this.setMaxAmountToInvest();
