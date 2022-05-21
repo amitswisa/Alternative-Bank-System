@@ -27,3 +27,12 @@
     -fx-border-width: 0;
     -fx-border-color: -fx-focus-color;
 }
+
+.scroll-pane {
+    -fx-background-color: #FFF;
+}
+
+#currentBalance {
+    -fx-font-weight: bold;
+    -fx-fint-size: 14px;
+}

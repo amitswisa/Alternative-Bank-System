@@ -37,7 +37,11 @@ public class AdminController {
     public AdminController() {
         fileChooser  = new FileChooser();
         customersNames = new ArrayList<String>();
+
         alertDiaglog = new Alert(Alert.AlertType.INFORMATION);
+        alertDiaglog.setHeaderText(null);
+        alertDiaglog.setGraphic(null);
+
         fileToLoad = null;
         xmlFilePathTextProperty = new SimpleStringProperty("No xml file was loaded!");
     }
