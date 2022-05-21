@@ -3,6 +3,7 @@ package tableview.loan_tableview;
 import dto.objectdata.LoanDataObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +22,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class loansTableView implements Initializable {
 
@@ -30,7 +33,8 @@ public class loansTableView implements Initializable {
     private Scene firstScene = null;
 
     // this Data-Members
-    private ObservableList<LoanDataObject> list = null;
+    private ObservableList<LoanDataObject> obsList;
+    private FilteredList<LoanDataObject> list = null;
     private Stage popUpStage;
 
     @FXML private TableView<LoanDataObject> loansTable;
@@ -57,7 +61,10 @@ public class loansTableView implements Initializable {
         loanAmount.setCellValueFactory(new PropertyValueFactory<>("loanAmount"));
         loanInterestPerPayment.setCellValueFactory(new PropertyValueFactory<>("loanInterestPerPayment"));
         loanTotalTime.setCellValueFactory(new PropertyValueFactory<>("loanTotalTime"));
-        list = FXCollections.observableArrayList();
+
+        // Init list of loans.
+        obsList = FXCollections.observableArrayList();
+        list = new FilteredList<LoanDataObject>(obsList);
 
         TableColumn<LoanDataObject, Void> colBtn = new TableColumn("View Loan");
 
@@ -94,12 +101,20 @@ public class loansTableView implements Initializable {
 
     public void setLoanItems(List<LoanDataObject> loansList) {
 
-        list.clear();
+        obsList.clear();
 
         if(loansList == null || loansList.isEmpty())
             return;
 
-        list.addAll(loansList);
+        obsList.addAll(loansList);
         loansTable.setItems(list);
+    }
+
+    public void filterList(int amountToInvest) {
+
+        if(amountToInvest == 0)
+            list.setPredicate(i -> i.getLoanAmount() > 0);
+        else
+            list.setPredicate(i -> i.getLoanAmount() <= amountToInvest);
     }
 }
