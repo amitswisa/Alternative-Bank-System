@@ -1,26 +1,31 @@
 .MyTabPane {
-    -fx-background-color: #cecfcc;
+    -fx-background-color: #FFF;
 
 }
 
 .MyTabPane .tab
 {
-    -fx-background-color: #778DA9;
+    -fx-background-color: #f8a5c2;
 }
 
 .MyTabPane .tab:selected
 {
-    -fx-background-color: #415A77;
+    -fx-background-color: #cf6a87;
+}
+
+.tab-pane *.tab-header-background {
+    -fx-background-color: #FFF;
 }
 
 .tab .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: #3c3c3c;
+    -fx-text-fill: #FFF;
     -fx-font-size: 12px;
 }
 
 .tab:selected .tab-label {
     -fx-alignment: CENTER;
+    -fx-font-weight: bold;
     -fx-text-fill: white;
 }
 .tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
@@ -29,6 +34,10 @@
 }
 
 .scroll-pane {
+    -fx-background-color: #FFF;
+}
+
+.split-pane {
     -fx-background-color: #FFF;
 }
 
