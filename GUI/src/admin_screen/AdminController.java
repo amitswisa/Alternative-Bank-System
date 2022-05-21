@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import tableview.loan_tableview.loansTableView;
+import tableview.customer_tableview.customerTableView;
 import main_screen.mainScreenController;
 
 import java.io.File;
@@ -33,6 +34,7 @@ public class AdminController {
     @FXML private Button loadXmlFileBtn;
     @FXML private Button increaseYazBtn;
     @FXML private loansTableView loanTableController;
+    @FXML private customerTableView customerTableController;
 
     public AdminController() {
         fileChooser  = new FileChooser();
@@ -65,6 +67,7 @@ public class AdminController {
                 mainPage.setYazLabelText(BankSystem.getCurrentYaz()+""); //Set yaz and transfer to text
                 this.setCustomersNamesChoiceBox();
                 loanTableController.setLoanItems(this.engineManager.getAllLoansData()); // Transfer loan's list from loaded file to controller.
+                customerTableController.setCustomerList(this.engineManager.getAllCustomerData()); // Transfer customer's list from loaded file to controller.
             }
 
             // Pop an alert message.
