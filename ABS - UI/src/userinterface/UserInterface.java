@@ -1,4 +1,4 @@
-package userinterface;
+/*package userinterface;
 
 import abs.BankSystem;
 import dto.infodata.DataTransferObject;
@@ -518,4 +518,4 @@ public class UserInterface {
     private void cleanBuffer() {
         scanner.nextLine();
     }
-}
+}*/

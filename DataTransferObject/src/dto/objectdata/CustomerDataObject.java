@@ -1,7 +1,5 @@
 package dto.objectdata;
 
-import abs.BankCustomer;
-
 import java.util.List;
 
 public class CustomerDataObject {
@@ -11,11 +9,11 @@ public class CustomerDataObject {
     private List<LoanDataObject> investmentList;
     private List<LoanDataObject> loanList;
 
-    public CustomerDataObject(BankCustomer customer){
-        name = customer.getName();
-        this.logCustomer = customer.getCustomerLog();
-        this.investmentList = customer.getLoansInvested();
-        this.loanList = customer.getLoansTaken();
+    public CustomerDataObject(String name, List<CustomerOperationData> logCustomer, List<LoanDataObject> investmentList,  List<LoanDataObject> loanList){
+        this.name = name;
+        this.logCustomer = logCustomer;
+        this.investmentList = investmentList;
+        this.loanList = loanList;
     }
 
     public String getName() {

@@ -41,8 +41,9 @@ public class BankCustomer {
         List<LoanDataObject> myListOfLoans = new ArrayList<>();
         for(Map.Entry<Integer, Set<BankLoan>> loan : loansTaken.entrySet())
            for(BankLoan bankLoan : loan.getValue())
-                myListOfLoans.add(new LoanDataObject(bankLoan));
-
+                myListOfLoans.add(new LoanDataObject(bankLoan.getOwner(), bankLoan.getLoanID(), bankLoan.getLoanCategory(), bankLoan.getLoanAmount(),
+                        bankLoan.getLoanOpeningTime(), bankLoan.getLoanTotalTime(), bankLoan.getLoanStartTime(), bankLoan.getLoanEndTime(),
+                        bankLoan.getLoanInterestPerPayment(), bankLoan.getPaymentInterval(), bankLoan.getLoanStatus()));
         return myListOfLoans;
     }
 
@@ -58,7 +59,7 @@ public class BankCustomer {
     // withdraw money from customer account's balace.
     public void withdraw(int amountOfMoney) throws DataTransferObject {
         if(this.balance < amountOfMoney)
-            throw new DataTransferObject(this.name + " doesnt have enough money to make this withdrawal.");
+            throw new DataTransferObject(this.name + " doesnt have enough money to make this withdrawal.", BankSystem.getCurrentYaz());
 
         this.addOperationToCustomerLog(
                 new CustomerOperationData("Withdraw", "Withdrawal made successfully."
@@ -113,7 +114,9 @@ public class BankCustomer {
         List<LoanDataObject> loansTakenList = new ArrayList<>();
         for( Map.Entry<Integer,Set<BankLoan>> loan: loansTaken.entrySet())
             for (BankLoan currentBankLoan : loan.getValue())
-                loansTakenList.add(new LoanDataObject(currentBankLoan));
+                loansTakenList.add(new LoanDataObject(currentBankLoan.getOwner(), currentBankLoan.getLoanID(), currentBankLoan.getLoanCategory(), currentBankLoan.getLoanAmount(),
+                        currentBankLoan.getLoanOpeningTime(), currentBankLoan.getLoanTotalTime(), currentBankLoan.getLoanStartTime(), currentBankLoan.getLoanEndTime(),
+                        currentBankLoan.getLoanInterestPerPayment(), currentBankLoan.getPaymentInterval(), currentBankLoan.getLoanStatus()));
 
         return loansTakenList;
     }
@@ -125,7 +128,9 @@ public class BankCustomer {
         List<LoanDataObject> loansInvestedList = new ArrayList<>();
         for( Map.Entry<Integer,Set<BankLoan>> loan: loansInvested.entrySet())
             for (BankLoan currentBankLoan : loan.getValue())
-                loansInvestedList.add(new LoanDataObject(currentBankLoan));
+                loansInvestedList.add(new LoanDataObject(currentBankLoan.getOwner(), currentBankLoan.getLoanID(), currentBankLoan.getLoanCategory(), currentBankLoan.getLoanAmount(),
+                        currentBankLoan.getLoanOpeningTime(), currentBankLoan.getLoanTotalTime(), currentBankLoan.getLoanStartTime(), currentBankLoan.getLoanEndTime(),
+                        currentBankLoan.getLoanInterestPerPayment(), currentBankLoan.getPaymentInterval(), currentBankLoan.getLoanStatus()));
 
         return loansInvestedList;
     }
@@ -159,7 +164,7 @@ public class BankCustomer {
         List<BankLoan> loansToPay = new ArrayList<>();
         for(Set<BankLoan> setLoans : loansTaken.values()) {
             setLoans.forEach(loan -> {
-                if((loan.getLoanStatus() == BankLoan.Status.ACTIVE || loan.getLoanStatus() == BankLoan.Status.RISK) && loan.getNextPaymentTime() == BankSystem.getCurrentYaz())
+                if((loan.getLoanStatus() == LoanDataObject.Status.ACTIVE || loan.getLoanStatus() == LoanDataObject.Status.RISK) && loan.getNextPaymentTime() == BankSystem.getCurrentYaz())
                     loansToPay.add(loan);
             });
         }

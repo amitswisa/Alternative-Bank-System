@@ -1,3 +1,4 @@
+/*
 import userinterface.UserInterface;
 
 public class main {
@@ -5,4 +6,4 @@ public class main {
         UserInterface ui = new UserInterface();
         ui.init(); // Print program menu.
     }
-}
+}*/

@@ -32,7 +32,7 @@ public class EngineManager {
     public DataTransferObject loadXML(String filePath) {
 
         if(filePath.isEmpty())
-            return new DataTransferObject("Please choose a file!");
+            return new DataTransferObject("Please choose a file!", BankSystem.getCurrentYaz());
 
         AbsDescriptor xmlObject;
         try {
@@ -42,7 +42,7 @@ public class EngineManager {
         }
 
         bankSystem = new BankSystem(xmlObject); // Creating bank system from AbsDescriptor.
-        return new DataTransferObject("File loaded successfully!", true);
+        return new DataTransferObject("File loaded successfully!", true, BankSystem.getCurrentYaz());
     }
 
     public boolean isFileLoaded() {
@@ -96,7 +96,7 @@ public class EngineManager {
 
         // filter loans list -> only loans with status PENDING or NEW & loan's owner is other then current customer.
         pendingLoans = pendingLoans.stream().filter(loan -> !loan.getLoanOwnerName().equals(chosenCustomer)
-                && (loan.getLoanStatus() == BankLoan.Status.PENDING || loan.getLoanStatus() == BankLoan.Status.NEW)).collect(Collectors.toList());
+                && (loan.getLoanStatus() == LoanDataObject.Status.PENDING || loan.getLoanStatus() == LoanDataObject.Status.NEW)).collect(Collectors.toList());
 
         // filter loans list -> if customer chose specific category then the list will hold loans from that category.
         if(!catChoice.get(0).equals("All"))
