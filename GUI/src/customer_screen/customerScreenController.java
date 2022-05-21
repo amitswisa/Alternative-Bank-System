@@ -92,7 +92,7 @@ public class customerScreenController implements Initializable {
                 // Deposite money and refresh view.
                 this.engineManager.depositeMoney(this.currentUser.getUsername(), valueOfInput);
                 this.updateCustomerInfo(this.currentUser.getUsername());
-                this.filterFirstSettings();
+                this.setMaxAmountToInvest();
 
                 currentBalance.setText("Current balance: " + this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
             } catch(NumberFormatException nfe) {
@@ -128,7 +128,7 @@ public class customerScreenController implements Initializable {
                 // Withdraw money and refresh view.
                 this.engineManager.withdrawMoney(this.currentUser.getUsername(), valueOfInput);
                 this.updateCustomerInfo(this.currentUser.getUsername());
-                this.filterFirstSettings();
+                this.setMaxAmountToInvest();
 
                 currentBalance.setText("Current balance: " + this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
             } catch(NumberFormatException | DataTransferObject nfe) {
@@ -152,7 +152,7 @@ public class customerScreenController implements Initializable {
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 
                 amountLabel.setText(newValue.intValue() + "");
-                loansToInvestTableController.filterList(newValue.intValue()); // Filter by investmentAmount.
+                loansToInvestTableController.filterByAmount(newValue.intValue()); // Filter by investmentAmount.
             }
         });
     }
@@ -191,16 +191,20 @@ public class customerScreenController implements Initializable {
                 .filter(e -> !e.getOwner().equals(this.currentUser.getUsername())).collect(Collectors.toList());
         loansToInvestTableController.setLoanItems(listOfLoansExcludedCurrentUser);
 
-        this.filterFirstSettings();
+        this.setMaxAmountToInvest();
     }
 
-    private void filterFirstSettings() {
+    private void setMaxAmountToInvest() {
          this.investmentAmount.setMax(this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
     }
 
     private void cleanListOfLoansToInvest() {
         // Clear list of loans to invest.
         loansToInvestList.clear();
+    }
+
+    public void resetSettings() {
+        this.investmentAmount.adjustValue(0); // Updating label too because of binding.
     }
 
     /* END SCRAMBLE PAGE */

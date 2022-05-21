@@ -79,6 +79,7 @@ public class mainScreenController implements Initializable {
             this.customerPageComponent.setVisible(true);
             this.adminPageComponent.setVisible(false);
             this.currentUser.setUsername(newUser);
+            customerPageComponentController.resetSettings();
         }
     }
 }

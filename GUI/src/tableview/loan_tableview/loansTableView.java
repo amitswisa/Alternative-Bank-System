@@ -110,7 +110,7 @@ public class loansTableView implements Initializable {
         loansTable.setItems(list);
     }
 
-    public void filterList(int amountToInvest) {
+    public void filterByAmount(int amountToInvest) {
 
         if(amountToInvest == 0)
             list.setPredicate(i -> i.getLoanAmount() > 0);
