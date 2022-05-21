@@ -44,7 +44,6 @@ public class LoanDataObject extends DataTransferObject {
         this.loanInterestPerPayment = loanInterestPerPayment;
         this.paymentInterval = paymentInterval;
         this.loanStatus = loanStatus;
-
     }
 
     // Section 2 from menu.

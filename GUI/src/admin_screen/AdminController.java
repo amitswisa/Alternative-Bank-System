@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import loan_tableview.loansTableView;
 import main_screen.mainScreenController;
 
 import java.io.File;
@@ -31,11 +32,16 @@ public class AdminController {
     // @FXML
     @FXML private Button loadXmlFileBtn;
     @FXML private Button increaseYazBtn;
+    @FXML private loansTableView loanTableController;
 
     public AdminController() {
         fileChooser  = new FileChooser();
         customersNames = new ArrayList<String>();
+
         alertDiaglog = new Alert(Alert.AlertType.INFORMATION);
+        alertDiaglog.setHeaderText(null);
+        alertDiaglog.setGraphic(null);
+
         fileToLoad = null;
         xmlFilePathTextProperty = new SimpleStringProperty("No xml file was loaded!");
     }
@@ -58,6 +64,7 @@ public class AdminController {
                 xmlFilePathTextProperty.set(selectedFile.getAbsolutePath()); // Change pathText
                 mainPage.setYazLabelText(BankSystem.getCurrentYaz()+""); //Set yaz and transfer to text
                 this.setCustomersNamesChoiceBox();
+                loanTableController.setLoanItems(this.engineManager.getAllLoansData()); // Transfer loan's list from loaded file to controller.
             }
 
             // Pop an alert message.

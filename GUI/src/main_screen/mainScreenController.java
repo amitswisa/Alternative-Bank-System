@@ -1,7 +1,12 @@
 package main_screen;
 
+import Utils.User;
 import admin_screen.AdminController;
+import customer_screen.customerScreenController;
 import engine.EngineManager;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -14,11 +19,13 @@ public class mainScreenController implements Initializable {
 
     // Data members
     private final EngineManager engineManager;
-    private String currentUser;
+    private User currentUser;
 
     // Pages
     @FXML private AnchorPane adminPageComponent;
     @FXML private AdminController adminPageComponentController;
+    @FXML private AnchorPane customerPageComponent;
+    @FXML private customerScreenController customerPageComponentController;
 
     // FXML members
     @FXML private ChoiceBox<String> userTypeChoice;
@@ -27,11 +34,14 @@ public class mainScreenController implements Initializable {
 
     public mainScreenController() {
         engineManager = new EngineManager();
-        this.currentUser = "Admin";
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        customerPageComponent.setVisible(false);
+        customerPageComponentController.setEngineManager(this.engineManager);
+        currentUser = customerPageComponentController.getCurrentUser();
 
         // Transfer engine to included fxmls.
         adminPageComponentController.setInitData(this.engineManager, this);
@@ -48,14 +58,27 @@ public class mainScreenController implements Initializable {
     }
 
     public String getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(String currentUser) {
-        this.currentUser = currentUser;
+        return this.currentUser.getUsername();
     }
 
     public void setYazLabelText(String yazString) {
         this.yazLabel.setText(yazString);
+    }
+
+    public void changeUserType(ActionEvent actionEvent) {
+        String newUser = userTypeChoice.getValue();
+
+        if(newUser == null)
+            return;
+
+        if(newUser.equals(this.currentUser.getDefaultUserName())) {
+            this.customerPageComponent.setVisible(false);
+            this.adminPageComponent.setVisible(true);
+            this.currentUser.setUsername(this.currentUser.getDefaultUserName());
+        } else {
+            this.customerPageComponent.setVisible(true);
+            this.adminPageComponent.setVisible(false);
+            this.currentUser.setUsername(newUser);
+        }
     }
 }
