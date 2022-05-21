@@ -1,71 +1,53 @@
 package dto.objectdata;
 
-import abs.BankLoan;
-import abs.BankLoanTransaction;
-import abs.BankSystem;
-import abs.Investor;
 import dto.infodata.DataTransferObject;
 
+import java.util.List;
 import java.util.Map;
 
 public class LoanDataObject extends DataTransferObject {
 
-    private BankLoan loan;
-    private String id;
-    private String owner;
-    private String category;
-    private int capital;
-    private int interest;
-    private int totalTime;
-    private int loanInterval;
-    private String status;
+    public enum Status {
+        NEW,
+        PENDING,
+        ACTIVE,
+        RISK,
+        FINISHED
+    }
 
-    public LoanDataObject(BankLoan loan, String ownerName){
+    private final String owner;
+    private final String loanID;
+    private final String loanCategory;
+    private final int loanAmount; // Loan amount of money.
+    private final int loanOpeningTime; // Time in YAZ that customer opened new loan.
+    private final int loanTotalTime;
+    private final int loanStartTime; // in yaz - set value when being active.
+    private final int loanEndTime;
+    private final int loanInterestPerPayment;
+    private final int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
+    private final Status loanStatus;
+    //private Map<String, Investor> loanInvestors; // List of investors and their amount of investment;
+    //private List<BankLoanTransaction> transactionList; // hold all transaction's history.
+
+    public LoanDataObject(String owner, String loanID, String loanCategory, int loanAmount, int loanOpeningTime, int loanTotalTime,
+                          int loanStartTime, int loanEndTime, int loanInterestPerPayment, int paymentInterval, Status loanStatus)
+    {
         super();
-        this.id = loan.getLoanID();
-        this.owner = ownerName;
-        this.category = loan.getLoanCategory();
-        this.capital = loan.getLoanAmount();
-        this.interest = loan.getTotalLoanInterestInMoney();
-        this.totalTime = loan.getLoanTotalTime();
-        this.loanInterval = loan.getPaymentInterval();
-        this.status = loan.getLoanStatus().toString();
-
-        // Extra data from loan will be created from engine by given id.
+        this.owner = owner;
+        this.loanID = loanID;
+        this.loanCategory = loanCategory;
+        this.loanAmount = loanAmount;
+        this.loanOpeningTime = loanOpeningTime;
+        this.loanTotalTime = loanTotalTime;
+        this.loanStartTime = loanStartTime;
+        this.loanEndTime = loanEndTime;
+        this.loanInterestPerPayment = loanInterestPerPayment;
+        this.paymentInterval = paymentInterval;
+        this.loanStatus = loanStatus;
     }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public int getCapital() {
-        return capital;
-    }
-
-    public String getStatus() {
-        return this.status.toString();
-    }
-
-    public int getInterest() {
-        return interest;
-    }
-
-    public int getTotalTime() {
-        return totalTime;
-    }
-
-    public int getLoanInterval() {return this.loanInterval; }
 
     // Section 2 from menu.
-    public void showLoan() {
+    /*public void showLoan() {
         System.out.println(this);
 
         //Print all the investors.
@@ -170,29 +152,29 @@ public class LoanDataObject extends DataTransferObject {
             }
         }
         return res;
-    }
+    }*/
 
     public String getLoanOwnerName() {
-        return this.loan.getOwner();
+        return this.owner;
     }
 
     public int getLoanTotalTime() {
-        return this.loan.getLoanTotalTime();
+        return this.loanTotalTime;
     }
 
-    public int getLoanInterest() {return this.loan.getLoanInterestPerPayment();}
+    public int getLoanInterest() {return this.loanInterestPerPayment;}
 
-    public String getLoanCatgory() {return this.loan.getLoanCategory();}
+    public String getLoanCatgory() {return this.loanCategory;}
 
-    public BankLoan.Status getLoanStatus() {return this.loan.getLoanStatus();}
+    public LoanDataObject.Status getLoanStatus() {return this.loanStatus;}
 
-    public String getLoanName() {return this.loan.getLoanID(); }
+    public String getLoanName() {return this.loanID; }
 
     public int getLoanOpeningTime() {
-        return this.loan.getLoanOpeningTime();
+        return this.loanOpeningTime;
     }
 
-    @Override
+   /* @Override
     public String toString() {
         return  "Loan ID: " + this.loan.getLoanID() + "\n" +
                 "Loan Category: " + this.loan.getLoanCategory() + "\n" +
@@ -201,6 +183,6 @@ public class LoanDataObject extends DataTransferObject {
                 "Loan Interest: " + this.loan.getTotalLoanInterestInMoney() + "\n" +
                 "Payment Interval: " + this.loan.getPaymentInterval() + "\n" +
                 "Loan Status: " + this.loan.getLoanStatus();
-    }
+    }*/
 
 }

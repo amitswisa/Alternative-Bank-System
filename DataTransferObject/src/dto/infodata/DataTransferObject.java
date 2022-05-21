@@ -1,6 +1,5 @@
 package dto.infodata;
 
-import abs.BankSystem;
 
 public class DataTransferObject extends Throwable {
 
@@ -8,29 +7,30 @@ public class DataTransferObject extends Throwable {
     private final int timeInYaz;
     private final boolean isSuccess;
 
+//TODO check with amit that is correct logic
     public DataTransferObject() {
         this.message = "";
-        this.timeInYaz = BankSystem.getCurrentYaz();
+        this.timeInYaz = 0;
         this.isSuccess = false;
     }
 
-    public DataTransferObject(String message) {
-        this.message = message;
-        this.timeInYaz = BankSystem.getCurrentYaz();
+    public DataTransferObject(int currentYaz) {
+        this.message = "";
+        this.timeInYaz = currentYaz;
         this.isSuccess = false;
     }
 
-    public DataTransferObject(String message, boolean isSuccess) {
+    public DataTransferObject(String message, int currentYaz) {
         this.message = message;
-        this.timeInYaz = BankSystem.getCurrentYaz();
+        this.timeInYaz = currentYaz;
+        this.isSuccess = false;
+    }
+
+    public DataTransferObject(String message, boolean isSuccess, int currentYaz) {
+        this.message = message;
+        this.timeInYaz = currentYaz;
         this.isSuccess = isSuccess;
 
-    }
-
-    public DataTransferObject(String message, int timeInYaz) {
-        this.message = message;
-        this.timeInYaz = timeInYaz;
-        this.isSuccess = false;
     }
 
     // Get Data Transfer Object message.

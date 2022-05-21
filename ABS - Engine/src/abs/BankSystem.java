@@ -2,6 +2,7 @@ package abs;
 
 import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerDataObject;
+import dto.objectdata.CustomerOperationData;
 import dto.objectdata.LoanDataObject;
 import engine.convertor.Convertor;
 import generalObjects.Triple;
@@ -72,7 +73,7 @@ public class BankSystem {
 
         List<CustomerDataObject> customerData = new ArrayList<>();
         for(Map.Entry<String, BankCustomer> customer : customers.entrySet()) {
-            customerData.add(new CustomerDataObject(customer.getValue()));
+            customerData.add(new CustomerDataObject(customer.getValue().getName(), customer.getValue().getCustomerLog(), customer.getValue().getLoansInvested(), customer.getValue().getLoansTaken()));
         }
 
         return customerData;

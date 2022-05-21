@@ -10,7 +10,7 @@ public class CustomerOperationData extends DataTransferObject {
     private final int balanceAfter;
 
     public CustomerOperationData(String operationName, String message, int balance, int currentOptAmount) {
-        super(message);
+        super();
         this.operationName = operationName;
         this.currentOptAmount = currentOptAmount;
         this.balanceAfter = currentOptAmount + balance;

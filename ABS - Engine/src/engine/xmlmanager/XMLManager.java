@@ -1,5 +1,6 @@
 package engine.xmlmanager;
 
+import abs.BankSystem;
 import dto.infodata.DataTransferObject;
 import xmlgenerated.*;
 
@@ -26,10 +27,10 @@ public class XMLManager {
         File tempFileHolder = new File(filePathString); // Init temp file var.
 
         if(!tempFileHolder.exists())  // Check if file is exist.
-            throw new DataTransferObject("Error: file doesnt exist.");
+            throw new DataTransferObject("Error: file doesnt exist.", BankSystem.getCurrentYaz());
 
         if(!this.isFileHaveXmlExtension(tempFileHolder))  // Check if file extension is ".xml"
-            throw new DataTransferObject("Error: file must have .xml extension.");
+            throw new DataTransferObject("Error: file must have .xml extension.", BankSystem.getCurrentYaz());
 
         AbsDescriptor resValue = this.validateXML(tempFileHolder); // XML file content validation.
 
@@ -53,7 +54,7 @@ public class XMLManager {
             InputStream xml_InfoStream = new FileInputStream(f_xml); // open new file stream.
             toValidate = this.deserializeFrom(xml_InfoStream); // deserialize from xml file to object.
         } catch(FileNotFoundException | JAXBException e) {
-            throw new DataTransferObject("Error occurred while trying deserialize xml file.");
+            throw new DataTransferObject("Error occurred while trying deserialize xml file.", BankSystem.getCurrentYaz());
         }
 
         // Adding categories name into Map Object.
@@ -68,7 +69,7 @@ public class XMLManager {
         Map<String, Boolean> customersNameMap = new HashMap<>();
         for(AbsCustomer customer : absCusts.getAbsCustomer()) {
             if(customersNameMap.containsKey(customer.getName()))
-                throw new DataTransferObject("Error: customer " + customer.getName() + "exists more then once.");
+                throw new DataTransferObject("Error: customer " + customer.getName() + "exists more then once.", BankSystem.getCurrentYaz());
 
             customersNameMap.put(customer.getName(), true);
         }
@@ -77,16 +78,16 @@ public class XMLManager {
         for(AbsLoan loan : toValidate.getAbsLoans().getAbsLoan()) {
             // Check if loan has an existing category name.
             if(!catNameStringMap.containsKey(loan.getAbsCategory()))
-                throw new DataTransferObject("Loan Error: given category doesn't exist in loan with following id: " + loan.getId());
+                throw new DataTransferObject("Loan Error: given category doesn't exist in loan with following id: " + loan.getId(), BankSystem.getCurrentYaz());
 
             // Check if loan has an existing customer name.
             if(!customersNameMap.containsKey(loan.getAbsOwner()))
-                throw new DataTransferObject("Loan Error: loan " + loan.getId() + " holds customer that doesnt exist.");
+                throw new DataTransferObject("Loan Error: loan " + loan.getId() + " holds customer that doesnt exist.", BankSystem.getCurrentYaz());
 
             // Validate payment.
             float isValidPayment = (float)loan.getAbsTotalYazTime() / (float)loan.getAbsPaysEveryYaz();
             if(isValidPayment != (int)isValidPayment)
-                throw new DataTransferObject("Loan Error: loan "+loan.getId()+" payment isn't divided equally.");
+                throw new DataTransferObject("Loan Error: loan "+loan.getId()+" payment isn't divided equally.", BankSystem.getCurrentYaz());
         }
 
         return toValidate;

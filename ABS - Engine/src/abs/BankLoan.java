@@ -1,5 +1,6 @@
 package abs;
 
+import dto.objectdata.LoanDataObject;
 import xmlgenerated.AbsLoan;
 
 import java.util.*;
@@ -7,14 +8,14 @@ import java.util.stream.Collectors;
 
 public class BankLoan {
 
-    public enum Status {
+    /*public enum Status {
         NEW,
         PENDING,
         ACTIVE,
         RISK,
         FINISHED
     }
-
+*/
     private String owner;
     private String loanID;
     private String loanCategory;
@@ -25,7 +26,7 @@ public class BankLoan {
     private int loanEndTime;
     private int loanInterestPerPayment;
     private int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
-    private Status loanStatus;
+    private LoanDataObject.Status loanStatus;
     private Map<String, Investor> loanInvestors; // List of investors and their amount of investment;
     private List<BankLoanTransaction> transactionList; // hold all transaction's history.
 
@@ -40,7 +41,7 @@ public class BankLoan {
         this.loanInterestPerPayment = absLoan.getAbsIntristPerPayment();
         this.paymentInterval = absLoan.getAbsPaysEveryYaz();
         this.loanInvestors = new HashMap<>();
-        this.loanStatus = Status.NEW;
+        this.loanStatus = LoanDataObject.Status.NEW;
         transactionList = new ArrayList<>();
     }
 
@@ -64,13 +65,13 @@ public class BankLoan {
           this.addInvestor(customer, amountToActivate);
           //Change status loan
           this.loanStartTime = BankSystem.getCurrentYaz();
-          this.loanStatus = Status.ACTIVE;
+          this.loanStatus = LoanDataObject.Status.ACTIVE;
           this.updateBankLoansTransactionsList(); // Update list to contain all future payments & updates status to not_paied.
           return amountToActivate; //return the amount actually success to invest
       }
 
-      if(this.loanStatus == Status.NEW)
-          this.setStatus(Status.PENDING);
+      if(this.loanStatus == LoanDataObject.Status.NEW)
+          this.setStatus(LoanDataObject.Status.PENDING);
 
       this.addInvestor(customer, InvestmentAmount);
       return InvestmentAmount;
@@ -147,7 +148,7 @@ public class BankLoan {
         return loanInvestors;
     }
 
-    public Status getLoanStatus() {
+    public LoanDataObject.Status getLoanStatus() {
         return loanStatus;
     }
 
@@ -206,7 +207,7 @@ public class BankLoan {
         return this.getLoanAmount() - loanInvestors.values().stream().mapToInt(e -> e.getInitialInvestment()).sum();
     }
 
-    public void setStatus(Status loanStatus) {
+    public void setStatus(LoanDataObject.Status loanStatus) {
         this.loanStatus = loanStatus;
     }
 
@@ -244,10 +245,10 @@ public class BankLoan {
 
             // Change loan status to finish when last payment is made.
             if (paymentNumber == this.getLoanNumberOfPayments()) {
-                this.setStatus(Status.FINISHED);
+                this.setStatus(LoanDataObject.Status.FINISHED);
                 this.loanEndTime = BankSystem.getCurrentYaz();
-            } else if (this.getLoanStatus() == Status.RISK) {
-                this.setStatus(Status.ACTIVE);
+            } else if (this.getLoanStatus() == LoanDataObject.Status.RISK) {
+                this.setStatus(LoanDataObject.Status.ACTIVE);
 
                 // change previouse unpaid payments status from UN_PAID to DEBT_COVERED
                 for(int i = 0;i < paymentNumber;i++) {
@@ -261,7 +262,7 @@ public class BankLoan {
         }
 
         // If balance is not enough to make the payment.
-        this.setStatus(Status.RISK); // set status to RISK.
+        this.setStatus(LoanDataObject.Status.RISK); // set status to RISK.
         // if this is not the last payment add this debt to next payment.
         if(paymentNumber < lastPaymentIndex)
             transactionList.get(paymentNumber).addDebt(loanToPay.getPaymentValue(), loanToPay.getInterestValue());
