@@ -63,8 +63,10 @@ public class EngineManager {
     }
 
     public CustomerDataObject getCustomerByName(String customerName) {
-        if(bankSystem != null)
-            return new CustomerDataObject(this.bankSystem.getCustomerByName(customerName));
+        if(bankSystem != null) {
+            BankCustomer temp = this.bankSystem.getCustomerByName(customerName);
+            return new CustomerDataObject(temp.getName(), temp.getCustomerLog(), temp.getLoansInvested(), temp.getLoansTaken());
+        }
 
         return null;
     }
@@ -102,17 +104,17 @@ public class EngineManager {
         List<LoanDataObject> resData = new ArrayList<>(); // result list.
 
         // filter loans list -> only loans with status PENDING or NEW & loan's owner is other then current customer.
-        pendingLoans = pendingLoans.stream().filter(loan -> !loan.getLoanOwnerName().equals(chosenCustomer)
+        pendingLoans = pendingLoans.stream().filter(loan -> !loan.getOwner().equals(chosenCustomer)
                 && (loan.getLoanStatus() == LoanDataObject.Status.PENDING || loan.getLoanStatus() == LoanDataObject.Status.NEW)).collect(Collectors.toList());
 
         // filter loans list -> if customer chose specific category then the list will hold loans from that category.
         if(!catChoice.get(0).equals("All"))
             for(String ch : catChoice)
-                resData.addAll(pendingLoans.stream().filter(loan -> loan.getLoanCatgory().equals(ch)).collect(Collectors.toList()));
+                resData.addAll(pendingLoans.stream().filter(loan -> loan.getLoanCategory().equals(ch)).collect(Collectors.toList()));
 
         // filter loans lost -> if interent isnt equal to 0 -> hold loans with interest greater or equal to given interest.
         if(interest > 0)
-            resData = resData.stream().filter(loan -> loan.getLoanInterest() >= interest).collect(Collectors.toList());
+            resData = resData.stream().filter(loan -> loan.getLoanInterestPerPayment() >= interest).collect(Collectors.toList());
 
         // filter loans list -> filter list by total time left to loans.
         if(totalTime > 0)

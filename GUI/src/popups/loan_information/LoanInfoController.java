@@ -19,13 +19,13 @@ public class LoanInfoController {
 
 
     public void setLoanPopupInfo(LoanDataObject loan) {
-        this.loanName.setText(loan.getId());
+        this.loanName.setText(loan.getLoanID());
         this.owner.setText(loan.getOwner());
-        this.category.setText(loan.getCategory());
-        this.capital.setText(loan.getCapital()+"");
-        this.interest.setText(loan.getInterest()+"");
-        this.totalTime.setText(loan.getTotalTime()+"");
-        this.interval.setText(loan.getLoanInterval() + "");
-        this.status.setText(loan.getStatus());
+        this.category.setText(loan.getLoanCategory());
+        this.capital.setText(loan.getLoanAmount()+"");
+        this.interest.setText(loan.getLoanInterestPerPayment()+"");
+        this.totalTime.setText(loan.getLoanTotalTime()+"");
+        this.interval.setText(loan.getPaymentInterval() + "");
+        this.status.setText(loan.getLoanStatus().toString());
     }
 }

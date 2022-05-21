@@ -1,8 +1,9 @@
 package customer_screen;
 
-import Utils.User;
+import Utils.*;
 import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerDataObject;
+import dto.objectdata.LoanDataObject;
 import engine.EngineManager;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,8 +13,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Popup;
 import javafx.stage.StageStyle;
 import loan_tableview.loansTableView;
 
@@ -62,7 +61,7 @@ public class customerScreenController implements Initializable {
             }
         });
 
-        // Deposit & Withdrawal button functionality
+        // Deposit button functionality
         depositBtn.setOnMouseClicked(event -> {
             moneyPopup.setTitle("Deposit");
             Optional<String> result = moneyPopup.showAndWait();
@@ -72,19 +71,29 @@ public class customerScreenController implements Initializable {
             // Try parsing input to int and if success update user bank.
             try {
                 int valueOfInput = Integer.parseInt(value);
+
+                // Trying to deposit negative number.
+                if(valueOfInput < 0) {
+                    throw new NumberFormatException("Negative");
+                }
+
                 this.engineManager.depositeMoney(this.currentUser.getUsername(), valueOfInput);
                 currentBalance.setText("Current balance: " + this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
             } catch(NumberFormatException nfe) {
 
                 // If ok button was pressed!
                 if(result.isPresent()) {
-                    alertDialog.setContentText("Please enter a number.");
+                    if(nfe.getMessage().equals("Negstive"))
+                        alertDialog.setContentText("Cant deposit negative numbers.");
+                    else
+                        alertDialog.setContentText("Please enter a number.");
+
                     alertDialog.showAndWait();
                 }
             }
         });
 
-        // Deposit & Withdrawal button functionality
+        // Withdrawal button functionality
         withdrawalBtn.setOnMouseClicked(event -> {
             moneyPopup.setTitle("Withdrawal");
             Optional<String> result = moneyPopup.showAndWait();
@@ -94,6 +103,12 @@ public class customerScreenController implements Initializable {
             // Try parsing input to int and if success update user bank.
             try {
                 int valueOfInput = Integer.parseInt(value);
+
+                // Trying to deposit negative number.
+                if(valueOfInput < 0) {
+                    throw new NumberFormatException("Cant Withdrawal negative numbers.");
+                }
+
                 this.engineManager.withdrawMoney(this.currentUser.getUsername(), valueOfInput);
                 currentBalance.setText("Current balance: " + this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
             } catch(NumberFormatException | DataTransferObject nfe) {

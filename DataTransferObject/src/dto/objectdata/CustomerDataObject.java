@@ -21,7 +21,7 @@ public class CustomerDataObject {
     }
 
     public List<CustomerOperationData> getLogCustomer() {
-        return logCustomer;
+        return this.logCustomer;
     }
 
     public List<LoanDataObject> getInvestmentList() {
@@ -29,6 +29,6 @@ public class CustomerDataObject {
     }
 
     public List<LoanDataObject> getLoanList() {
-        return loanList;
+        return this.loanList;
     }
 }

@@ -154,7 +154,7 @@ public class LoanDataObject extends DataTransferObject {
         return res;
     }*/
 
-    public String getLoanOwnerName() {
+    public String getOwner() {
         return this.owner;
     }
 
@@ -162,13 +162,17 @@ public class LoanDataObject extends DataTransferObject {
         return this.loanTotalTime;
     }
 
-    public int getLoanInterest() {return this.loanInterestPerPayment;}
+    public int getLoanInterestPerPayment() {return this.loanInterestPerPayment;}
 
-    public String getLoanCatgory() {return this.loanCategory;}
+    public int getLoanAmount() {return this.loanAmount;}
+
+    public String getLoanCategory() {return this.loanCategory;}
 
     public LoanDataObject.Status getLoanStatus() {return this.loanStatus;}
 
-    public String getLoanName() {return this.loanID; }
+    public String getLoanID() {return this.loanID; }
+
+    public int getPaymentInterval() {return this.paymentInterval;}
 
     public int getLoanOpeningTime() {
         return this.loanOpeningTime;

@@ -34,7 +34,7 @@ public class loansTableView implements Initializable {
     private Stage popUpStage;
 
     @FXML private TableView<LoanDataObject> loansTable;
-    @FXML private TableColumn<LoanDataObject, String> id, owner, category, capital, interest, totalTime;
+    @FXML private TableColumn<LoanDataObject, String> loanID, owner, loanCategory, loanAmount, loanInterestPerPayment, loanTotalTime;
 
     public loansTableView() throws IOException {
         // Create popup window.
@@ -51,12 +51,12 @@ public class loansTableView implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        loanID.setCellValueFactory(new PropertyValueFactory<>("loanID"));
         owner.setCellValueFactory(new PropertyValueFactory<>("owner"));
-        category.setCellValueFactory(new PropertyValueFactory<>("category"));
-        capital.setCellValueFactory(new PropertyValueFactory<>("capital"));
-        interest.setCellValueFactory(new PropertyValueFactory<>("interest"));
-        totalTime.setCellValueFactory(new PropertyValueFactory<>("totalTime"));
+        loanCategory.setCellValueFactory(new PropertyValueFactory<>("loanCategory"));
+        loanAmount.setCellValueFactory(new PropertyValueFactory<>("loanAmount"));
+        loanInterestPerPayment.setCellValueFactory(new PropertyValueFactory<>("loanInterestPerPayment"));
+        loanTotalTime.setCellValueFactory(new PropertyValueFactory<>("loanTotalTime"));
         list = FXCollections.observableArrayList();
 
         TableColumn<LoanDataObject, Void> colBtn = new TableColumn("View Loan");
