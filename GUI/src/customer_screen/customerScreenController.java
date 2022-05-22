@@ -188,8 +188,10 @@ public class customerScreenController implements Initializable {
         });
 
         this.ownershipPrecent.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(this.validateTextField(oldValue, newValue, ownershipPrecent))
-                this.loansToInvestTableController.setOwnershipPrecent(Integer.parseInt(newValue));
+            this.validateTextField(oldValue, newValue, ownershipPrecent);
+
+            if(Integer.parseInt(newValue) > 100)
+                this.ownershipPrecent.setText("100");
         });
 
     }

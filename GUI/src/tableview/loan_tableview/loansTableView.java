@@ -35,7 +35,7 @@ public class loansTableView implements Initializable {
     private Stage popUpStage;
 
     // Properties for filter use
-    private SimpleIntegerProperty investAmount, minInterest, minYaz, maxOpenLoans, ownershipPrecent;
+    private SimpleIntegerProperty investAmount, minInterest, minYaz, maxOpenLoans;
     private ListProperty<String> catsList;
 
     @FXML private TableView<LoanDataObject> loansTable;
@@ -70,7 +70,6 @@ public class loansTableView implements Initializable {
         minInterest = new SimpleIntegerProperty(0);
         minYaz = new SimpleIntegerProperty(0);
         maxOpenLoans = new SimpleIntegerProperty(0);
-        ownershipPrecent = new SimpleIntegerProperty(0);
         catsList = new SimpleListProperty<>();
 
         // Init list of loans.
@@ -83,9 +82,8 @@ public class loansTableView implements Initializable {
                         && ((this.investAmount.get() == 0) ? i.getLoanAmount() > 0 : i.getLoanAmount() <= this.investAmount.get())
                             && (i.getLoanInterestPerPayment() > this.minInterest.get())
                                 && (i.getLoanTotalTime() >= this.minYaz.get())
-                                && ((this.maxOpenLoans.get() == 0) ? i.getUnfinishedLoansNumber() >= 0 : i.getUnfinishedLoansNumber() <= this.maxOpenLoans.get())
-                                    && ((this.ownershipPrecent.get() == 0) ? i.getAmountLeftToPay() > 0 : ((i.getAmountLeftToPay()/i.getLoanAmount())*100) <= this.ownershipPrecent.get()),
-                this.catsList, this.investAmount, this.minInterest, this.minYaz, this.maxOpenLoans, this.ownershipPrecent
+                                && ((this.maxOpenLoans.get() == 0) ? i.getUnfinishedLoansNumber() >= 0 : i.getUnfinishedLoansNumber() <= this.maxOpenLoans.get()),
+                this.catsList, this.investAmount, this.minInterest, this.minYaz, this.maxOpenLoans
         ));
 
         TableColumn<LoanDataObject, Void> colBtn = new TableColumn("View Loan");
@@ -148,9 +146,5 @@ public class loansTableView implements Initializable {
 
     public void setMaxOpenLoans(int newV) {
         this.maxOpenLoans.set(newV);
-    }
-
-    public void setOwnershipPrecent(int newV) {
-        this.ownershipPrecent.set(newV);
     }
 }
