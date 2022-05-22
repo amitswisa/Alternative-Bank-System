@@ -7,6 +7,9 @@ import dto.objectdata.LoanDataObject;
 import engine.EngineManager;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -43,7 +46,7 @@ public class customerScreenController implements Initializable {
     @FXML private Slider investmentAmount;
     @FXML private Label amountLabel;
     @FXML private CheckComboBox<String> filterCats;
-    @FXML private TextField maxInterest, maxYax, maxOpenLoans, ownershipPrecent;
+    @FXML private TextField minInterest, minYaz, maxOpenLoans, ownershipPrecent;
 
     public customerScreenController() {
         currentUser = new User();
@@ -146,21 +149,57 @@ public class customerScreenController implements Initializable {
             }
         });
 
+        this.setFilterOptionsListeners();
+    }
+
+    // Set ChangeEventListener to each filter component.
+    private void setFilterOptionsListeners() {
+
         // Bind slider value to label.
         this.investmentAmount.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 
                 amountLabel.setText(newValue.intValue() + "");
-                loansToInvestTableController.filterByAmount(newValue.intValue()); // Filter by investmentAmount.
+                loansToInvestTableController.setMinAmount(newValue.intValue()); // Filter by investmentAmount.
             }
         });
+
+        // Listener for CheckComboBox item pick -> updating cats list in view.
+        this.filterCats.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+            public void onChanged(ListChangeListener.Change<? extends String> c) {
+                loansToInvestTableController.updateFilterCategories(filterCats.getCheckModel().getCheckedItems());
+        } });
+
+        // text fields bindings.
+        this.minInterest.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(this.validateTextField(oldValue, newValue, minInterest))
+                this.loansToInvestTableController.setMinInterest(Integer.parseInt(newValue));
+        });
+
+        this.minYaz.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(this.validateTextField(oldValue, newValue, this.minYaz))
+                this.loansToInvestTableController.setMinYaz(Integer.parseInt(newValue));
+        });
+
+        this.maxOpenLoans.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(this.validateTextField(oldValue, newValue, maxOpenLoans))
+                this.loansToInvestTableController.setMaxOpenLoans(Integer.parseInt(newValue));
+        });
+
+        this.ownershipPrecent.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(this.validateTextField(oldValue, newValue, ownershipPrecent))
+                this.loansToInvestTableController.setOwnershipPrecent(Integer.parseInt(newValue));
+        });
+
     }
 
+    // Set engine.
     public void setEngineManager(EngineManager engineManager) {
         this.engineManager = engineManager;
     }
 
+    // Get the current chosen user.
     public User getCurrentUser() {
         return this.currentUser;
     }
@@ -179,21 +218,28 @@ public class customerScreenController implements Initializable {
         myInvestmentsLoansController.setLoanItems(this.currentCustomer.getInvestmentList());
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
 
+        this.setCategoryList();
     }
-
 
     /* SCRAMBLE PAGE */
 
     // Show and re-render all loans to invest in list.
     private void updateScramble() {
+
         // Get all loans and exclude current user's ones.
         List<LoanDataObject> listOfLoansExcludedCurrentUser = this.engineManager.getAllLoansData().stream()
                 .filter(e -> (e.getLoanStatus() == LoanDataObject.Status.NEW || e.getLoanStatus() == LoanDataObject.Status.PENDING) && !e.getOwner().equals(this.currentUser.getUsername())).collect(Collectors.toList());
+
+        // update number of open loans for customer.
+        for(LoanDataObject e : listOfLoansExcludedCurrentUser)
+            e.setUnfinishedLoansNumber(this.engineManager.getCustomerByName(e.getOwner()).countUnfinishedLoans());
+
         loansToInvestTableController.setLoanItems(listOfLoansExcludedCurrentUser);
 
-        this.setMaxAmountToInvest();
+        this.setMaxAmountToInvest(); // Define max amount to invest by user balance.
     }
 
+    // Set slider max value to be user balance (even if balance changed).
     private void setMaxAmountToInvest() {
          this.investmentAmount.setMax(this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
     }
@@ -205,7 +251,32 @@ public class customerScreenController implements Initializable {
 
     public void resetSettings() {
         this.investmentAmount.adjustValue(0); // Updating label too because of binding.
+        minInterest.setText("0");
+        minYaz.setText("0");
+        maxOpenLoans.setText("0");
+        ownershipPrecent.setText("0");
     }
 
+    private void setCategoryList() {
+        ObservableList<String> strings = FXCollections.observableArrayList();
+        strings.setAll(this.engineManager.getBankCategories());
+        this.filterCats.getItems().setAll(strings);
+    }
+
+    // Validator function for binding textfield to check textfield dont contain non-integers.
+    private boolean validateTextField(String oldValue, String newValue, TextField tf) {
+        try {
+            int newV = Integer.parseInt(newValue);
+
+            if(newV < 0)
+                throw new NumberFormatException();
+
+            return true;
+
+        } catch(NumberFormatException e) {
+            tf.setText(oldValue);
+            return false;
+        }
+    }
     /* END SCRAMBLE PAGE */
 }

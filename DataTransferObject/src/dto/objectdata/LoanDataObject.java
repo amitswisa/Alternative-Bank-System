@@ -21,16 +21,18 @@ public class LoanDataObject extends DataTransferObject {
     private final int loanAmount; // Loan amount of money.
     private final int loanOpeningTime; // Time in YAZ that customer opened new loan.
     private final int loanTotalTime;
+    private final int amountLeftToPay;
     private final int loanStartTime; // in yaz - set value when being active.
     private final int loanEndTime;
     private final int loanInterestPerPayment;
     private final int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
+    private int unfinishedLoansNumber;
     private final Status loanStatus;
     //private Map<String, Investor> loanInvestors; // List of investors and their amount of investment;
     //private List<BankLoanTransaction> transactionList; // hold all transaction's history.
 
     public LoanDataObject(String owner, String loanID, String loanCategory, int loanAmount, int loanOpeningTime, int loanTotalTime,
-                          int loanStartTime, int loanEndTime, int loanInterestPerPayment, int paymentInterval, Status loanStatus)
+                          int loanStartTime, int loanEndTime, int loanInterestPerPayment, int paymentInterval, Status loanStatus, int amountLeftToPay)
     {
         super();
         this.owner = owner;
@@ -44,6 +46,7 @@ public class LoanDataObject extends DataTransferObject {
         this.loanInterestPerPayment = loanInterestPerPayment;
         this.paymentInterval = paymentInterval;
         this.loanStatus = loanStatus;
+        this.amountLeftToPay = amountLeftToPay;
     }
 
     // Section 2 from menu.
@@ -174,9 +177,17 @@ public class LoanDataObject extends DataTransferObject {
 
     public int getPaymentInterval() {return this.paymentInterval;}
 
+    public int getAmountLeftToPay() {return this.amountLeftToPay;}
+
     public int getLoanOpeningTime() {
         return this.loanOpeningTime;
     }
+
+    public void setUnfinishedLoansNumber(int val) {
+        this.unfinishedLoansNumber = val;
+    }
+
+    public int getUnfinishedLoansNumber() {return this.unfinishedLoansNumber;}
 
    /* @Override
     public String toString() {

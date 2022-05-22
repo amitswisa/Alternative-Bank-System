@@ -13,6 +13,7 @@
             <TableColumn fx:id="owner" prefWidth="153.3333740234375" text="Owner" />
             <TableColumn fx:id="loanCategory" prefWidth="174.00003051757812" text="Category" />
             <TableColumn fx:id="loanAmount" prefWidth="128.66668701171875" text="Capital" />
+            <TableColumn fx:id="amountLeftToPay" minWidth="0.0" prefWidth="69.3333740234375" text="Amount to activate" />
             <TableColumn fx:id="loanInterestPerPayment" prefWidth="101.33331298828125" text="Interest" />
             <TableColumn fx:id="loanTotalTime" minWidth="0.0" prefWidth="69.3333740234375" text="Total time" />
          </columns>

@@ -1,6 +1,7 @@
 package dto.objectdata;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CustomerDataObject {
 
@@ -50,6 +51,11 @@ public class CustomerDataObject {
 
     public List<LoanDataObject> getLoanList() {
         return this.loanList;
+    }
+
+    public int countUnfinishedLoans() {
+        return (int) this.getLoanList().stream()
+                .filter(i -> i.getLoanStatus() != LoanDataObject.Status.FINISHED).count();
     }
 
 }
