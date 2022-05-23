@@ -27,18 +27,52 @@ public class CustomerDataObject {
         return this.balance;
     }
 
-    public int getTakenLoansNumber() {
-        if(this.loanList != null && !this.loanList.isEmpty())
-            return this.loanList.size();
+    public String getTakenLoansNumber() {
+        String res = "";
+        if(this.loanList != null && !this.loanList.isEmpty()) {
+            int temp = this.loanList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.NEW)).collect(Collectors.toList()).size();
+           res += temp;
+           res += " / ";
 
-        return 0;
+            temp = this.loanList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.PENDING)).collect(Collectors.toList()).size();
+            res += temp;
+            res += " / ";
+
+            temp = this.loanList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.ACTIVE)).collect(Collectors.toList()).size();
+            res += temp;
+            res += " / ";
+
+            temp = this.loanList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.RISK)).collect(Collectors.toList()).size();
+            res += temp;
+        }
+        else
+            res += "0";
+
+        return res;
     }
 
-    public int getInvestedLoansNumber() {
-        if(this.investmentList != null && !this.investmentList.isEmpty())
-            return this.loanList.size();
+    public String getInvestedLoansNumber() {
+        String res = "";
+        if(this.investmentList != null && !this.investmentList.isEmpty()){
+            int temp = this.investmentList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.NEW)).collect(Collectors.toList()).size();
+        res += temp;
+        res += " / ";
 
-        return 0;
+        temp = this.investmentList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.PENDING)).collect(Collectors.toList()).size();
+        res += temp;
+        res += " / ";
+
+        temp = this.investmentList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.ACTIVE)).collect(Collectors.toList()).size();
+        res += temp;
+        res += " / ";
+
+        temp = this.investmentList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.RISK)).collect(Collectors.toList()).size();
+        res += temp;
+    }
+        else
+    res += "0";
+
+        return res;
     }
 
     public List<CustomerOperationData> getLogCustomer() {
