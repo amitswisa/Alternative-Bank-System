@@ -127,7 +127,7 @@
                                           <Insets bottom="5.0" top="5.0" />
                                        </padding>
                                     </MenuButton>
-                                    <MenuButton fx:id="minYaz" mnemonicParsing="false" styleClass="filterMenuBtn" text="Min Yaz">
+                                    <MenuButton mnemonicParsing="false" styleClass="filterMenuBtn" text="Min Yaz">
                                        <items>
                                           <MenuItem mnemonicParsing="false">
                                              <graphic>
@@ -139,14 +139,21 @@
                                           <Insets bottom="5.0" top="5.0" />
                                        </padding>
                                     </MenuButton>
-                                    <MenuButton mnemonicParsing="false" styleClass="filterMenuBtn" text="Loans preferences">
+                                    <MenuButton mnemonicParsing="false" styleClass="filterMenuBtn" text="Max open loans">
                                        <items>
                                           <MenuItem mnemonicParsing="false">
                                              <graphic>
                                                 <TextField fx:id="maxOpenLoans" promptText="Max open loans for loaner" />
                                              </graphic>
                                           </MenuItem>
-                                          <MenuItem mnemonicParsing="false">
+                                       </items>
+                                       <padding>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </padding>
+                                    </MenuButton>
+                                    <MenuButton mnemonicParsing="false" styleClass="filterMenuBtn" text="Max ownership">
+                                       <items>
+                                                 <MenuItem mnemonicParsing="false">
                                              <graphic>
                                                 <TextField fx:id="ownershipPrecent" promptText="Max ownership precent (1-100)" />
                                              </graphic>

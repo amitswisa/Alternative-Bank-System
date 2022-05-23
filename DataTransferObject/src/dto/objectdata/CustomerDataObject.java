@@ -87,4 +87,9 @@ public class CustomerDataObject {
         return this.loanList;
     }
 
+    public int countUnfinishedLoans() {
+        return (int) this.getLoanList().stream()
+                .filter(i -> i.getLoanStatus() != LoanDataObject.Status.FINISHED).count();
+    }
+
 }

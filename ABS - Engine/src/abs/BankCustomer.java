@@ -43,7 +43,7 @@ public class BankCustomer {
            for(BankLoan bankLoan : loan.getValue())
                 myListOfLoans.add(new LoanDataObject(bankLoan.getOwner(), bankLoan.getLoanID(), bankLoan.getLoanCategory(), bankLoan.getLoanAmount(),
                         bankLoan.getLoanOpeningTime(), bankLoan.getLoanTotalTime(), bankLoan.getLoanStartTime(), bankLoan.getLoanEndTime(),
-                        bankLoan.getLoanInterestPerPayment(), bankLoan.getPaymentInterval(), bankLoan.getLoanStatus()));
+                        bankLoan.getLoanInterestPerPayment(), bankLoan.getPaymentInterval(), bankLoan.getLoanStatus(), bankLoan.getAmountLeftToActivateLoan()));
         return myListOfLoans;
     }
 
@@ -116,7 +116,7 @@ public class BankCustomer {
             for (BankLoan currentBankLoan : loan.getValue())
                 loansTakenList.add(new LoanDataObject(currentBankLoan.getOwner(), currentBankLoan.getLoanID(), currentBankLoan.getLoanCategory(), currentBankLoan.getLoanAmount(),
                         currentBankLoan.getLoanOpeningTime(), currentBankLoan.getLoanTotalTime(), currentBankLoan.getLoanStartTime(), currentBankLoan.getLoanEndTime(),
-                        currentBankLoan.getLoanInterestPerPayment(), currentBankLoan.getPaymentInterval(), currentBankLoan.getLoanStatus()));
+                        currentBankLoan.getLoanInterestPerPayment(), currentBankLoan.getPaymentInterval(), currentBankLoan.getLoanStatus(), currentBankLoan.getAmountLeftToActivateLoan()));
 
         return loansTakenList;
     }
@@ -130,7 +130,7 @@ public class BankCustomer {
             for (BankLoan currentBankLoan : loan.getValue())
                 loansInvestedList.add(new LoanDataObject(currentBankLoan.getOwner(), currentBankLoan.getLoanID(), currentBankLoan.getLoanCategory(), currentBankLoan.getLoanAmount(),
                         currentBankLoan.getLoanOpeningTime(), currentBankLoan.getLoanTotalTime(), currentBankLoan.getLoanStartTime(), currentBankLoan.getLoanEndTime(),
-                        currentBankLoan.getLoanInterestPerPayment(), currentBankLoan.getPaymentInterval(), currentBankLoan.getLoanStatus()));
+                        currentBankLoan.getLoanInterestPerPayment(), currentBankLoan.getPaymentInterval(), currentBankLoan.getLoanStatus(), currentBankLoan.getAmountLeftToActivateLoan()));
 
         return loansInvestedList;
     }
@@ -175,4 +175,5 @@ public class BankCustomer {
         });
 
     }
+
 }
