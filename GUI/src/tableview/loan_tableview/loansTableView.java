@@ -3,6 +3,8 @@ package tableview.loan_tableview;
 import dto.objectdata.LoanDataObject;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -12,15 +14,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import popups.loan_information.LoanInfoController;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class loansTableView implements Initializable {
 
@@ -36,10 +41,12 @@ public class loansTableView implements Initializable {
 
     // Properties for filter use
     private SimpleIntegerProperty investAmount, minInterest, minYaz, maxOpenLoans;
-    private ListProperty<String> catsList;
+    private ListProperty<String> catsList; // list of to filter by categories.
+    private List<String> loansToInvestList; // reference to object in customerScreenController - scramble.
 
     @FXML private TableView<LoanDataObject> loansTable;
     @FXML private TableColumn<LoanDataObject, String> loanID, owner, loanCategory, loanAmount, loanInterestPerPayment, loanTotalTime, amountLeftToPay;
+    private TableColumn<LoanDataObject, Void> checkbox;
 
     public loansTableView() throws IOException {
         // Create popup window.
@@ -86,6 +93,14 @@ public class loansTableView implements Initializable {
                 this.catsList, this.investAmount, this.minInterest, this.minYaz, this.maxOpenLoans
         ));
 
+        // When filtered something make sure checkbox keep their status.
+        list.predicateProperty().addListener(new ChangeListener<Predicate<? super LoanDataObject>>() {
+            @Override
+            public void changed(ObservableValue<? extends Predicate<? super LoanDataObject>> observable, Predicate<? super LoanDataObject> oldValue, Predicate<? super LoanDataObject> newValue) {
+
+            }
+        });
+
         TableColumn<LoanDataObject, Void> colBtn = new TableColumn("View Loan");
         Callback<TableColumn<LoanDataObject, Void>, TableCell<LoanDataObject, Void>> cellFactory = param -> {
             return new TableCell<LoanDataObject, Void>() {
@@ -126,6 +141,7 @@ public class loansTableView implements Initializable {
 
         obsList.addAll(loansList);
         loansTable.setItems(list);
+        this.loansTable.refresh();
     }
 
     public void setMinAmount(int amountToInvest) {
@@ -133,7 +149,12 @@ public class loansTableView implements Initializable {
     }
 
     public void updateFilterCategories(ObservableList<String> checkedItems) {
-        this.catsList.set(checkedItems);
+        if(!checkedItems.isEmpty())
+            this.catsList.set(checkedItems);
+    }
+
+    public void resetFilterCategories() {
+        this.catsList.set(null);
     }
 
     public void setMinInterest(int newV) {
@@ -146,5 +167,22 @@ public class loansTableView implements Initializable {
 
     public void setMaxOpenLoans(int newV) {
         this.maxOpenLoans.set(newV);
+    }
+
+    public void addCheckboxColumn(TableColumn<LoanDataObject, Void> colBtn) {
+        loansTable.getColumns().add(colBtn);
+        checkbox = colBtn;
+    }
+
+    public void resetCheckboxColumn() {
+        this.loansTable.refresh();
+    }
+
+    public ListProperty<String> getCatList() {
+        return this.catsList;
+    }
+
+    public void setLoansToInvestList(List<String> loansToInvestList) {
+        this.loansToInvestList = loansToInvestList;
     }
 }

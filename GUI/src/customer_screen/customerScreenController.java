@@ -5,6 +5,7 @@ import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
 import engine.EngineManager;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -13,7 +14,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
 import tableview.loan_tableview.loansTableView;
 import tableview.transactions_view.TransactionTable;
@@ -33,6 +37,7 @@ public class customerScreenController implements Initializable {
     private TextInputDialog moneyPopup;
     private Alert alertDialog;
     private List<LoanDataObject> allLoans;
+
     private List<String> loansToInvestList; // Holds loans to invest in when user mark them.
 
     // FXML MEMBERS
@@ -71,10 +76,12 @@ public class customerScreenController implements Initializable {
                     return;
 
                 updateCustomerInfo(newValue);
-                cleanListOfLoansToInvest();
                 updateScramble();
             }
         });
+
+        // Set filtering listeners.
+        this.setFilterOptionsListeners();
 
         // Deposit button functionality
         depositBtn.setOnMouseClicked(event -> {
@@ -149,7 +156,48 @@ public class customerScreenController implements Initializable {
             }
         });
 
-        this.setFilterOptionsListeners();
+        // adding checkbox for invest to scramble.
+        TableColumn select = new TableColumn("CheckBox");
+        select.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LoanDataObject, CheckBox>, ObservableValue<CheckBox>>() {
+
+            @Override
+            public ObservableValue<CheckBox> call(
+                    TableColumn.CellDataFeatures<LoanDataObject, CheckBox> arg0) {
+
+                LoanDataObject loan = arg0.getValue();
+                CheckBox checkBox = new CheckBox();
+
+                checkBox.selectedProperty().setValue(loansToInvestList.contains(loan.getLoanID()));
+
+                checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                    public void changed(ObservableValue<? extends Boolean> ov,
+                                        Boolean old_val, Boolean new_val) {
+
+                        if(new_val == true)
+                        {
+                            if(!loansToInvestList.contains(loan.getLoanID()))
+                                loansToInvestList.add(loan.getLoanID());
+                        } else {
+                            if(loansToInvestList.contains(loan.getLoanID()))
+                                loansToInvestList.remove(loan.getLoanID());
+                        }
+
+                        System.out.println(loansToInvestList);
+
+                    }
+                });
+
+                return new SimpleObjectProperty<CheckBox>(checkBox);
+
+            }
+
+        });
+
+        // adding CheckBox column to scramble tableview.
+        loansToInvestTableController.addCheckboxColumn(select);
+
+        // send reference to list of loans to invest.
+        loansToInvestTableController.setLoansToInvestList(this.loansToInvestList);
     }
 
     // Set ChangeEventListener to each filter component.
@@ -169,7 +217,7 @@ public class customerScreenController implements Initializable {
         this.filterCats.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
             public void onChanged(ListChangeListener.Change<? extends String> c) {
                 loansToInvestTableController.updateFilterCategories(filterCats.getCheckModel().getCheckedItems());
-        } });
+            } });
 
         // text fields bindings.
         this.minInterest.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -239,6 +287,8 @@ public class customerScreenController implements Initializable {
         loansToInvestTableController.setLoanItems(listOfLoansExcludedCurrentUser);
 
         this.setMaxAmountToInvest(); // Define max amount to invest by user balance.
+        this.resetSettings(); // reset filter object's values.
+
     }
 
     // Set slider max value to be user balance (even if balance changed).
@@ -246,19 +296,25 @@ public class customerScreenController implements Initializable {
          this.investmentAmount.setMax(this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
     }
 
-    private void cleanListOfLoansToInvest() {
-        // Clear list of loans to invest.
-        loansToInvestList.clear();
-    }
-
     public void resetSettings() {
+
+        // reset filter object's value.
         this.investmentAmount.adjustValue(0); // Updating label too because of binding.
         minInterest.setText("0");
         minYaz.setText("0");
         maxOpenLoans.setText("0");
         ownershipPrecent.setText("0");
+
+        // Categories in filer (CheckComboBox) set all to be selected.
+        for(String s : this.filterCats.getItems()) {
+            this.filterCats.getItemBooleanProperty(s).set(true);
+        }
+
+        // Add checkbox column for scramble page.
+        this.resetCheckBoxToInvestList();
     }
 
+    // Update and init category list to choose from in filter.
     private void setCategoryList() {
         ObservableList<String> strings = FXCollections.observableArrayList();
         strings.setAll(this.engineManager.getBankCategories());
@@ -279,6 +335,12 @@ public class customerScreenController implements Initializable {
             tf.setText(oldValue);
             return false;
         }
+    }
+
+    private void resetCheckBoxToInvestList() {
+
+        loansToInvestList.clear(); // clear loans to invest list.
+        loansToInvestTableController.resetCheckboxColumn();
     }
     /* END SCRAMBLE PAGE */
 }
