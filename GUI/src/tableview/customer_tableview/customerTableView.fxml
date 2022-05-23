@@ -12,8 +12,8 @@
            <columns>
                <TableColumn fx:id="name" prefWidth="207.0" text="Customer Name" />
                <TableColumn fx:id="balance" prefWidth="165.0" text="Balance" />
-               <TableColumn fx:id="takenLoansNumber" prefWidth="311.0" text="Taken Loans (NEW \ PENDING \ ACTIVE \ RISK)" />
-               <TableColumn fx:id="investedLoansNumber" minWidth="0.0" prefWidth="286.0" text="Invested Loans" />
+               <TableColumn fx:id="takenLoansNumber" prefWidth="311.0" text="Taken Loans (NEW / PENDING / ACTIVE / RISK)" />
+               <TableColumn fx:id="investedLoansNumber" minWidth="0.0" prefWidth="286.0" text="Invested Loans (NEW / PENDING / ACTIVE / RISK)" />
            </columns>
        </TableView>
    </children>
