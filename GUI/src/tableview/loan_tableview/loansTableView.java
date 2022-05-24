@@ -42,7 +42,7 @@ public class loansTableView implements Initializable {
     // Properties for filter use
     private SimpleIntegerProperty investAmount, minInterest, minYaz, maxOpenLoans;
     private ListProperty<String> catsList; // list of to filter by categories.
-    private List<String> loansToInvestList; // reference to object in customerScreenController - scramble.
+    private List<LoanDataObject> loansToInvestList; // reference to object in customerScreenController - scramble.
 
     @FXML private TableView<LoanDataObject> loansTable;
     @FXML private TableColumn<LoanDataObject, String> loanID, owner, loanCategory, loanAmount, loanInterestPerPayment, loanTotalTime, amountLeftToPay;
@@ -178,11 +178,7 @@ public class loansTableView implements Initializable {
         this.loansTable.refresh();
     }
 
-    public ListProperty<String> getCatList() {
-        return this.catsList;
-    }
-
-    public void setLoansToInvestList(List<String> loansToInvestList) {
+    public void setLoansToInvestList(List<LoanDataObject> loansToInvestList) {
         this.loansToInvestList = loansToInvestList;
     }
 }

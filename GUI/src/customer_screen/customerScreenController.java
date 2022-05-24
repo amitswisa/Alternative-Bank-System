@@ -1,16 +1,20 @@
 package customer_screen;
 
 import Utils.*;
+import abs.BankSystem;
+import com.sun.corba.se.impl.orbutil.graph.Graph;
 import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
 import engine.EngineManager;
+import generalObjects.Triple;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -38,7 +42,7 @@ public class customerScreenController implements Initializable {
     private Alert alertDialog;
     private List<LoanDataObject> allLoans;
 
-    private List<String> loansToInvestList; // Holds loans to invest in when user mark them.
+    private List<LoanDataObject> loansToInvestList; // Holds loans to invest in when user mark them.
 
     // FXML MEMBERS
     @FXML private User currentUser;
@@ -95,7 +99,7 @@ public class customerScreenController implements Initializable {
                 int valueOfInput = Integer.parseInt(value);
 
                 // Trying to deposit negative number.
-                if(valueOfInput < 0) {
+                if(valueOfInput <= 0) {
                     throw new NumberFormatException("Negative");
                 }
 
@@ -131,7 +135,7 @@ public class customerScreenController implements Initializable {
                 int valueOfInput = Integer.parseInt(value);
 
                 // Trying to deposit negative number.
-                if(valueOfInput < 0) {
+                if(valueOfInput <= 0) {
                     throw new NumberFormatException("Cant Withdrawal negative numbers.");
                 }
 
@@ -175,14 +179,12 @@ public class customerScreenController implements Initializable {
 
                         if(new_val == true)
                         {
-                            if(!loansToInvestList.contains(loan.getLoanID()))
-                                loansToInvestList.add(loan.getLoanID());
+                            if(!loansToInvestList.contains(loan))
+                                loansToInvestList.add(loan);
                         } else {
-                            if(loansToInvestList.contains(loan.getLoanID()))
-                                loansToInvestList.remove(loan.getLoanID());
+                            if(loansToInvestList.contains(loan))
+                                loansToInvestList.remove(loan);
                         }
-
-                        System.out.println(loansToInvestList);
 
                     }
                 });
@@ -341,6 +343,71 @@ public class customerScreenController implements Initializable {
 
         loansToInvestList.clear(); // clear loans to invest list.
         loansToInvestTableController.resetCheckboxColumn();
+    }
+
+    // Make investment button functionality.
+    public void makeInvestmentClicked(ActionEvent actionEvent) {
+
+        // if user didnt chose any loans to invest.
+        if(this.loansToInvestList.isEmpty()) {
+            alertDialog.setContentText("Please choose some loans to invest.");
+            alertDialog.showAndWait();
+            return;
+        }
+
+        moneyPopup.setTitle("Investment");
+        moneyPopup.setContentText("Enter amount of money to invest: ");
+        Optional<String> result = moneyPopup.showAndWait();
+        String value = String.valueOf(moneyPopup.getEditor().getText());
+
+        // Try parsing input to int and if success update user bank.
+        try {
+            int valueOfInput = Integer.parseInt(value);
+
+            // Trying to deposit negative number.
+            if(valueOfInput < 0)
+                throw new NumberFormatException("Negative");
+
+            if(valueOfInput > this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()))
+                throw new DataTransferObject("You cant invest more money then your balance.", BankSystem.getCurrentYaz());
+
+            // Invest proccess
+            List<Triple<String,Integer,String>> nameOfLoansToInvest = new ArrayList<>();
+            for(LoanDataObject l : loansToInvestList)
+                nameOfLoansToInvest.add(new Triple<>(l.getOwner(), l.getLoanOpeningTime(), l.getLoanID()));
+
+            // make investments!
+            String res = this.engineManager.makeInvestments(this.currentUser.getUsername(), valueOfInput, nameOfLoansToInvest);
+            updateCustomerInfo(this.currentUser.getUsername());
+            updateScramble();
+
+            // Popup dialog with result.
+            alertDialog.setTitle("Investment details");
+            alertDialog.setAlertType(Alert.AlertType.INFORMATION);
+            alertDialog.setHeaderText("Congratulations!");
+            alertDialog.setContentText(res);
+            alertDialog.showAndWait();
+
+            currentBalance.setText("Current balance: " + this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
+        } catch(NumberFormatException | DataTransferObject nfe) {
+
+            // If ok button was pressed!
+            if(result.isPresent()) {
+                if(nfe instanceof DataTransferObject)
+                    alertDialog.setContentText(nfe.getMessage());
+                else if(nfe.getMessage().equals("Negstive"))
+                    alertDialog.setContentText("Please enter positive number.");
+                else
+                    alertDialog.setContentText("Please enter a number.");
+
+                alertDialog.showAndWait();
+            }
+        }  finally {
+            moneyPopup.getEditor().setText(""); // empty input text.
+            alertDialog.setHeaderText("Error");
+            alertDialog.setAlertType(Alert.AlertType.ERROR);
+        }
+
     }
     /* END SCRAMBLE PAGE */
 }
