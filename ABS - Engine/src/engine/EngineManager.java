@@ -65,7 +65,7 @@ public class EngineManager {
     public CustomerDataObject getCustomerByName(String customerName) {
         if(bankSystem != null) {
             BankCustomer temp = this.bankSystem.getCustomerByName(customerName);
-            return new CustomerDataObject(temp.getName(), temp.getCustomerLog(), temp.getLoansInvested(), temp.getLoansTaken(), temp.getBalance());
+            return new CustomerDataObject(temp.getName(), temp.getCustomerLog(), temp.getLoansInvested(), temp.getLoansTaken(), temp.getBalance(), temp.getListOfAlerts());
         }
 
         return null;

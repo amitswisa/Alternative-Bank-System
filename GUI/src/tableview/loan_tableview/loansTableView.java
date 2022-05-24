@@ -93,14 +93,6 @@ public class loansTableView implements Initializable {
                 this.catsList, this.investAmount, this.minInterest, this.minYaz, this.maxOpenLoans
         ));
 
-        // When filtered something make sure checkbox keep their status.
-        list.predicateProperty().addListener(new ChangeListener<Predicate<? super LoanDataObject>>() {
-            @Override
-            public void changed(ObservableValue<? extends Predicate<? super LoanDataObject>> observable, Predicate<? super LoanDataObject> oldValue, Predicate<? super LoanDataObject> newValue) {
-
-            }
-        });
-
         TableColumn<LoanDataObject, Void> colBtn = new TableColumn("View Loan");
         Callback<TableColumn<LoanDataObject, Void>, TableCell<LoanDataObject, Void>> cellFactory = param -> {
             return new TableCell<LoanDataObject, Void>() {

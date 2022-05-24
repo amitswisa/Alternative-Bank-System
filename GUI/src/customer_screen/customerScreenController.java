@@ -2,8 +2,8 @@ package customer_screen;
 
 import Utils.*;
 import abs.BankSystem;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
 import dto.infodata.DataTransferObject;
+import dto.objectdata.CustomerAlertData;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
 import engine.EngineManager;
@@ -18,8 +18,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
@@ -40,8 +38,6 @@ public class customerScreenController implements Initializable {
     private CustomerDataObject currentCustomer;
     private TextInputDialog moneyPopup;
     private Alert alertDialog;
-    private List<LoanDataObject> allLoans;
-
     private List<LoanDataObject> loansToInvestList; // Holds loans to invest in when user mark them.
 
     // FXML MEMBERS
@@ -161,8 +157,8 @@ public class customerScreenController implements Initializable {
         });
 
         // adding checkbox for invest to scramble.
-        TableColumn select = new TableColumn("CheckBox");
-        select.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LoanDataObject, CheckBox>, ObservableValue<CheckBox>>() {
+        TableColumn investColumn = new TableColumn("Invest");
+        investColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LoanDataObject, CheckBox>, ObservableValue<CheckBox>>() {
 
             @Override
             public ObservableValue<CheckBox> call(
@@ -171,7 +167,7 @@ public class customerScreenController implements Initializable {
                 LoanDataObject loan = arg0.getValue();
                 CheckBox checkBox = new CheckBox();
 
-                checkBox.selectedProperty().setValue(loansToInvestList.contains(loan.getLoanID()));
+                checkBox.selectedProperty().setValue(loansToInvestList.contains(loan));
 
                 checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
                     public void changed(ObservableValue<? extends Boolean> ov,
@@ -196,7 +192,7 @@ public class customerScreenController implements Initializable {
         });
 
         // adding CheckBox column to scramble tableview.
-        loansToInvestTableController.addCheckboxColumn(select);
+        loansToInvestTableController.addCheckboxColumn(investColumn);
 
         // send reference to list of loans to invest.
         loansToInvestTableController.setLoansToInvestList(this.loansToInvestList);
@@ -223,24 +219,27 @@ public class customerScreenController implements Initializable {
 
         // text fields bindings.
         this.minInterest.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(this.validateTextField(oldValue, newValue, minInterest))
-                this.loansToInvestTableController.setMinInterest(Integer.parseInt(newValue));
+            String temp = validateTextField(oldValue, newValue, minInterest);
+            this.loansToInvestTableController.setMinInterest(Integer.parseInt(temp));
         });
 
         this.minYaz.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(this.validateTextField(oldValue, newValue, this.minYaz))
-                this.loansToInvestTableController.setMinYaz(Integer.parseInt(newValue));
+            String temp = validateTextField(oldValue, newValue, minYaz);
+            this.loansToInvestTableController.setMinYaz(Integer.parseInt(temp));
         });
 
         this.maxOpenLoans.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(this.validateTextField(oldValue, newValue, maxOpenLoans))
-                this.loansToInvestTableController.setMaxOpenLoans(Integer.parseInt(newValue));
+
+            String temp = validateTextField(oldValue, newValue, maxOpenLoans);
+            this.loansToInvestTableController.setMaxOpenLoans(Integer.parseInt(temp));
+
         });
 
         this.ownershipPrecent.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.validateTextField(oldValue, newValue, ownershipPrecent);
 
-            if(Integer.parseInt(newValue) > 100)
+            String temp = validateTextField(oldValue, newValue, ownershipPrecent);
+
+            if(Integer.parseInt(temp) > 100)
                 this.ownershipPrecent.setText("100");
         });
 
@@ -302,10 +301,10 @@ public class customerScreenController implements Initializable {
 
         // reset filter object's value.
         this.investmentAmount.adjustValue(0); // Updating label too because of binding.
-        minInterest.setText("0");
-        minYaz.setText("0");
-        maxOpenLoans.setText("0");
-        ownershipPrecent.setText("0");
+        minInterest.setText("");
+        minYaz.setText("");
+        maxOpenLoans.setText("");
+        ownershipPrecent.setText("");
 
         // Categories in filer (CheckComboBox) set all to be selected.
         for(String s : this.filterCats.getItems()) {
@@ -324,19 +323,15 @@ public class customerScreenController implements Initializable {
     }
 
     // Validator function for binding textfield to check textfield dont contain non-integers.
-    private boolean validateTextField(String oldValue, String newValue, TextField tf) {
-        try {
-            int newV = Integer.parseInt(newValue);
+    private String validateTextField(String oldValue, String newValue, TextField tf) {
 
-            if(newV < 0)
-                throw new NumberFormatException();
+        if (!newValue.matches("\\d*"))
+            tf.setText(newValue = newValue.replaceAll("[^\\d]", ""));
 
-            return true;
+        if(newValue.equals("") || newValue.isEmpty())
+            newValue = "0";
 
-        } catch(NumberFormatException e) {
-            tf.setText(oldValue);
-            return false;
-        }
+        return newValue;
     }
 
     private void resetCheckBoxToInvestList() {
@@ -365,7 +360,7 @@ public class customerScreenController implements Initializable {
             int valueOfInput = Integer.parseInt(value);
 
             // Trying to deposit negative number.
-            if(valueOfInput < 0)
+            if(valueOfInput <= 0)
                 throw new NumberFormatException("Negative");
 
             if(valueOfInput > this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()))
@@ -378,6 +373,8 @@ public class customerScreenController implements Initializable {
 
             // make investments!
             String res = this.engineManager.makeInvestments(this.currentUser.getUsername(), valueOfInput, nameOfLoansToInvest);
+
+            // update view.
             updateCustomerInfo(this.currentUser.getUsername());
             updateScramble();
 
@@ -398,7 +395,7 @@ public class customerScreenController implements Initializable {
                 else if(nfe.getMessage().equals("Negstive"))
                     alertDialog.setContentText("Please enter positive number.");
                 else
-                    alertDialog.setContentText("Please enter a number.");
+                    alertDialog.setContentText("Please enter a valid number.");
 
                 alertDialog.showAndWait();
             }
@@ -408,6 +405,10 @@ public class customerScreenController implements Initializable {
             alertDialog.setAlertType(Alert.AlertType.ERROR);
         }
 
+    }
+
+    public List<CustomerAlertData> getCustomerAlertList() {
+        return currentCustomer.getListOfAlerts();
     }
     /* END SCRAMBLE PAGE */
 }

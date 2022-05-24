@@ -1,12 +1,12 @@
 package abs;
 
 import dto.infodata.DataTransferObject;
+import dto.objectdata.CustomerAlertData;
 import dto.objectdata.CustomerOperationData;
 import dto.objectdata.LoanDataObject;
 import xmlgenerated.AbsCustomer;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BankCustomer {
 
@@ -15,6 +15,7 @@ public class BankCustomer {
     private List<CustomerOperationData> customerLog;
     private Map<Integer, Set<BankLoan>> loansTaken; // List of all loans current customer took.
     private Map<Integer, Set<BankLoan>> loansInvested; // List of all loans current customer invest in.
+    private List<CustomerAlertData> listOfAlerts; // List of notifications send to customer.
 
     public BankCustomer(AbsCustomer customer){
         this.name = customer.getName();
@@ -22,6 +23,11 @@ public class BankCustomer {
         customerLog = new ArrayList<>();
         loansTaken = new HashMap<>();
         loansInvested = new HashMap<>();
+        listOfAlerts = new ArrayList<>();
+        listOfAlerts.add(new CustomerAlertData("check", BankSystem.getCurrentYaz(), CustomerAlertData.Type.CONFIRMATION));
+        listOfAlerts.add(new CustomerAlertData("check 2", BankSystem.getCurrentYaz(), CustomerAlertData.Type.CONFIRMATION));
+        listOfAlerts.add(new CustomerAlertData("check 3", BankSystem.getCurrentYaz(), CustomerAlertData.Type.CONFIRMATION));
+        listOfAlerts.add(new CustomerAlertData("check 4", BankSystem.getCurrentYaz(), CustomerAlertData.Type.CONFIRMATION));
     }
 
     // addLoan -> function adding loan to specific customer.
@@ -176,4 +182,11 @@ public class BankCustomer {
 
     }
 
+    public void addAlert(String msg, CustomerAlertData.Type status) {
+        listOfAlerts.add(new CustomerAlertData(msg, BankSystem.getCurrentYaz(), status));
+    }
+
+    public List<CustomerAlertData> getListOfAlerts() {
+        return this.listOfAlerts;
+    }
 }

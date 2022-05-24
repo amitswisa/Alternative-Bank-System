@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox fx:id="item" prefHeight="50.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16">
+    <children>
+      <Pane fx:id="alertBackground" prefHeight="50.0" prefWidth="15.0" style="-fx-background-color: #93faa5;-fx-text-fill: #7e7e7e;" />
+      <VBox prefHeight="50.0" prefWidth="185.0">
+         <children>
+              <Label fx:id="title" id="title" style="-fx-font-weight: bold;-fx-font-size: 12px;" text="Headline">
+               <padding>
+                  <Insets left="8.0" top="7.0" />
+               </padding>
+            </Label>
+            <Label fx:id="timeInYaz" id="time" text="Time to receive: 1" style="-fx-font-size: 8px;-fx-text-fill: #acacac;">
+               <padding>
+                  <Insets left="8.0" top="3.0" />
+               </padding>
+            </Label>
+         </children>
+      </VBox>
+    </children>
+</HBox>
