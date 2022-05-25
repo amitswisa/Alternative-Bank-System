@@ -10,13 +10,15 @@ public class CustomerDataObject {
     private List<CustomerOperationData> logCustomer;
     private List<LoanDataObject> investmentList;
     private List<LoanDataObject> loanList;
+    private List<CustomerAlertData> listOfAlerts;
 
-    public CustomerDataObject(String name, List<CustomerOperationData> logCustomer, List<LoanDataObject> investmentList,  List<LoanDataObject> loanList, int balance){
+    public CustomerDataObject(String name, List<CustomerOperationData> logCustomer, List<LoanDataObject> investmentList, List<LoanDataObject> loanList, int balance, List<CustomerAlertData> listOfAlerts){
         this.name = name;
         this.logCustomer = logCustomer;
         this.investmentList = investmentList;
         this.loanList = loanList;
         this.balance = balance;
+        this.listOfAlerts = listOfAlerts;
     }
 
     public String getName() {
@@ -90,6 +92,10 @@ public class CustomerDataObject {
     public int countUnfinishedLoans() {
         return (int) this.getLoanList().stream()
                 .filter(i -> i.getLoanStatus() != LoanDataObject.Status.FINISHED).count();
+    }
+
+    public List<CustomerAlertData> getListOfAlerts() {
+        return this.listOfAlerts;
     }
 
 }

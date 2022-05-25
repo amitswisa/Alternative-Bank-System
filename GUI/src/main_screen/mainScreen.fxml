@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -10,15 +11,18 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@mainScreen.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_screen.mainScreenController">
+<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-effect: dropshadow(three-pass-box, #dcdcdc, 6, 0, 0, 0);;" stylesheets="@mainScreen.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_screen.mainScreenController">
    <children>
       <GridPane id="header" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="43.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
             <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="22.0" prefWidth="223.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="720.6666666666667" minWidth="10.0" percentWidth="62.0" prefWidth="555.6666666666667" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.0" minWidth="10.0" percentWidth="12.0" prefWidth="152.33329264322913" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.0" minWidth="10.0" percentWidth="4.0" prefWidth="72.00002034505212" />
+          <ColumnConstraints hgrow="ALWAYS" maxWidth="720.6666666666667" minWidth="10.0" percentWidth="56.0" prefWidth="555.6666666666667" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="229.0" minWidth="10.0" percentWidth="5.0" prefWidth="152.33329264322913" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="229.0" minWidth="10.0" percentWidth="14.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="ALWAYS" maxWidth="229.0" minWidth="10.0" percentWidth="5.0" prefWidth="72.00002034505212" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -37,22 +41,10 @@
                   <Insets bottom="5.0" left="10.0" top="5.0" />
                </padding>
                <GridPane.margin>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets left="10.0" right="5.0" />
                </GridPane.margin>
             </Label>
-            <HBox id="timeSpan" alignment="CENTER" minWidth="10.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2">
-               <GridPane.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </GridPane.margin>
-               <padding>
-                  <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-               </padding>
-               <children>
-                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="YAZ:" />
-                  <Label fx:id="yazLabel" text="#" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" minWidth="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-cursor: hand;" GridPane.columnIndex="3">
+            <HBox alignment="CENTER" minWidth="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-cursor: hand;" GridPane.columnIndex="4">
                <children>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -61,16 +53,63 @@
                   </ImageView>
                </children>
             </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3">
+               <children>
+                  <HBox id="timeSpan" alignment="CENTER" minWidth="10.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <padding>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </padding>
+                     <children>
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="YAZ:" />
+                        <Label fx:id="yazLabel" text="#" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox fx:id="alertBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
+               <children>
+                  <ImageView fx:id="alertBtn" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@../resources/images/alert.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="5.0" right="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                   <Label id="alertMessageCounter" fx:id="alertMessageCounter" text="1">
+                     <HBox.margin>
+                        <Insets bottom="-15.0" left="-25.0" right="10.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
          </children>
          <padding>
             <Insets bottom="10.0" top="10.0" />
          </padding>
       </GridPane>
-       <AnchorPane fx:id="dataDiv" layoutY="43.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="43.0">
+       <AnchorPane fx:id="dataDiv" layoutY="48.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="538.0" prefWidth="1000.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
            <children>
                <fx:include fx:id="adminPageComponent" source="../admin_screen/adminScreen.fxml" />
                <fx:include fx:id="customerPageComponent" source="../customer_screen/customerScreen.fxml" />
            </children>
        </AnchorPane>
+      <AnchorPane id="alertPane" fx:id="alertPane" layoutX="682.0" layoutY="41.0" prefHeight="275.0" prefWidth="222.0" style="-fx-background-color: #FFF;" AnchorPane.rightAnchor="96.0" AnchorPane.topAnchor="41.0">
+         <children>
+            <VBox prefHeight="275.0" prefWidth="222.0">
+               <children>
+                  <Label id="notification" alignment="CENTER" contentDisplay="CENTER" prefHeight="15.0" prefWidth="222.0" text="Notifications">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ListView fx:id="alertsViewList" fixedCellSize="50.0" maxHeight="275.0" maxWidth="222.0" minHeight="244.0" minWidth="100.0" prefHeight="244.0" prefWidth="222.0" style="-fx-border-width: 0;" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

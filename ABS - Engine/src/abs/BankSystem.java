@@ -73,7 +73,7 @@ public class BankSystem {
 
         List<CustomerDataObject> customerData = new ArrayList<>();
         for(Map.Entry<String, BankCustomer> customer : customers.entrySet()) {
-            customerData.add(new CustomerDataObject(customer.getValue().getName(), customer.getValue().getCustomerLog(), customer.getValue().getLoansInvested(), customer.getValue().getLoansTaken(), customer.getValue().getBalance()));
+            customerData.add(new CustomerDataObject(customer.getValue().getName(), customer.getValue().getCustomerLog(), customer.getValue().getLoansInvested(), customer.getValue().getLoansTaken(), customer.getValue().getBalance(), customer.getValue().getListOfAlerts()));
         }
 
         return customerData;
@@ -102,7 +102,7 @@ public class BankSystem {
         //Sort the list by  the amount left to activate the loan.
         this.sortLoanslist(loansToInvest);
 
-        // go through the list and invest money as much as possible and equally berween all loans.
+        // go through the list and invest money as much as possible and equally between all loans.
         return this.investEqually(getCustomerByName(customerName) , amountToInvest , loansToInvest);
 
     }
@@ -111,13 +111,18 @@ public class BankSystem {
     private String investEqually(BankCustomer customerName, int amountToInvest, List<BankLoan> loansToInvest) {
         String res = "New investments: \n";
         for (int i = 0 ; i < loansToInvest.size() ; i++) {
+
             int avgInvestmentAmount = amountToInvest / (loansToInvest.size() - i ); // Initial average investment in each loan.
+
             //for the last investment we try to invest the max amount letf
-            int realTimeInvestedAmount;
-            if(i == (loansToInvest.size() -1))
-                realTimeInvestedAmount = loansToInvest.get(i).invest(customerName , amountToInvest);
-            else
-                realTimeInvestedAmount = loansToInvest.get(i).invest(customerName , avgInvestmentAmount);
+            int realTimeInvestedAmount = 0;
+            if(i == (loansToInvest.size() -1)) {
+                if (amountToInvest > 0)
+                    realTimeInvestedAmount = loansToInvest.get(i).invest(customerName, amountToInvest);
+            } else {
+                    if (avgInvestmentAmount > 0)
+                        realTimeInvestedAmount = loansToInvest.get(i).invest(customerName, avgInvestmentAmount);
+                }
 
             amountToInvest -= realTimeInvestedAmount;
             res += "Invested " + realTimeInvestedAmount + " in " + loansToInvest.get(i).getLoanID() + ".\n";

@@ -19,21 +19,27 @@
 }
 
 #header #timeSpan {
-    -fx-background-color: #cf6a87;
+    -fx-background-color: #FFF;
     -fx-padding: 5px 0 5px 0;
+    -fx-border-color: #cf6a87;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
 }
 
 #header #timeSpan .label {
-    -fx-text-fill:#FFF;
+    -fx-text-fill:#cf6a87;
+    -fx-font-weight: bold;
 }
 
 .choice-box {
-    -fx-background-color: #cf6a87;
-    -fx-border-radius: 12px;
+    -fx-background-color: #FFF;
+    -fx-border-radius: 5px;
+    -fx-text-font: #cf6a87;
+    -fx-border-color: #cf6a87;
 }
 
 .choice-box .label {
-    -fx-text-fill: #FFF;
+    -fx-text-fill: #cf6a87;
     -fx-font-weight: bold;
 }
 
@@ -45,6 +51,7 @@
     -fx-background-color: #cf6a87;
     -fx-text-fill: #FFF;
     -fx-border-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, #dcdcdc, 2, 0, 0, 0);
 }
 
 .button {
@@ -61,4 +68,37 @@
     -fx-background-color: #cf6a87;
     -fx-text-fill: #FFF;
     -fx-border-radius: 12px !important;
+}
+
+#alertMessageCounter {
+    -fx-background-color: #cf6a87;
+    -fx-background-radius: 50px;
+    -fx-padding: 0px 3px 0px 3px;
+    -fx-font-size: 9px;
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.list-cell {
+    -fx-cell-size: 25px;
+}
+
+#alertPane {
+    -fx-effect: dropshadow(three-pass-box, #dcdcdc, 5, 0, 0, 0);
+}
+
+#notification {
+    -fx-font-weight:bold;
+    -fx-effect: dropshadow(three-pass-box, #dcdcdc, 2, 0, 0, 0);
+}
+
+.list-view {
+    -fx-background-insets: 0; -fx-padding: 1;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #FFF;
+    -fx-border-color: #cf6a87;
+    -fx-text-fill: #2e2e2e;
 }

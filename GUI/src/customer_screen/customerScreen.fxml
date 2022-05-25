@@ -19,7 +19,7 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="558.0" prefWidth="1000.0" styleClass="MyTabPane" stylesheets="@customerScreen.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="customer_screen.customerScreenController">
    <children>
-      <TabPane fx:id="myTabPane" layoutX="12.0" layoutY="23.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="976.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="15.0">
+      <TabPane fx:id="myTabPane" layoutX="12.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="976.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="10.0">
         <tabs>
           <Tab text="Information">
             <content>
@@ -153,7 +153,7 @@
                                     </MenuButton>
                                     <MenuButton mnemonicParsing="false" styleClass="filterMenuBtn" text="Max ownership">
                                        <items>
-                                                 <MenuItem mnemonicParsing="false">
+                                           <MenuItem mnemonicParsing="false">
                                              <graphic>
                                                 <TextField fx:id="ownershipPrecent" promptText="Max ownership precent (1-100)" />
                                              </graphic>
