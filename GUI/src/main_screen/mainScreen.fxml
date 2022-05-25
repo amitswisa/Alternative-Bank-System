@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-effect: dropshadow(three-pass-box, #dcdcdc, 6, 0, 0, 0);;" stylesheets="@mainScreen.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_screen.mainScreenController">
+<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-effect: dropshadow(three-pass-box, #dcdcdc, 6, 0, 0, 0);;" stylesheets="@mainScreen.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_screen.mainScreenController">
    <children>
       <GridPane id="header" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="43.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -41,7 +41,7 @@
                   <Insets bottom="5.0" left="10.0" top="5.0" />
                </padding>
                <GridPane.margin>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets left="10.0" right="5.0" />
                </GridPane.margin>
             </Label>
             <HBox alignment="CENTER" minWidth="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-cursor: hand;" GridPane.columnIndex="4">
@@ -72,10 +72,13 @@
                      <image>
                         <Image url="@../resources/images/alert.png" />
                      </image>
+                     <HBox.margin>
+                        <Insets left="5.0" right="10.0" />
+                     </HBox.margin>
                   </ImageView>
                    <Label id="alertMessageCounter" fx:id="alertMessageCounter" text="1">
                      <HBox.margin>
-                        <Insets bottom="-15.0" left="-15.0" />
+                        <Insets bottom="-15.0" left="-25.0" right="10.0" />
                      </HBox.margin>
                   </Label>
                </children>
@@ -91,7 +94,7 @@
                <fx:include fx:id="customerPageComponent" source="../customer_screen/customerScreen.fxml" />
            </children>
        </AnchorPane>
-      <AnchorPane fx:id="alertPane" id="alertPane" prefHeight="275.0" prefWidth="222.0" style="-fx-background-color: #FFF;" AnchorPane.rightAnchor="106.0" AnchorPane.topAnchor="41.0">
+      <AnchorPane id="alertPane" fx:id="alertPane" layoutX="682.0" layoutY="41.0" prefHeight="275.0" prefWidth="222.0" style="-fx-background-color: #FFF;" AnchorPane.rightAnchor="96.0" AnchorPane.topAnchor="41.0">
          <children>
             <VBox prefHeight="275.0" prefWidth="222.0">
                <children>

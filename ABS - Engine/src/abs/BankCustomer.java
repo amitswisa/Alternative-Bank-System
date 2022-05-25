@@ -24,10 +24,6 @@ public class BankCustomer {
         loansTaken = new HashMap<>();
         loansInvested = new HashMap<>();
         listOfAlerts = new ArrayList<>();
-        listOfAlerts.add(new CustomerAlertData("check", BankSystem.getCurrentYaz(), CustomerAlertData.Type.CONFIRMATION));
-        listOfAlerts.add(new CustomerAlertData("check 2", BankSystem.getCurrentYaz(), CustomerAlertData.Type.CONFIRMATION));
-        listOfAlerts.add(new CustomerAlertData("check 3", BankSystem.getCurrentYaz(), CustomerAlertData.Type.CONFIRMATION));
-        listOfAlerts.add(new CustomerAlertData("check 4", BankSystem.getCurrentYaz(), CustomerAlertData.Type.CONFIRMATION));
     }
 
     // addLoan -> function adding loan to specific customer.

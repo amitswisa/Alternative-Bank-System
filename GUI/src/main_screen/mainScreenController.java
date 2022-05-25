@@ -79,6 +79,7 @@ public class mainScreenController implements Initializable {
 
         // Alerts list view init to invisible.
         alertPane.setVisible(false);
+        alertsViewList.setPlaceholder(new Label("No content found"));
 
         // Handling clicking on alert icon open listview event.
         alertBtn.onMouseClickedProperty().set(e -> handleAlertBoxClick());
@@ -116,16 +117,18 @@ public class mainScreenController implements Initializable {
             return;
 
         // Update details according to customer select. (different "Admin" Or Other).
-        if(newUser.equals(this.currentUser.getDefaultUserName())) {
+        if(newUser.equals(this.currentUser.getDefaultUserName())) { // if Admin chosen.
             this.customerPageComponent.setVisible(false);
             this.adminPageComponent.setVisible(true);
             this.currentUser.setUsername(this.currentUser.getDefaultUserName());
+            this.alertBox.setVisible(false);
         } else {
             this.customerPageComponent.setVisible(true);
             this.adminPageComponent.setVisible(false);
             this.currentUser.setUsername(newUser);
             customerPageComponentController.resetSettings();
             this.getCustomerAlerts();
+            this.alertBox.setVisible(true);
         }
 
         this.alertPane.setVisible(false); // Set alert view invisible when changing user.

@@ -24,9 +24,9 @@ public class ListViewCell extends ListCell<CustomerAlertData>
             setPrefHeight(Region.USE_COMPUTED_SIZE);
 
             if(alert.isAlertGotRead())
-                setStyle("-fx-background-color: #FFF;");
+                setStyle("-fx-background-color: #FFF;-fx-text-fill: #2e2e2e;");
             else {
-                setStyle("-fx-background-color: #ededed;");
+                setStyle("-fx-background-color: #ededed;-fx-text-fill: #2e2e2e;");
             }
         }
     }
