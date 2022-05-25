@@ -23,7 +23,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
+import tableview.customer_tableview.customerTableView;
 import tableview.loan_tableview.loansTableView;
+import tableview.payment_tableview.PaymentTableView;
 import tableview.transactions_view.TransactionTable;
 
 import java.net.URL;
@@ -48,6 +50,7 @@ public class customerScreenController implements Initializable {
     @FXML private User currentUser;
     @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController;
     @FXML private TransactionTable myTransactionListController;
+    @FXML private PaymentTableView myPaymentTableController;
     @FXML private Label currentBalance;
     @FXML private Button depositBtn, withdrawalBtn;
 
@@ -56,6 +59,7 @@ public class customerScreenController implements Initializable {
     @FXML private Label amountLabel;
     @FXML private CheckComboBox<String> filterCats;
     @FXML private TextField minInterest, minYaz, maxOpenLoans, ownershipPrecent;
+
 
     public customerScreenController() {
         currentUser = new User();
@@ -269,6 +273,7 @@ public class customerScreenController implements Initializable {
         myLoansTableController.setLoanItems(this.currentCustomer.getLoanList());
         myInvestmentsLoansController.setLoanItems(this.currentCustomer.getInvestmentList());
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
+        myPaymentTableController.setpaymentItems(this.currentCustomer.getLoanList());
 
         this.setCategoryList();
     }
