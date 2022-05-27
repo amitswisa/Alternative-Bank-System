@@ -29,10 +29,11 @@ public class LoanDataObject extends DataTransferObject {
     private int unfinishedLoansNumber;
     private final Status loanStatus;
     //private Map<String, Investor> loanInvestors; // List of investors and their amount of investment;
-    //private List<BankLoanTransaction> transactionList; // hold all transaction's history.
+    private List<TransactionDataObject> transactionList; // hold all transaction's history.
 
     public LoanDataObject(String owner, String loanID, String loanCategory, int loanAmount, int loanOpeningTime, int loanTotalTime,
-                          int loanStartTime, int loanEndTime, int loanInterestPerPayment, int paymentInterval, Status loanStatus, int amountLeftToPay)
+                          int loanStartTime, int loanEndTime, int loanInterestPerPayment, int paymentInterval, Status loanStatus,
+                          int amountLeftToPay, List<TransactionDataObject> transactionList)
     {
         super();
         this.owner = owner;
@@ -47,6 +48,7 @@ public class LoanDataObject extends DataTransferObject {
         this.paymentInterval = paymentInterval;
         this.loanStatus = loanStatus;
         this.amountLeftToPay = amountLeftToPay;
+        this.transactionList = transactionList;
     }
 
     // Section 2 from menu.
@@ -174,6 +176,22 @@ public class LoanDataObject extends DataTransferObject {
     public LoanDataObject.Status getLoanStatus() {return this.loanStatus;}
 
     public String getLoanID() {return this.loanID; }
+
+    public int getPaymentYaz() {
+        for (TransactionDataObject payment :  this.transactionList) {
+            if (payment.getTransactionStatus()== TransactionDataObject.Status.NOT_PAYED )
+             return payment.getPaymentTime();
+        }
+        return -1; //return worng yaz in case all transactions payed
+    }
+
+    public int getCapitalANDIntrest() {
+        for (TransactionDataObject payment :  this.transactionList) {
+            if (payment.getTransactionStatus()== TransactionDataObject.Status.NOT_PAYED )
+                return payment.getInterestValue() + payment.getPaymentValue();
+        }
+        return -1; //return worng amount in case all transactions payed
+    }
 
     public int getPaymentInterval() {return this.paymentInterval;}
 
