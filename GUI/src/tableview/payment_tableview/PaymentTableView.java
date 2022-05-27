@@ -88,7 +88,7 @@ public class PaymentTableView implements Initializable {
         if(list == null || list.isEmpty())
             return;
 
-        this.list.addAll(list);
+        this.list.setAll(list);
         this.paymentTable.setItems(this.list);
         this.paymentTable.refresh();
     }

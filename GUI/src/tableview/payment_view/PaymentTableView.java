@@ -14,9 +14,10 @@ import java.util.ResourceBundle;
 
 public class PaymentTableView implements Initializable {
 
+    //public TableColumn loanID;
     private ObservableList<String> obsList;
     @FXML private TableView<String> paymentTable;
-    @FXML private TableColumn<String, Void> title, test, testv;
+    @FXML private TableColumn<String, Void> loanID, paymentYaz, capitalANDIntrest;
 
     public PaymentTableView() {
         obsList = FXCollections.observableArrayList();
@@ -24,9 +25,9 @@ public class PaymentTableView implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        title.setCellValueFactory(new PropertyValueFactory<>("title"));
-        test.setCellValueFactory(new PropertyValueFactory<>("test"));
-        testv.setCellValueFactory(new PropertyValueFactory<>("testv"));
+        loanID.setCellValueFactory(new PropertyValueFactory<>("loanID"));
+        paymentYaz.setCellValueFactory(new PropertyValueFactory<>("paymentYaz"));
+        capitalANDIntrest.setCellValueFactory(new PropertyValueFactory<>("capitalANDIntrest"));
     }
 
     public void setPaymentList(List<String> list) {
