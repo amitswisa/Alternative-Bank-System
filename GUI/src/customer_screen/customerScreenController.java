@@ -22,6 +22,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
 import tableview.loan_tableview.loansTableView;
+import tableview.payment_view.PaymentTableView;
 import tableview.transactions_view.TransactionTable;
 
 import java.net.URL;
@@ -44,6 +45,7 @@ public class customerScreenController implements Initializable {
     @FXML private User currentUser;
     @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController;
     @FXML private TransactionTable myTransactionListController;
+    @FXML private PaymentTableView paymentTableController;
     @FXML private Label currentBalance;
     @FXML private Button depositBtn, withdrawalBtn;
 
@@ -196,6 +198,14 @@ public class customerScreenController implements Initializable {
 
         // send reference to list of loans to invest.
         loansToInvestTableController.setLoansToInvestList(this.loansToInvestList);
+
+
+
+        // TRY
+        List<String> d = new ArrayList<>();
+        d.add("asdad");
+        d.add("Asdasdasd");
+        paymentTableController.setPaymentList(d);
     }
 
     // Set ChangeEventListener to each filter component.
