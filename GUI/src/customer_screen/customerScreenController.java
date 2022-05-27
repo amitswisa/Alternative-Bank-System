@@ -79,6 +79,7 @@ public class customerScreenController implements Initializable {
 
                 updateCustomerInfo(newValue);
                 updateScramble();
+                updatePayments();
             }
         });
 
@@ -198,14 +199,10 @@ public class customerScreenController implements Initializable {
 
         // send reference to list of loans to invest.
         loansToInvestTableController.setLoansToInvestList(this.loansToInvestList);
+    }
 
-
-
-        // TRY
-        List<String> d = new ArrayList<>();
-        d.add("asdad");
-        d.add("Asdasdasd");
-        paymentTableController.setPaymentList(d);
+    private void updatePayments() {
+        paymentTableController.setPaymentList(currentCustomer.getLoanList());
     }
 
     // Set ChangeEventListener to each filter component.

@@ -36,10 +36,11 @@ public class customerTableView implements Initializable {
     }
 
     public void setCustomerList(List<CustomerDataObject> list) {
+
         if(list == null || list.isEmpty())
             return;
 
-        this.list.addAll(list);
+        this.list.setAll(list);
         this.customerTable.setItems(this.list);
     }
 }

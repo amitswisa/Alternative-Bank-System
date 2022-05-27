@@ -122,6 +122,7 @@ public class mainScreenController implements Initializable {
             this.adminPageComponent.setVisible(true);
             this.currentUser.setUsername(this.currentUser.getDefaultUserName());
             this.alertBox.setVisible(false);
+            this.adminPageComponentController.updateAdminLists();
         } else {
             this.customerPageComponent.setVisible(true);
             this.adminPageComponent.setVisible(false);

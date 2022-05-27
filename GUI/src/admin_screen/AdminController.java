@@ -66,8 +66,7 @@ public class AdminController {
                 xmlFilePathTextProperty.set(selectedFile.getAbsolutePath()); // Change pathText
                 mainPage.setYazLabelText(BankSystem.getCurrentYaz()+""); //Set yaz and transfer to text
                 this.setCustomersNamesChoiceBox();
-                loanTableController.setLoanItems(this.engineManager.getAllLoansData()); // Transfer loan's list from loaded file to controller.
-                customerTableController.setCustomerList(this.engineManager.getAllCustomerData()); // Transfer customer's list from loaded file to controller.
+                this.updateAdminLists();
             }
 
             // Pop an alert message.
@@ -102,5 +101,12 @@ public class AdminController {
     public void increaseYaz(MouseEvent mouseEvent) {
         engineManager.increaseYazDate();
         mainPage.setYazLabelText(BankSystem.getCurrentYaz()+"");
+    }
+
+    public void updateAdminLists() {
+        if(fileToLoad != null) {
+            loanTableController.setLoanItems(this.engineManager.getAllLoansData()); // Transfer loan's list from loaded file to controller.
+            customerTableController.setCustomerList(this.engineManager.getAllCustomerData()); // Transfer customer's list from loaded file to controller.
+        }
     }
 }
