@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
@@ -42,6 +43,7 @@ public class customerScreenController implements Initializable {
     private List<LoanDataObject> loansToInvestList; // Holds loans to invest in when user mark them.
 
     // FXML MEMBERS
+    @FXML private AnchorPane customerPane;
     @FXML private User currentUser;
     @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController;
     @FXML private TransactionTable myTransactionListController;
@@ -65,6 +67,7 @@ public class customerScreenController implements Initializable {
         moneyPopup.setHeaderText("Enter amount of money: ");
         moneyPopup.initStyle(StageStyle.UTILITY);
         moneyPopup.setGraphic(null);
+
     }
 
     @Override
@@ -418,4 +421,8 @@ public class customerScreenController implements Initializable {
         return currentCustomer.getListOfAlerts();
     }
     /* END SCRAMBLE PAGE */
+
+    public AnchorPane getCustomerMainPane() {
+        return this.customerPane;
+    }
 }

@@ -8,7 +8,7 @@
 
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="923.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tableview.customer_tableview.customerTableView">
    <children>
-       <TableView id="customerTable" fx:id="customerTable" nodeOrientation="LEFT_TO_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" stylesheets="@../loan_tableview/loanTableStyle.css">
+       <TableView id="customerTable" fx:id="customerTable" nodeOrientation="LEFT_TO_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
            <columns>
                <TableColumn fx:id="name" prefWidth="207.0" text="Customer Name" />
                <TableColumn fx:id="balance" prefWidth="100.0" text="Balance" />

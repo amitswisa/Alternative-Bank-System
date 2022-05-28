@@ -102,3 +102,142 @@
     -fx-border-color: #cf6a87;
     -fx-text-fill: #2e2e2e;
 }
+
+.table-view{
+    -fx-background-color: #FFF;
+}
+
+.table-view:focused{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: #FFF;
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: #2e2e2e;
+}
+
+.table-view .column-header {
+    -fx-background-color: #FFF;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: #000;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell{
+    -fx-background-color: -fx-table-cell-border-color, #ffe9ec;
+    -fx-background-insets: 0, 0 0 0 0;
+    -fx-padding: 0.0em;
+    -fx-cell-size: 58px;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: -fx-table-cell-border-color, #FFF;
+    -fx-background-insets: 0, 0 0 0 0;
+    -fx-padding: 0.0em;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #f8a5c2;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+}
+
+.table-column {
+    -fx-alignment: center;
+    -fx-font-weight: bold;
+}
+
+.table-view .scroll-bar:vertical,
+.table-view .scroll-bar:horizontal,
+.table-view .corner {
+    -fx-background-color: #FFF;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #E0E1DD;
+    -fx-padding: 0 0 0 0;
+    -fx-pref-width: 5;
+}
+
+.MyTabPane {
+    -fx-background-color: #FFF;
+
+}
+
+
+
+.MyTabPane .tab
+{
+    -fx-background-color: #457B9D;
+}
+
+.MyTabPane .tab:selected
+{
+    -fx-background-color: #1D3557;
+}
+
+.tab-pane *.tab-header-background {
+    -fx-background-color: #FFF;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #FFF;
+    -fx-font-size: 12px;
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-width: 0;
+    -fx-border-color: -fx-focus-color;
+}
+
+.scroll-pane {
+    -fx-background-color: #FFF;
+}
+
+.split-pane {
+    -fx-background-color: #FFF;
+}
+
+#currentBalance {
+    -fx-font-weight: bold;
+    -fx-fint-size: 14px;
+}
+
+/* SCRAMNLE */
+
+#labelFilter {
+    font-weight:bold;
+}
+
+.filterMenuBtn {
+    -fx-background-color: #FFF;
+    -fx-border-color: #343A40;
+    -fx-cursor: hand;
+    -fx-border-radius: 2px;
+    -fx-text-alignment: center;
+    -fx-text-fill: #343A40;
+    -fx-font-weight: bold;
+}
+
+.menu-item {
+    -fx-background-color: #FFF;
+}
+
+.menu-item:hover, .menu-item:selected {
+    -fx-background-color: transparent;
+    -fx-text-fill: #000;
+}
