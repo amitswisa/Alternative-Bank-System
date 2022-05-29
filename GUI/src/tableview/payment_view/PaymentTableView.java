@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
+import payment_area.PaymentAreaController;
 
 import java.net.URL;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class PaymentTableView implements Initializable {
 
     private ObservableList<LoanDataObject> obsList;
+    private ObservableValue<LoanDataObject> obsDataObject;
     @FXML private TableView<LoanDataObject> paymentTable;
     @FXML private TableColumn<LoanDataObject, String> loanID, paymentYaz, capitalANDIntrest;
     @FXML private TableColumn<LoanDataObject, Void> choseBtn;
@@ -40,9 +42,8 @@ public class PaymentTableView implements Initializable {
                 {
                     btn.setOnAction((ActionEvent event) -> {
                         // Get loan data when clicking specific View button.
-                        LoanDataObject dataObject = getTableView().getItems().get(getIndex());
+                        obsDataObject = (ObservableValue<LoanDataObject>) getTableView().getItems().get(getIndex());
 
-                        // TODO - updatePשymentTable -> dataObject
                     });
                 }
 
@@ -71,5 +72,9 @@ public class PaymentTableView implements Initializable {
 
         obsList.setAll(list);
         paymentTable.setItems(obsList);
+    }
+
+    public ObservableValue<LoanDataObject> valueProperty() {
+        return obsDataObject;
     }
 }

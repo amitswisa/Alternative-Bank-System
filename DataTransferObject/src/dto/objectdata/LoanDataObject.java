@@ -21,7 +21,7 @@ public class LoanDataObject extends DataTransferObject {
     private final int loanAmount; // Loan amount of money.
     private final int loanOpeningTime; // Time in YAZ that customer opened new loan.
     private final int loanTotalTime;
-    private final int amountLeftToPay;
+    private final int amountLeftToPay; //left to pay to activate
     private final int loanStartTime; // in yaz - set value when being active.
     private final int loanEndTime;
     private final int loanInterestPerPayment;
@@ -185,6 +185,42 @@ public class LoanDataObject extends DataTransferObject {
         return -1; //return worng yaz in case all transactions payed
     }
 
+    //Returns the current payment number.
+    public int getThisPaymentNumber(){
+        int count=1, i=0;
+
+        while(this.transactionList.get(i).getTransactionStatus() == TransactionDataObject.Status.PAYED || this.transactionList.get(i).getTransactionStatus() == TransactionDataObject.Status.DEPT_COVERED) {
+            count++;
+            i++;
+        }
+        return count;
+    }
+
+    public int getThisPaymentAmount(){
+        for (TransactionDataObject payment :  this.transactionList) {
+            if (payment.getTransactionStatus()== TransactionDataObject.Status.NOT_PAYED )
+                return payment.getPaymentValue();
+        }
+        return -1; //return worng amount in case all transactions payed
+    }
+
+    //Returns the number of payments.
+    public int getNumberOfPayment(){
+        return this.loanTotalTime / this.paymentInterval;
+    }
+
+    //Returns the amount that left to close the loan.
+    public int getAmountLeftToPay() {
+        int paidAlready= 0 ;
+        for (TransactionDataObject payment:this.transactionList) {
+            if(payment.getTransactionStatus() == TransactionDataObject.Status.DEPT_COVERED ||
+                    payment.getTransactionStatus() == TransactionDataObject.Status.PAYED)
+                paidAlready += payment.getPaymentValue() ;
+
+        }
+        return this.loanAmount - paidAlready;
+    }
+
     public int getCapitalANDIntrest() {
         for (TransactionDataObject payment :  this.transactionList) {
             if (payment.getTransactionStatus()== TransactionDataObject.Status.NOT_PAYED )
@@ -195,7 +231,7 @@ public class LoanDataObject extends DataTransferObject {
 
     public int getPaymentInterval() {return this.paymentInterval;}
 
-    public int getAmountLeftToPay() {return this.amountLeftToPay;}
+    public int getAmountLeftToPayToActivate() {return this.amountLeftToPay;}
 
     public int getLoanOpeningTime() {
         return this.loanOpeningTime;

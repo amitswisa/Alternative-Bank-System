@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="payment_area.PaymentAreaController" prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <GridPane layoutX="2.0" layoutY="1.0" prefHeight="253.0" prefWidth="968.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label prefHeight="34.0" prefWidth="192.0" text="Loan Status:" GridPane.columnIndex="1" />
+                <Label layoutX="10.0" layoutY="25.0" prefHeight="34.0" prefWidth="192.0" text="Payment Number:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label layoutX="10.0" layoutY="89.0" prefHeight="34.0" prefWidth="192.0" text="Amout Left To Pay:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Button fx:id="payThisPayment" mnemonicParsing="false" text="Pay This Payment" GridPane.columnIndex="3" GridPane.rowIndex="1" disable="true" />
+                <Button fx:id="payAll" mnemonicParsing="false" text="Pay All The Amount" GridPane.columnIndex="3" GridPane.rowIndex="2" disable="true"/>
+                <Label text="Payment Amount:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label fx:id="loanStatus" text=" " GridPane.columnIndex="2" />
+                <Label fx:id="paymentNumber" text=" " GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Label fx:id="amountLeft" text=" " GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <Label fx:id="paymentAmount" text=" " GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            </children>
+        </GridPane>
+    </children>
+</AnchorPane>
