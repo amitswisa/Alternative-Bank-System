@@ -1,9 +1,13 @@
 package dto.objectdata;
 
 import dto.infodata.DataTransferObject;
+import javafx.util.Pair;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static dto.objectdata.LoanDataObject.Status.*;
 
 public class LoanDataObject extends DataTransferObject {
 
@@ -28,12 +32,14 @@ public class LoanDataObject extends DataTransferObject {
     private final int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
     private int unfinishedLoansNumber;
     private final Status loanStatus;
+    private final List<Pair<String, Integer>> investersList;
     //private Map<String, Investor> loanInvestors; // List of investors and their amount of investment;
     private List<TransactionDataObject> transactionList; // hold all transaction's history.
 
     public LoanDataObject(String owner, String loanID, String loanCategory, int loanAmount, int loanOpeningTime, int loanTotalTime,
                           int loanStartTime, int loanEndTime, int loanInterestPerPayment, int paymentInterval, Status loanStatus,
-                          int amountLeftToPay, List<TransactionDataObject> transactionList)
+                          int amountLeftToPay, List<TransactionDataObject> transactionList,
+                          List<Pair<String, Integer>> investersList)
     {
         super();
         this.owner = owner;
@@ -49,115 +55,109 @@ public class LoanDataObject extends DataTransferObject {
         this.loanStatus = loanStatus;
         this.amountLeftToPay = amountLeftToPay;
         this.transactionList = transactionList;
+        this.investersList = investersList;
     }
 
     // Section 2 from menu.
-    /*public void showLoan() {
-        System.out.println(this);
+    public String showLoanData(int yaz) {
+
+        String res = "";
 
         //Print all the investors.
-        Map<String, Investor> temp = this.loan.getLoanInvestors();
-        if(temp != null && temp.size() > 0) {
-            System.out.println("List of investors: ");
-            for (Map.Entry<String, Investor> invester : temp.entrySet())
-                System.out.println("Name:" + invester.getKey() + ", Investment: " + invester.getValue().getInitialInvestment());
+        List<Pair<String, Integer>> temp = this.investersList;
+        if(this.investersList != null && this.investersList.size() > 0) {
+            res += "List of investors: \n";
+            for (Pair<String, Integer> invester: this.investersList)
+                 res += "   Name: " + invester.getKey() + ", Investment: " + invester.getValue() + ". \n";
         } else
-            System.out.println("No investors at this moment.");
+            res += "   No investors at this moment.\n";
 
         //Show more deatails according to loan status.
-        BankLoan.Status status = this.loan.getLoanStatus();
-        switch (status){
+        switch (this.getLoanStatus()){
             case ACTIVE: {
-                this.presentActiveStatusData();
+                res += this.presentActiveStatusData();
                 break;
             }
             case RISK: {
-                this.presentActiveStatusData();
-                this.presentRiskStatusData();
+                res += this.presentActiveStatusData();
+                res += this.presentRiskStatusData(yaz);
                 break;
             }
             case FINISHED: {
-                System.out.println("Starting loan time: " + this.loan.getLoanStartTime());
-                System.out.println("Ending loan time: " + this.loan.getLoanEndTime());
+                res += "Starting loan time: " + this.getLoanOpeningTime() + "\n";
+                res += "Ending loan time: " + (this.getLoanOpeningTime()+this.getLoanTotalTime());
                 break;
             }
             default: {
-                if(status != BankLoan.Status.PENDING && status != BankLoan.Status.NEW) // if current loan status is not pending or any of the above.
-                    System.out.println("Error: invalid loan status.");
+                if(this.getLoanStatus() != PENDING && this.getLoanStatus() != NEW) // if current loan status is not pending or any of the above.
+                    res += "Error: invalid loan status.\n";
             }
 
         }
-        System.out.println(" ");
+        res += " \n";
+        return res;
     }
 
-    private void presentActiveStatusData() {
-        System.out.println("Started YAZ:" + this.loan.getLoanStartTime()); //print the YAZ start to be active
+    private String presentActiveStatusData() {
+        String res = "\nStarted YAZ:" + this.getLoanOpeningTime() + "\n"; //print the YAZ start to be active
 
         // Calculate next payment in yaz.
-        int nextYaz = this.loan.getNextPaymentTime();
-        if(nextYaz <= BankSystem.getCurrentYaz())
-            nextYaz += + this.loan.getPaymentInterval();
-        System.out.println("Next YAZ payment: " + nextYaz);
+        int nextYaz = this.getPaymentYaz();
+        res += "Next YAZ payment: " + nextYaz + ".\n\n";
+
+        res += "List of payed payments: \n";
 
         int totalInterestPayed = 0;
         int totalLoanPayment = 0;
-        // Print all transaction that are payed in time.
-        for(BankLoanTransaction tranc : this.loan.getPayedTransactions()) {
-            System.out.println(tranc);
-            totalInterestPayed += tranc.getInterestValue();
-            totalLoanPayment += tranc.getPaymentValue();
-        }
 
-        System.out.println("Total payments already payed: " + totalLoanPayment);
-        System.out.println("Total interest already payed: " + totalInterestPayed);
-        System.out.println("Total payments left to pay: " + (this.loan.getLoanAmount()-totalLoanPayment));
-        System.out.println("Total interest left to pay: "
-                + (this.loan.getTotalLoanInterestInMoney()-totalInterestPayed));
+        List<TransactionDataObject> filteredList = this.transactionList.stream()
+                .filter(e -> e.getTransactionStatus() == TransactionDataObject.Status.PAYED)
+                            .collect(Collectors.toList());
 
-    }
-
-    private void presentRiskStatusData() {
-        System.out.println("There are " + this.loan.getUnpayedTransactions().size() + " unpaied payments.");
-        System.out.println("Total unpaid payments so far: "
-                + (this.loan.getLastUnPaidTransaction().getPaymentValue() + this.loan.getLastUnPaidTransaction().getInterestValue()));
-    }
-
-    // Part of section 3 from menu.
-    public String getLoanDetails() {
-         return "   Loan Name: " + this.loan.getLoanID() + ".\n" +
-                "      Loan Category: " + this.loan.getLoanCategory() + ".\n" +
-                "      Loan Amount: " + this.loan.getLoanAmount() + ".\n" +
-                "      Payment Interval: " + this.loan.getPaymentInterval() + ".\n" +
-                "      Loan Interest Per Payment: " + this.loan.getLoanInterestPerPayment() + ".\n" +
-                "      Loan total (interest+capital): " + (this.loan.getTotalLoanInterestInMoney()+this.loan.getLoanAmount()) + ".\n" +
-                "      Loan Status: " + this.loan.getLoanStatus() + ".\n" +
-                this.getLoanDetailsAccordingToStatus();
-    }
-
-    private String getLoanDetailsAccordingToStatus() {
-        String res = "";
-        switch(loan.getLoanStatus()) {
-            case PENDING: {
-                res = "      Amount left to make loan active: " + loan.getAmountLeftToActivateLoan() + "\n";
-                break;
-            }
-            case ACTIVE: {
-                res = "      Next payment date (in YAZ): " + this.loan.getNextPaymentTime()
-                        +".\n      Next payment value: " + ((this.loan.getLoanAmount()/(this.loan.getLoanTotalTime()/this.loan.getPaymentInterval()))+this.loan.getLoanInterestPerPayment()) + "\n";
-                break;
-            }
-            case RISK: {
-                res = "      Total value of unpaied transactions: " + this.loan.getUnpayedTransactionsAmountOfMoney() + "\n";
-                break;
-            }
-            case FINISHED: {
-                res = "      Loan started at: " + this.loan.getLoanStartTime() +
-                        ".\n      Loan ending time: " + (this.loan.getLoanEndTime()) + "\n";
-                break;
+        if(filteredList.size() <= 0)
+            res += "   There are no payed payments yet.\n\n";
+        else {
+            for (TransactionDataObject tranc : filteredList) {
+                res += tranc + "\n\n";
+                totalInterestPayed += tranc.getInterestValue();
+                totalLoanPayment += tranc.getPaymentValue();
             }
         }
+
+        res += "Total payments already payed: " + totalLoanPayment + "\n";
+        res += "Total interest already payed: " + totalInterestPayed + "\n";
+        res += "Total payments left to pay: " + (this.getLoanAmount()-totalLoanPayment) + "\n";
+        res += "Total interest left to pay: *TODO* \n";
+
         return res;
-    }*/
+    }
+
+    private String presentRiskStatusData(int yaz) {
+        String res = "There are " + this.getUnpayedTransactionsAmount(yaz) + " unpaied payments.\n";
+        res += "Total unpaid payments so far: "
+                + (this.getLastUnPaidTransaction(yaz).getPaymentValue() + this.getLastUnPaidTransaction(yaz).getInterestValue()) + ".\n";
+        return res;
+    }
+
+    public int getUnpayedTransactionsAmount(int yaz) {
+
+        // if all transactions alreadty paied.
+        if(this.transactionList == null)
+            return 0;
+
+        return this.transactionList.stream().filter(s -> s.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED
+                && s.getPaymentTime() <= yaz).collect(Collectors.toList()).size();
+    }
+
+    public TransactionDataObject getLastUnPaidTransaction(int yaz) {
+        for(int i = this.transactionList.size();i > 0;i--) {
+            TransactionDataObject temp = transactionList.get(i-1);
+            if(temp.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED
+                    && temp.getPaymentTime() <= yaz)
+                return temp;
+        }
+        return null;
+    }
 
     public String getOwner() {
         return this.owner;
@@ -241,16 +241,5 @@ public class LoanDataObject extends DataTransferObject {
     }
 
     public int getUnfinishedLoansNumber() {return this.unfinishedLoansNumber;}
-
-   /* @Override
-    public String toString() {
-        return  "Loan ID: " + this.loan.getLoanID() + "\n" +
-                "Loan Category: " + this.loan.getLoanCategory() + "\n" +
-                "Loan Amount: " + this.loan.getLoanAmount() + "\n" +
-                "Original Time of loan: " + this.loan.getLoanTotalTime() + "\n" +
-                "Loan Interest: " + this.loan.getTotalLoanInterestInMoney() + "\n" +
-                "Payment Interval: " + this.loan.getPaymentInterval() + "\n" +
-                "Loan Status: " + this.loan.getLoanStatus();
-    }*/
 
 }

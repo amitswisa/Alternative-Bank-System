@@ -223,12 +223,12 @@
 
 .filterMenuBtn {
     -fx-background-color: #FFF;
-    -fx-border-color: #343A40;
-    -fx-cursor: hand;
+    -fx-border-color: #cf6a87;
     -fx-border-radius: 2px;
     -fx-text-alignment: center;
     -fx-text-fill: #343A40;
     -fx-font-weight: bold;
+    -fx-cursor: hand;
 }
 
 .menu-item {
