@@ -215,8 +215,7 @@ public class LoanDataObject extends DataTransferObject {
         for (TransactionDataObject payment:this.transactionList) {
             if(payment.getTransactionStatus() == TransactionDataObject.Status.DEPT_COVERED ||
                     payment.getTransactionStatus() == TransactionDataObject.Status.PAYED)
-                paidAlready += payment.getPaymentValue() ;
-
+                paidAlready += payment.getPaymentValue();
         }
         return this.loanAmount - paidAlready;
     }

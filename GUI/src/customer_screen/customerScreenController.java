@@ -204,6 +204,9 @@ public class customerScreenController implements Initializable {
 
         // send reference to list of loans to invest.
         loansToInvestTableController.setLoansToInvestList(this.loansToInvestList);
+
+        // send customer controller instance to payment table view to update payment area.
+        paymentTableController.setCustomerController(this);
     }
 
     private void updatePayments() {
@@ -257,14 +260,9 @@ public class customerScreenController implements Initializable {
 
     }
 
-    //TODO
-    private void setPaymentAreaController(){
-        this.paymentTableController.valueProperty().addListener(new ChangeListener<LoanDataObject>() {
-            @Override
-            public void changed(ObservableValue<? extends LoanDataObject> observable, LoanDataObject oldValue, LoanDataObject newValue) {
-                paymentAreaController.updateInfo(newValue);
-            }
-        });
+    // Update view of payment area when choosing a loan.
+    public void setPaymentArea(LoanDataObject d){
+        paymentAreaController.updateInfo(d);
     }
 
     // Set engine.

@@ -172,16 +172,14 @@
 
 }
 
-
-
 .MyTabPane .tab
 {
-    -fx-background-color: #457B9D;
+    -fx-background-color: #f8a5c2;
 }
 
 .MyTabPane .tab:selected
 {
-    -fx-background-color: #1D3557;
+    -fx-background-color: #cf6a87;
 }
 
 .tab-pane *.tab-header-background {
