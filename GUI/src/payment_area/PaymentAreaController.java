@@ -13,7 +13,7 @@ public class PaymentAreaController {
     public void updateInfo(LoanDataObject dataObject){
         loanStatus.setText(dataObject.getLoanStatus().toString());
         paymentNumber.setText(dataObject.getThisPaymentNumber() + "/" + dataObject.getNumberOfPayment());
-        amountLeft.setText(dataObject.getAmountLeftToPay() + " ");
+        amountLeft.setText(dataObject.getAmountLeftToPayTofinished() + " ");
         paymentAmount.setText(dataObject.getThisPaymentAmount() + " ");
         payThisPayment.setDisable(false);
         payAll.setDisable(false);

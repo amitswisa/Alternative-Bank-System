@@ -210,7 +210,7 @@ public class LoanDataObject extends DataTransferObject {
     }
 
     //Returns the amount that left to close the loan.
-    public int getAmountLeftToPay() {
+    public int getAmountLeftToPayTofinished() {
         int paidAlready= 0 ;
         for (TransactionDataObject payment:this.transactionList) {
             if(payment.getTransactionStatus() == TransactionDataObject.Status.DEPT_COVERED ||
@@ -230,7 +230,7 @@ public class LoanDataObject extends DataTransferObject {
 
     public int getPaymentInterval() {return this.paymentInterval;}
 
-    public int getAmountLeftToPayToActivate() {return this.amountLeftToPay;}
+    public int getAmountLeftToPay() {return this.amountLeftToPay;}
 
     public int getLoanOpeningTime() {
         return this.loanOpeningTime;
