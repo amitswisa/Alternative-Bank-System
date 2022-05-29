@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
+import payment_area.PaymentAreaController;
 import tableview.loan_tableview.loansTableView;
 import tableview.payment_view.PaymentTableView;
 import tableview.transactions_view.TransactionTable;
@@ -48,6 +49,7 @@ public class customerScreenController implements Initializable {
     @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController;
     @FXML private TransactionTable myTransactionListController;
     @FXML private PaymentTableView paymentTableController;
+    @FXML private PaymentAreaController paymentAreaController;
     @FXML private Label currentBalance;
     @FXML private Button depositBtn, withdrawalBtn;
 
@@ -253,6 +255,16 @@ public class customerScreenController implements Initializable {
                 this.ownershipPrecent.setText("100");
         });
 
+    }
+
+    //TODO
+    private void setPaymentAreaController(){
+        this.paymentTableController.valueProperty().addListener(new ChangeListener<LoanDataObject>() {
+            @Override
+            public void changed(ObservableValue<? extends LoanDataObject> observable, LoanDataObject oldValue, LoanDataObject newValue) {
+                paymentAreaController.updateInfo(newValue);
+            }
+        });
     }
 
     // Set engine.
