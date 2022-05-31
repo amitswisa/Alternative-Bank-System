@@ -1,5 +1,6 @@
 package tableview.payment_view;
 
+import customer_screen.customerScreenController;
 import dto.objectdata.LoanDataObject;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,8 +20,10 @@ import java.util.stream.Collectors;
 
 public class PaymentTableView implements Initializable {
 
+    private RadioButton currentBtn = null;
+    private customerScreenController customerController;
+
     private ObservableList<LoanDataObject> obsList;
-    private ObservableValue<LoanDataObject> obsDataObject;
     @FXML private TableView<LoanDataObject> paymentTable;
     @FXML private TableColumn<LoanDataObject, String> loanID, paymentYaz, capitalANDIntrest;
     @FXML private TableColumn<LoanDataObject, Void> choseBtn;
@@ -42,7 +45,20 @@ public class PaymentTableView implements Initializable {
                 {
                     btn.setOnAction((ActionEvent event) -> {
                         // Get loan data when clicking specific View button.
-                        obsDataObject = (ObservableValue<LoanDataObject>) getTableView().getItems().get(getIndex());
+                        LoanDataObject data = getTableView().getItems().get(getIndex());
+
+                        if(btn.isSelected()) {
+                            customerController.setPaymentArea(data);
+
+                            if(currentBtn != null && currentBtn != btn)
+                                currentBtn.setSelected(false);
+
+                            currentBtn = btn;
+                        } else {
+                            if(currentBtn == btn)
+                                btn.setSelected(true);
+                        }
+
                     });
                 }
 
@@ -73,7 +89,8 @@ public class PaymentTableView implements Initializable {
         paymentTable.setItems(obsList);
     }
 
-    public ObservableValue<LoanDataObject> valueProperty() {
-        return obsDataObject;
+    public void setCustomerController(customerScreenController controller) {
+        this.customerController = controller;
     }
+
 }

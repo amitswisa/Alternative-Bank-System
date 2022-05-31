@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
@@ -43,6 +44,7 @@ public class customerScreenController implements Initializable {
     private List<LoanDataObject> loansToInvestList; // Holds loans to invest in when user mark them.
 
     // FXML MEMBERS
+    @FXML private AnchorPane customerPane;
     @FXML private User currentUser;
     @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController;
     @FXML private TransactionTable myTransactionListController;
@@ -67,6 +69,7 @@ public class customerScreenController implements Initializable {
         moneyPopup.setHeaderText("Enter amount of money: ");
         moneyPopup.initStyle(StageStyle.UTILITY);
         moneyPopup.setGraphic(null);
+
     }
 
     @Override
@@ -201,6 +204,9 @@ public class customerScreenController implements Initializable {
 
         // send reference to list of loans to invest.
         loansToInvestTableController.setLoansToInvestList(this.loansToInvestList);
+
+        // send customer controller instance to payment table view to update payment area.
+        paymentTableController.setCustomerController(this);
     }
 
     private void updatePayments() {
@@ -254,14 +260,9 @@ public class customerScreenController implements Initializable {
 
     }
 
-    //TODO
-    private void setPaymentAreaController(){
-        this.paymentTableController.valueProperty().addListener(new ChangeListener<LoanDataObject>() {
-            @Override
-            public void changed(ObservableValue<? extends LoanDataObject> observable, LoanDataObject oldValue, LoanDataObject newValue) {
-                paymentAreaController.updateInfo(newValue);
-            }
-        });
+    // Update view of payment area when choosing a loan.
+    public void setPaymentArea(LoanDataObject d){
+        paymentAreaController.updateInfo(d);
     }
 
     // Set engine.
@@ -430,4 +431,8 @@ public class customerScreenController implements Initializable {
         return currentCustomer.getListOfAlerts();
     }
     /* END SCRAMBLE PAGE */
+
+    public AnchorPane getCustomerMainPane() {
+        return this.customerPane;
+    }
 }

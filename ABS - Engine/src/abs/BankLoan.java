@@ -2,6 +2,7 @@ package abs;
 
 import dto.objectdata.LoanDataObject;
 import dto.objectdata.TransactionDataObject;
+import javafx.util.Pair;
 import xmlgenerated.AbsLoan;
 
 import java.util.*;
@@ -139,6 +140,17 @@ public class BankLoan {
 
     public Map<String, Investor> getLoanInvestors() {
         return loanInvestors;
+    }
+
+    public List<Pair<String, Integer>> getLoanInvestorsToView() {
+        List<Pair<String, Integer>> list = new ArrayList<>();
+
+        // populate list with pairs of investor name and investment amount.
+        getLoanInvestors().forEach((str,inv) -> {
+            list.add(new Pair<>(str, inv.getInitialInvestment()));
+        });
+
+        return list;
     }
 
     public LoanDataObject.Status getLoanStatus() {

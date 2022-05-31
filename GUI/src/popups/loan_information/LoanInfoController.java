@@ -1,10 +1,19 @@
 package popups.loan_information;
 
+import abs.BankLoan;
+import abs.BankSystem;
 import dto.objectdata.LoanDataObject;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
-public class LoanInfoController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class LoanInfoController implements Initializable {
 
     @FXML private Label loanName;
 
@@ -16,7 +25,7 @@ public class LoanInfoController {
     @FXML private Label totalTime;
     @FXML private Label interval;
     @FXML private Label status;
-
+    @FXML private ScrollPane scrollPane;
 
     public void setLoanPopupInfo(LoanDataObject loan) {
         this.loanName.setText(loan.getLoanID());
@@ -27,5 +36,13 @@ public class LoanInfoController {
         this.totalTime.setText(loan.getLoanTotalTime()+"");
         this.interval.setText(loan.getPaymentInterval() + "");
         this.status.setText(loan.getLoanStatus().toString());
+
+        scrollPane.setContent(new Text(loan.showLoanData(BankSystem.getCurrentYaz())));
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        Text text = new Text();
+        scrollPane.setContent(text);
     }
 }

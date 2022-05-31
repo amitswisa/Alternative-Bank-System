@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-effect: dropshadow(three-pass-box, #dcdcdc, 6, 0, 0, 0);;" stylesheets="@mainScreen.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_screen.mainScreenController">
+<AnchorPane fx:id="mainPane" id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-effect: dropshadow(three-pass-box, #dcdcdc, 6, 0, 0, 0);;" stylesheets="@mainScreen.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_screen.mainScreenController">
    <children>
       <GridPane id="header" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="43.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -46,7 +46,7 @@
             </Label>
             <HBox alignment="CENTER" minWidth="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-cursor: hand;" GridPane.columnIndex="4">
                <children>
-                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="settingsBtn" onMouseClicked="#settingsFunctionallity" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../resources/images/settings.png" />
                      </image>

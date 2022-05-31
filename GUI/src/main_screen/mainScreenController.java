@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
@@ -20,7 +21,7 @@ import javafx.util.Duration;
 import listview.ListViewCell;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class mainScreenController implements Initializable {
 
@@ -28,8 +29,11 @@ public class mainScreenController implements Initializable {
     private final EngineManager engineManager;
     private User currentUser;
     private TranslateTransition translateTransition;
+    private ChoiceDialog<String> dialog;
 
     // Pages
+    @FXML private AnchorPane mainPane;
+    @FXML private AnchorPane dataDiv;
     @FXML private AnchorPane adminPageComponent;
     @FXML private AdminController adminPageComponentController;
     @FXML private AnchorPane customerPageComponent;
@@ -37,6 +41,7 @@ public class mainScreenController implements Initializable {
 
     // FXML members
     @FXML private ChoiceBox<String> userTypeChoice;
+    @FXML private ImageView settingsBtn;
     @FXML private Label pathLabel;
     @FXML private Label yazLabel;
     @FXML private Label alertMessageCounter;
@@ -49,6 +54,17 @@ public class mainScreenController implements Initializable {
     public mainScreenController() {
         engineManager = new EngineManager();
         alertObservableList = FXCollections.observableArrayList();
+
+        // Dialog to settings
+        List<String> choices = new ArrayList<String>();
+        choices.add("Light theme");
+        choices.add("Dark theme");
+        dialog = new ChoiceDialog<>("Light theme", choices);
+        dialog.setTitle("Settings");
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
+        dialog.setContentText("Theme: ");
+        ((Button) dialog.getDialogPane().lookupButton(ButtonType.OK)).setText("Save");
     }
 
     @Override
@@ -94,6 +110,7 @@ public class mainScreenController implements Initializable {
                 return new ListViewCell();
             }
         });
+
     }
 
     public ChoiceBox<String> getUserTypeChoice() {
@@ -155,7 +172,6 @@ public class mainScreenController implements Initializable {
             return;
         }
 
-
         // Refresh changes.
         alertPane.setVisible(!alertPane.isVisible());
 
@@ -173,5 +189,22 @@ public class mainScreenController implements Initializable {
         int count = (int) customerPageComponentController.getCustomerAlertList().stream().filter(e -> !e.isAlertGotRead()).count();
         this.alertMessageCounter.setText(count + "");
         return count;
+    }
+
+    public void settingsFunctionallity(MouseEvent mouseEvent) {
+
+        Optional<String> result = dialog.showAndWait();
+
+        // If clicked ok.
+        if (result.isPresent()){
+
+            if(result.get().equals("Dark theme"))
+                mainPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("mainScreenDark.css")).toExternalForm());
+            else
+                mainPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("mainScreenDark.css")).toExternalForm());
+
+
+        }
+
     }
 }
