@@ -96,4 +96,8 @@ public class PaymentTableView implements Initializable {
         this.customerController = controller;
     }
 
+    public void refreshTable() {
+        paymentTable.refresh();
+    }
+
 }

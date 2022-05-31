@@ -47,4 +47,9 @@ public class Investor {
     public void setInitialInvestment(int initialInvestment) {
         this.initialInvestment = initialInvestment;
     }
+
+    public int getMyShareInInvestment(int originalLoanAmount) {
+        return (this.getPaymentAmount() * 100 / originalLoanAmount);
+    }
+
 }

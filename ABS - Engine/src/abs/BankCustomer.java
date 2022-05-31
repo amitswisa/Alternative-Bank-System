@@ -169,7 +169,7 @@ public class BankCustomer {
     // pay for specific loan.
     public void payCustomerTakenLoan(LoanDataObject loan, int amountToPay) {
         BankLoan currentLoanToPay = this.getLoanByNameAndYaz(loan.getLoanID(), loan.getLoanOpeningTime());
-        currentLoanToPay.makePayment(this, amountToPay);
+        this.balance -= currentLoanToPay.makePayment(this, amountToPay);
     }
 
     public void updateCustomerLoansStatus() {
@@ -195,5 +195,18 @@ public class BankCustomer {
 
     public List<CustomerAlertData> getListOfAlerts() {
         return this.listOfAlerts;
+    }
+
+    public void payLoanAllDebt(LoanDataObject e) {
+        BankLoan loan = this.getLoanByNameAndYaz(e.getLoanID(), e.getLoanOpeningTime());
+        loan.payLoanAllDebt(this, e);
+        this.addAlert(loan.getLoanID(), "Finished pay the loan!", CustomerAlertData.Type.CONFIRMATION);
+    }
+
+    public void pay(int amount) {
+        this.balance -= amount;
+        this.addOperationToCustomerLog(
+                new CustomerOperationData("Investment"
+                        , "Covered the loan!", this.balance, -1*amount));
     }
 }

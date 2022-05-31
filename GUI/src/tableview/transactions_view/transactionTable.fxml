@@ -10,7 +10,7 @@
             <columns>
                 <TableColumn fx:id="operationName" prefWidth="242.0000203847885" text="Operation" />
                 <TableColumn fx:id="currentOptAmount" prefWidth="153.3333740234375" text="Amount" />
-                <TableColumn fx:id="balanceAfter" prefWidth="174.00003051757812" text="Message" />
+                <TableColumn fx:id="balanceAfter" prefWidth="174.00003051757812" text="Balance" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

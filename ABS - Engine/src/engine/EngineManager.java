@@ -138,7 +138,14 @@ public class EngineManager {
     }
 
     // Customer Payments.
+
+    // Pay loan current payment.
     public void handleCustomerLoansPayments(LoanDataObject loan, int amountToPay) {
-        this.bankSystem.handleCustomerLoansPayments(loan, amountToPay);
+        this.bankSystem.handleCustomerLoanPayment(loan, amountToPay);
+    }
+
+    // Close all loans debt or specific loan.
+    public void handleCustomerPayAllDebt(List<LoanDataObject> loans) throws DataTransferObject {
+        this.bankSystem.handleCustomerPayAllDebt(loans);
     }
 }

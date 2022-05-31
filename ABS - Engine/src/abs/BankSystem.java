@@ -33,13 +33,11 @@ public class BankSystem {
         currentYaz++; // increase YAZ date by 1.
 
         // make relevant investments payment.
-        customers.values().forEach(customer -> {
-            customer.updateCustomerLoansStatus();
-        });
+        customers.values().forEach(BankCustomer::updateCustomerLoansStatus);
     }
 
     // Close all loans.
-    public void handleCustomerLoansPayments(List<LoanDataObject> loans) throws DataTransferObject {
+    public void handleCustomerPayAllDebt(List<LoanDataObject> loans) throws DataTransferObject {
 
         if(loans == null || loans.size() <= 0)
             throw new DataTransferObject("There are no loans to pay debt for.", BankSystem.getCurrentYaz());
@@ -54,11 +52,15 @@ public class BankSystem {
         if(totalToPay > customer.getBalance())
             throw new DataTransferObject("You dont have enough balance to cover all your loans.", BankSystem.getCurrentYaz());
 
-        loans.forEach(e -> handleCustomerLoansPayments(e, -1));
+        loans.forEach(customer::payLoanAllDebt); // pay all loan.
     }
 
-    // pay for specific loan.
-    public void handleCustomerLoansPayments(LoanDataObject loan, int amountToPay) {
+    // Pay for specific loan.
+    public void handleCustomerLoanPayment(LoanDataObject loan, int amountToPay) {
+
+        if(loan == null)
+            return;
+
         this.getCustomerByName(loan.getOwner()).payCustomerTakenLoan(loan, amountToPay);
     }
 

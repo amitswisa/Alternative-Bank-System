@@ -210,7 +210,7 @@ public class customerScreenController implements Initializable {
         paymentAreaController.setCustomerController(this);
     }
 
-    private void updatePayments() {
+    public void updatePayments() {
         paymentTableController.setPaymentList(currentCustomer.getLoanList());
     }
 
@@ -291,6 +291,10 @@ public class customerScreenController implements Initializable {
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
 
         this.setCategoryList();
+    }
+
+    public void updateCustomerInfo() {
+        this.updateCustomerInfo(this.currentUser.getUsername());
     }
 
     /* SCRAMBLE PAGE */
@@ -442,7 +446,18 @@ public class customerScreenController implements Initializable {
     }
 
     // Payment page
-    public void handleCustomerLoanPayment(LoanDataObject loan, int amountToPay) {
+
+    // Pay all loans current payment.
+    public void handleCustomerLoansPayments(LoanDataObject loan, int amountToPay) {
         this.engineManager.handleCustomerLoansPayments(loan, amountToPay);
+    }
+
+    // Close all loans debt or specific loan.
+    public void handleCustomerPayAllDebt(List<LoanDataObject> loans) throws DataTransferObject {
+        this.engineManager.handleCustomerPayAllDebt(loans);
+    }
+
+    public void refreshPaymentTable() {
+        paymentTableController.refreshTable();
     }
 }
