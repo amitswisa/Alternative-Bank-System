@@ -136,4 +136,9 @@ public class EngineManager {
     public List<CustomerDataObject> getAllCustomerData() {
         return this.bankSystem.getAllCustomersLoansAndLogs();
     }
+
+    // Customer Payments.
+    public void handleCustomerLoansPayments(LoanDataObject loan, int amountToPay) {
+        this.bankSystem.handleCustomerLoansPayments(loan, amountToPay);
+    }
 }

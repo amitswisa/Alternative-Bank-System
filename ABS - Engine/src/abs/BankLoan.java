@@ -225,24 +225,22 @@ public class BankLoan {
         return this.getLoanStartTime() + this.getLoanTotalTime();
     }
 
-    // This function make payment according to investors investment part when payday is arrived
-    public int makePayment(BankCustomer loanOwner, boolean doPayment) {
+    // This function make payment according to investors investment part when payday is arrived.
+    // pay loan payment -> if amountToPay.equals(-1) amountToPay is all balane
+    public int makePayment(BankCustomer loanOwner, int amountToPay) {
 
         // if customer has enough money in his balance to make the payment of this loan.
-        int paymentNumber = (BankSystem.getCurrentYaz() - this.getLoanStartTime()) / this.getPaymentInterval();
         int lastPaymentIndex = this.getLastPaymentDate() / this.getPaymentInterval();
-        if(paymentNumber > lastPaymentIndex)
-            paymentNumber = lastPaymentIndex;
+        int paymentNumber = this.getLastPaymentIndex(lastPaymentIndex);
 
         TransactionDataObject loanToPay = transactionList.get(paymentNumber - 1);
 
         // If loan owner have enough money to pay all loans.
-        if(doPayment && loanOwner.getBalance() >= (loanToPay.getPaymentValue() + loanToPay.getInterestValue())) {
+        if(loanOwner.getBalance() >= (loanToPay.getPaymentValue() + loanToPay.getInterestValue())) {
 
             // go through ivestors list and pay them accordingly
+            int numberOfUnPaidPayments = this.transactionList.stream().filter(e -> e.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED && e.getPaymentTime() <= BankSystem.getCurrentYaz()).collect(Collectors.toList()).size();
             loanInvestors.values().forEach(investor -> {
-
-                int numberOfUnPaidPayments = this.transactionList.stream().filter(e -> e.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED && e.getPaymentTime() <= BankSystem.getCurrentYaz()).collect(Collectors.toList()).size();
                 investor.getInvestor().addInvestmentMoneyToBalance(this.owner, this.getLoanID(), investor.getPaymentAmount() * numberOfUnPaidPayments);
             });
 
@@ -268,22 +266,48 @@ public class BankLoan {
 
             return (loanToPay.getPaymentValue() + loanToPay.getInterestValue());
         } else {
+            this.updateLoanStatus(loanOwner);
+            return 0;
+        }
+    }
 
-            // Add notification message
-            if(this.getLoanStatus() == LoanDataObject.Status.ACTIVE)
-                loanOwner.addAlert(this.getLoanID(), "loan's status changed to RISK.", CustomerAlertData.Type.ALERT);
-            else
-                loanOwner.addAlert(this.getLoanID(), "Couldn't set payments due to low balance.", CustomerAlertData.Type.ALERT);
+    // Update loan status according to current yaz.
+    public void updateLoanStatus(BankCustomer loanOwner) {
 
-            // If balance is not enough to make the payment.
-            this.setStatus(LoanDataObject.Status.RISK); // set status to RISK.
+        int lastPaymentIndex = this.getLastPaymentDate() / this.getPaymentInterval();
+        int paymentNumber = this.getLastPaymentIndex(lastPaymentIndex);
+        TransactionDataObject loanToPay = transactionList.get(this.getLastPaymentIndex(lastPaymentIndex) - 1);
+
+        if(loanToPay.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED)
+        {
+            this.setLoanStatusToRisk(loanOwner); // define loans status as risk and update notifications.
 
             // if this is not the last payment add this debt to next payment.
             if (paymentNumber < lastPaymentIndex)
                 transactionList.get(paymentNumber).addDebt(loanToPay.getPaymentValue(), loanToPay.getInterestValue());
-
-            return 0;
         }
+
+    }
+
+    // Change loan status to risk and add notifications.
+    private void setLoanStatusToRisk(BankCustomer loanOwner) {
+        // Add notification message
+        if(this.getLoanStatus() == LoanDataObject.Status.ACTIVE)
+            loanOwner.addAlert(this.getLoanID(), "loan's status changed to RISK.", CustomerAlertData.Type.ALERT);
+        else
+            loanOwner.addAlert(this.getLoanID(), "Couldn't set payments due to low balance.", CustomerAlertData.Type.ALERT);
+
+        // If balance is not enough to make the payment.
+        this.setStatus(LoanDataObject.Status.RISK); // set status to RISK.
+    }
+
+    // Returns the index of current payment need to pay.
+    private int getLastPaymentIndex(int lastPaymentIndex) {
+        int paymentNumber = (BankSystem.getCurrentYaz() - this.getLoanStartTime()) / this.getPaymentInterval();
+        if(paymentNumber > lastPaymentIndex)
+            paymentNumber = lastPaymentIndex;
+
+        return paymentNumber;
     }
 
     @Override

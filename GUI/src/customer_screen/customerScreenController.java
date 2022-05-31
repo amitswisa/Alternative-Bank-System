@@ -440,4 +440,9 @@ public class customerScreenController implements Initializable {
     public int getCurrentCustomerBalance(){
       return  currentCustomer.getBalance();
     }
+
+    // Payment page
+    public void handleCustomerLoanPayment(LoanDataObject loan, int amountToPay) {
+        this.engineManager.handleCustomerLoansPayments(loan, amountToPay);
+    }
 }

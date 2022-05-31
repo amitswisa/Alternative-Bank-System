@@ -45,7 +45,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
                <children>
-                  <Label text="Interest" />
+                  <Label text="Interest (%)" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">

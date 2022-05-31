@@ -34,11 +34,33 @@ public class BankSystem {
 
         // make relevant investments payment.
         customers.values().forEach(customer -> {
-            customer.payCustomerTakenLoans(false);
+            customer.updateCustomerLoansStatus();
         });
     }
 
+    // Close all loans.
+    public void handleCustomerLoansPayments(List<LoanDataObject> loans) throws DataTransferObject {
 
+        if(loans == null || loans.size() <= 0)
+            throw new DataTransferObject("There are no loans to pay debt for.", BankSystem.getCurrentYaz());
+
+        // Calculate amount to pay to cover all loans.
+        int totalToPay = 0;
+        for(LoanDataObject loan : loans)
+            totalToPay += loan.getInterestAmount() + loan.getLoanAmount();
+
+        // Check if customer has enough balance.
+        BankCustomer customer = this.getCustomerByName(loans.get(0).getOwner());
+        if(totalToPay > customer.getBalance())
+            throw new DataTransferObject("You dont have enough balance to cover all your loans.", BankSystem.getCurrentYaz());
+
+        loans.forEach(e -> handleCustomerLoansPayments(e, -1));
+    }
+
+    // pay for specific loan.
+    public void handleCustomerLoansPayments(LoanDataObject loan, int amountToPay) {
+        this.getCustomerByName(loan.getOwner()).payCustomerTakenLoan(loan, amountToPay);
+    }
 
     // Return list of LoanDataObject -> all customers loans data goes inside that list.
     public List<LoanDataObject> getCustomersLoansData() {

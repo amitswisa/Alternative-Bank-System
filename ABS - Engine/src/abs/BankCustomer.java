@@ -164,8 +164,20 @@ public class BankCustomer {
         this.balance -= investment;
     }
 
-    // Section 7 - pay loans.
-    public void payCustomerTakenLoans(boolean doPayment) {
+    // Loan's payments.
+
+    // pay for specific loan.
+    public void payCustomerTakenLoan(LoanDataObject loan, int amountToPay) {
+        BankLoan currentLoanToPay = this.getLoanByNameAndYaz(loan.getLoanID(), loan.getLoanOpeningTime());
+        currentLoanToPay.makePayment(this, amountToPay);
+    }
+
+    public void updateCustomerLoansStatus() {
+        List<BankLoan> loansToCheck = this.getNeedToPayLoans();
+        loansToCheck.forEach(e -> e.updateLoanStatus(this));
+    }
+
+    public List<BankLoan> getNeedToPayLoans() {
         List<BankLoan> loansToPay = new ArrayList<>();
         for(Set<BankLoan> setLoans : loansTaken.values()) {
             setLoans.forEach(loan -> {
@@ -173,14 +185,10 @@ public class BankCustomer {
                     loansToPay.add(loan);
             });
         }
-
-        // make each loan payment.
-        loansToPay.forEach(loan ->  {
-            this.balance -= loan.makePayment(this, doPayment);
-        });
-
+        return loansToPay;
     }
 
+    // Notifications
     public void addAlert(String headline, String msg, CustomerAlertData.Type status) {
         listOfAlerts.add(new CustomerAlertData(headline, msg, BankSystem.getCurrentYaz(), status));
     }

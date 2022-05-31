@@ -33,7 +33,6 @@ public class LoanDataObject extends DataTransferObject {
     private int unfinishedLoansNumber;
     private final Status loanStatus;
     private final List<Pair<String, Integer>> investersList;
-    //private Map<String, Investor> loanInvestors; // List of investors and their amount of investment;
     private List<TransactionDataObject> transactionList; // hold all transaction's history.
 
     public LoanDataObject(String owner, String loanID, String loanCategory, int loanAmount, int loanOpeningTime, int loanTotalTime,

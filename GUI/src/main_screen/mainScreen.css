@@ -47,6 +47,15 @@
     -fx-text-fill: #000;
 }
 
+.choice-box .menu-item:hover {
+    -fx-background-color: #ececec;
+    -fx-text-fill: #7e7e7e;
+}
+
+.choice-box .menu-item .label {
+    -fx-text-fill: #000;
+}
+
 #pathLabel {
     -fx-background-color: #cf6a87;
     -fx-text-fill: #FFF;
