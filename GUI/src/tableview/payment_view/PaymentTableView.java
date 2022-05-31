@@ -43,7 +43,6 @@ public class PaymentTableView implements Initializable {
                     btn.setOnAction((ActionEvent event) -> {
                         // Get loan data when clicking specific View button.
                         obsDataObject = (ObservableValue<LoanDataObject>) getTableView().getItems().get(getIndex());
-
                     });
                 }
 
