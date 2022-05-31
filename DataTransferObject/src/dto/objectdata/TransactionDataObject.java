@@ -30,6 +30,10 @@ public class TransactionDataObject {
         return paymentValue;
     }
 
+    public int getTotalPayment() {
+        return this.getPaymentValue() + this.getInterestValue();
+    }
+
     public int getInterestValue() {
         return interestValue;
     }

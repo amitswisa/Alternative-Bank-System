@@ -291,6 +291,8 @@ public class customerScreenController implements Initializable {
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
 
         this.setCategoryList();
+
+        paymentTableController.resetChoiceBtn();
     }
 
     public void updateCustomerInfo() {

@@ -140,11 +140,16 @@ public class LoanDataObject extends DataTransferObject {
 
     public int getLastPayment(int currentYaz) {
 
+        // Fix problem of first.
+        if(currentYaz == 1)
+            return this.transactionList.get(0).getTotalPayment();
+
+
         for(int i = this.transactionList.size();i > 0;i--) {
             TransactionDataObject temp = transactionList.get(i-1);
             if(temp.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED
                     && temp.getPaymentTime() <= currentYaz)
-                return temp.getPaymentValue()+temp.getInterestValue();
+                return temp.getTotalPayment();
         }
 
         return 0;
