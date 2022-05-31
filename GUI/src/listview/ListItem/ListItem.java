@@ -17,7 +17,7 @@ public class ListItem {
     private HBox item;
 
     @FXML
-    private Label title, timeInYaz;
+    private Label title, timeInYaz, notificationDesc;
 
     @FXML
     private Pane alertBackground;
@@ -40,6 +40,7 @@ public class ListItem {
     {
         this.data = data;
         this.title.setText(this.data.getMessage());
+        this.notificationDesc.setText(this.data.getHeadline());
         this.timeInYaz.setText("Time to receive: " + this.data.getTimeInYaz());
 
         // Change bg color.

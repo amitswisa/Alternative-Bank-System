@@ -106,7 +106,7 @@
                         <Insets bottom="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <ListView fx:id="alertsViewList" fixedCellSize="50.0" maxHeight="275.0" maxWidth="222.0" minHeight="244.0" minWidth="100.0" prefHeight="244.0" prefWidth="222.0" style="-fx-border-width: 0;" />
+                  <ListView id="alertListView" fx:id="alertsViewList" fixedCellSize="70.0" maxHeight="275.0" maxWidth="222.0" minHeight="244.0" minWidth="100.0" prefHeight="244.0" prefWidth="222.0" style="-fx-border-width: 0;" />
                </children>
             </VBox>
          </children>

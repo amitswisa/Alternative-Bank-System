@@ -32,11 +32,13 @@ public class BankSystem {
     public void increaseYazDate() {
         currentYaz++; // increase YAZ date by 1.
 
-        /*// make relevant investments payment.
+        // make relevant investments payment.
         customers.values().forEach(customer -> {
-            customer.payCustomerTakenLoans();
-        });*/
+            customer.payCustomerTakenLoans(false);
+        });
     }
+
+
 
     // Return list of LoanDataObject -> all customers loans data goes inside that list.
     public List<LoanDataObject> getCustomersLoansData() {

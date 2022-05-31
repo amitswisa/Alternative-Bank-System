@@ -1,7 +1,10 @@
 package tableview.payment_view;
 
+import abs.BankSystem;
 import customer_screen.customerScreenController;
 import dto.objectdata.LoanDataObject;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,7 +28,7 @@ public class PaymentTableView implements Initializable {
 
     private ObservableList<LoanDataObject> obsList;
     @FXML private TableView<LoanDataObject> paymentTable;
-    @FXML private TableColumn<LoanDataObject, String> loanID, paymentYaz, capitalANDIntrest;
+    @FXML private TableColumn<LoanDataObject, String> loanID, paymentYaz, lastPayment;
     @FXML private TableColumn<LoanDataObject, Void> choseBtn;
 
     public PaymentTableView() {
@@ -36,7 +39,7 @@ public class PaymentTableView implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         loanID.setCellValueFactory(new PropertyValueFactory<>("loanID"));
         paymentYaz.setCellValueFactory(new PropertyValueFactory<>("paymentYaz"));
-        capitalANDIntrest.setCellValueFactory(new PropertyValueFactory<>("capitalANDIntrest"));
+        lastPayment.setCellValueFactory((TableColumn.CellDataFeatures<LoanDataObject, String> d) -> new SimpleStringProperty(d.getValue().getLastPayment(BankSystem.getCurrentYaz())+""));
 
         Callback<TableColumn<LoanDataObject, Void>, TableCell<LoanDataObject, Void>> cellFactory = param -> {
             return new TableCell<LoanDataObject, Void>() {

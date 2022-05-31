@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -154,9 +155,8 @@ public class mainScreenController implements Initializable {
 
     private void getCustomerAlerts() {
         // Alerts handling.
-        alertsViewList.getItems().clear();
-        alertObservableList.clear();
         alertObservableList.setAll(customerPageComponentController.getCustomerAlertList());
+        FXCollections.reverse(alertObservableList); // sort from end to beginning.
         alertsViewList.setItems(alertObservableList);
 
         if(countUnReadMsg() > 0)
@@ -193,16 +193,24 @@ public class mainScreenController implements Initializable {
 
     public void settingsFunctionallity(MouseEvent mouseEvent) {
 
+        String formResult = dialog.getResult();
         Optional<String> result = dialog.showAndWait();
 
         // If clicked ok.
         if (result.isPresent()){
 
-            if(result.get().equals("Dark theme"))
-                mainPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("mainScreenDark.css")).toExternalForm());
-            else
-                mainPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("mainScreenDark.css")).toExternalForm());
+            if(result.get().equals(formResult))
+                return;
 
+            if(result.get().equals("Dark theme")) {
+                mainPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("mainScreenDark.css")).toExternalForm());
+                alertBtn.setImage(new Image("/resources/images/alertWhite.png"));
+                settingsBtn.setImage(new Image("/resources/images/settingsWhite.png"));
+            } else {
+                mainPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("mainScreenDark.css")).toExternalForm());
+                alertBtn.setImage(new Image("/resources/images/alert.png"));
+                settingsBtn.setImage(new Image("/resources/images/settings.png"));
+            }
 
         }
 
