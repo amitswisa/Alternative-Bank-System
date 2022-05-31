@@ -118,7 +118,7 @@ public class LoanDataObject extends DataTransferObject {
     public int getThisPaymentAmount(){
         for (TransactionDataObject payment :  this.transactionList) {
             if (payment.getTransactionStatus()== TransactionDataObject.Status.NOT_PAYED )
-                return payment.getPaymentValue();
+                return payment.getPaymentValue() + payment.getInterestValue();
         }
         return -1; //return worng amount in case all transactions payed
     }
@@ -134,9 +134,9 @@ public class LoanDataObject extends DataTransferObject {
         for (TransactionDataObject payment:this.transactionList) {
             if(payment.getTransactionStatus() == TransactionDataObject.Status.DEPT_COVERED ||
                     payment.getTransactionStatus() == TransactionDataObject.Status.PAYED)
-                paidAlready += payment.getPaymentValue();
+                paidAlready += (payment.getPaymentValue() + payment.getInterestValue());
         }
-        return this.loanAmount - paidAlready;
+        return this.loanAmount + getInterestAmount() - paidAlready;
     }
 
     public int getLastPayment(int currentYaz) {
@@ -150,6 +150,10 @@ public class LoanDataObject extends DataTransferObject {
 
         return 0;
 
+    }
+
+    public int getInterestAmount() {
+        return (this.loanAmount * this.loanInterestPerPayment)/100;
     }
 
     public int getPaymentInterval() {return this.paymentInterval;}
