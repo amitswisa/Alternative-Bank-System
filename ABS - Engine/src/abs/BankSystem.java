@@ -30,10 +30,10 @@ public class BankSystem {
     }
 
     public void increaseYazDate() {
-        currentYaz++; // increase YAZ date by 1.
-
         // make relevant investments payment.
         customers.values().forEach(BankCustomer::updateCustomerLoansStatus);
+
+        currentYaz++; // increase YAZ date by 1.
     }
 
     // Close all loans.
@@ -144,11 +144,11 @@ public class BankSystem {
             int realTimeInvestedAmount = 0;
             if(i == (loansToInvest.size() -1)) {
                 if (amountToInvest > 0)
-                    realTimeInvestedAmount = loansToInvest.get(i).invest(customerName, amountToInvest);
+                    realTimeInvestedAmount = loansToInvest.get(i).invest(this.getCustomerByName(loansToInvest.get(i).getOwner()), customerName, amountToInvest);
             } else {
-                    if (avgInvestmentAmount > 0)
-                        realTimeInvestedAmount = loansToInvest.get(i).invest(customerName, avgInvestmentAmount);
-                }
+                if (avgInvestmentAmount > 0)
+                    realTimeInvestedAmount = loansToInvest.get(i).invest(this.getCustomerByName(loansToInvest.get(i).getOwner()), customerName, avgInvestmentAmount);
+            }
 
             amountToInvest -= realTimeInvestedAmount;
             res += "Invested " + realTimeInvestedAmount + " in " + loansToInvest.get(i).getLoanID() + ".\n";

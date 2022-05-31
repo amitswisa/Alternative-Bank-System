@@ -141,18 +141,15 @@ public class LoanDataObject extends DataTransferObject {
     public int getLastPayment(int currentYaz) {
 
         // Fix problem of first.
-        if(currentYaz == 1)
-            return this.transactionList.get(0).getTotalPayment();
-
-
-        for(int i = this.transactionList.size();i > 0;i--) {
-            TransactionDataObject temp = transactionList.get(i-1);
+        int size = this.transactionList.size();
+        for(int i = 0;i < size;i++) {
+            TransactionDataObject temp = transactionList.get(i);
             if(temp.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED
-                    && temp.getPaymentTime() <= currentYaz)
+                    && temp.getPaymentTime() >= currentYaz)
                 return temp.getTotalPayment();
         }
 
-        return 0;
+        return transactionList.get(size-1).getTotalPayment();
 
     }
 
@@ -207,7 +204,7 @@ public class LoanDataObject extends DataTransferObject {
             }
             case FINISHED: {
                 res += "Starting loan time: " + this.getLoanOpeningTime() + "\n";
-                res += "Ending loan time: " + (this.getLoanOpeningTime()+this.getLoanTotalTime());
+                res += "Ending loan time: " + this.loanEndTime;
                 break;
             }
             default: {

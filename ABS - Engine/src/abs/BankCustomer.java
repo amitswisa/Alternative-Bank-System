@@ -102,7 +102,7 @@ public class BankCustomer {
     }
 
     public void addInvestmentMoneyToBalance(String payerName, String loanName, int investmentMoney) {
-        customerLog.add(new CustomerOperationData("Investment Payment", "You received payment from " + payerName + ", from loan: " + loanName, this.getBalance(), investmentMoney));
+        customerLog.add(new CustomerOperationData("Investment payment", "You received payment from " + payerName + ", from loan: " + loanName, this.getBalance(), investmentMoney));
         this.balance += investmentMoney;
     }
 
@@ -169,7 +169,8 @@ public class BankCustomer {
     // pay for specific loan.
     public void payCustomerTakenLoan(LoanDataObject loan, int amountToPay) {
         BankLoan currentLoanToPay = this.getLoanByNameAndYaz(loan.getLoanID(), loan.getLoanOpeningTime());
-        this.balance -= currentLoanToPay.makePayment(this, amountToPay);
+        int res = currentLoanToPay.makePayment(this, amountToPay);
+        this.pay(res);
     }
 
     public void updateCustomerLoansStatus() {
@@ -181,7 +182,9 @@ public class BankCustomer {
         List<BankLoan> loansToPay = new ArrayList<>();
         for(Set<BankLoan> setLoans : loansTaken.values()) {
             setLoans.forEach(loan -> {
-                if((loan.getLoanStatus() == LoanDataObject.Status.ACTIVE || loan.getLoanStatus() == LoanDataObject.Status.RISK) && loan.getNextPaymentTime() == BankSystem.getCurrentYaz())
+                if((loan.getLoanStatus() == LoanDataObject.Status.ACTIVE
+                        || loan.getLoanStatus() == LoanDataObject.Status.RISK)
+                            && loan.getNextPaymentTime() < BankSystem.getCurrentYaz()+1)
                     loansToPay.add(loan);
             });
         }
@@ -204,9 +207,9 @@ public class BankCustomer {
     }
 
     public void pay(int amount) {
-        this.balance -= amount;
         this.addOperationToCustomerLog(
-                new CustomerOperationData("Investment"
-                        , "Covered the loan!", this.balance, -1*amount));
+                new CustomerOperationData("Loan payment"
+                        , "", this.balance, -1*amount));
+        this.balance -= amount;
     }
 }

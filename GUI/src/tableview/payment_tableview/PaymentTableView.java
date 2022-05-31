@@ -1,11 +1,13 @@
 package tableview.payment_tableview;
 
+import abs.BankSystem;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -37,7 +39,7 @@ public class PaymentTableView implements Initializable {
     private ObservableList<LoanDataObject> list = null;
 
     @FXML private TableView<LoanDataObject> paymentTable;
-    @FXML private TableColumn<LoanDataObject, String> loanID, paymentYaz, capitalANDintrest;
+    @FXML private TableColumn<LoanDataObject, String> loanID, paymentYaz, lastPayment;
 
     public PaymentTableView() {
         list = FXCollections.observableArrayList();
@@ -49,38 +51,7 @@ public class PaymentTableView implements Initializable {
         // Init table columns
         loanID.setCellValueFactory(new PropertyValueFactory<>("loanID"));
         paymentYaz.setCellValueFactory(new PropertyValueFactory<>("paymentYaz"));
-        capitalANDintrest.setCellValueFactory(new PropertyValueFactory<>("capitalANDintrest"));
-
-    /*    TableColumn<LoanDataObject, Void> colBtn = new TableColumn("make a payment");
-        Callback<TableColumn<LoanDataObject, Void>, TableCell<LoanDataObject, Void>> cellFactory = param -> {
-            return new TableCell<LoanDataObject, Void>() {
-
-                private final Button btn = new Button("Pay");
-                {
-                    btn.setOnAction((ActionEvent event) -> {
-                        // make a confirmation popup
-                        // set alert type
-                        Alert a = new Alert(Alert.AlertType.NONE);
-                        a.setAlertType(Alert.AlertType.CONFIRMATION);
-                        // show the dialog
-                        a.show();
-
-                    });
-                }
-
-                @Override
-                public void updateItem(Void item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setGraphic(null);
-                    } else {
-                        setGraphic(btn);
-                    }
-                }
-            };
-        };
-        colBtn.setCellFactory(cellFactory);
-        paymentTable.getColumns().add(colBtn);*/
+        lastPayment.setCellValueFactory((TableColumn.CellDataFeatures<LoanDataObject, String> d) -> new SimpleStringProperty(d.getValue().getLastPayment(BankSystem.getCurrentYaz())+""));
     }
 
     public void setpaymentItems(List<LoanDataObject> list) {

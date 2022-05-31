@@ -31,7 +31,7 @@ public class TransactionDataObject {
     }
 
     public int getTotalPayment() {
-        return this.getPaymentValue() + this.getInterestValue();
+        return this.getPaymentValue() + this.getInterestValue() - totalPaid;
     }
 
     public int getInterestValue() {

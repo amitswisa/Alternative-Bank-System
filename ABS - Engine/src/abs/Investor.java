@@ -48,8 +48,8 @@ public class Investor {
         this.initialInvestment = initialInvestment;
     }
 
-    public int getMyShareInInvestment(int originalLoanAmount) {
-        return (this.getPaymentAmount() * 100 / originalLoanAmount);
+    public int getMyShareInInvestment(int oneTimeLoanPayment) {
+        return (this.getPaymentAmount() * 100 / oneTimeLoanPayment); // 4120 * 100 / 4120
     }
 
 }

@@ -125,6 +125,8 @@ public class customerScreenController implements Initializable {
                     alertDialog.showAndWait();
                 }
             }
+
+            refreshPaymentView();
         });
 
         // Withdrawal button functionality
@@ -162,6 +164,8 @@ public class customerScreenController implements Initializable {
                 }
 
             }
+
+            refreshPaymentView();
         });
 
         // adding checkbox for invest to scramble.
@@ -292,6 +296,7 @@ public class customerScreenController implements Initializable {
 
         this.setCategoryList();
 
+        this.updatePayments();
         paymentTableController.resetChoiceBtn();
     }
 
@@ -462,4 +467,6 @@ public class customerScreenController implements Initializable {
     public void refreshPaymentTable() {
         paymentTableController.refreshTable();
     }
+
+    public void refreshPaymentView() { paymentAreaController.refreshRelevantData(); }
 }
