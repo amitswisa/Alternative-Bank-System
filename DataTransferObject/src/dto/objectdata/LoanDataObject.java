@@ -220,12 +220,17 @@ public class LoanDataObject extends DataTransferObject {
         return this.loanAmount - paidAlready;
     }
 
-    public int getCapitalANDIntrest() {
-        for (TransactionDataObject payment :  this.transactionList) {
-            if (payment.getTransactionStatus()== TransactionDataObject.Status.NOT_PAYED )
-                return payment.getInterestValue() + payment.getPaymentValue();
+    public int getLastPayment(int currentYaz) {
+
+        for(int i = this.transactionList.size();i > 0;i--) {
+            TransactionDataObject temp = transactionList.get(i-1);
+            if(temp.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED
+                    && temp.getPaymentTime() <= currentYaz)
+                return temp.getPaymentValue()+temp.getInterestValue();
         }
-        return -1; //return worng amount in case all transactions payed
+
+        return 0;
+
     }
 
     public int getPaymentInterval() {return this.paymentInterval;}

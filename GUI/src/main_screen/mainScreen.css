@@ -80,10 +80,6 @@
     -fx-cursor: hand;
 }
 
-.list-cell {
-    -fx-cell-size: 25px;
-}
-
 #alertPane {
     -fx-effect: dropshadow(three-pass-box, #dcdcdc, 5, 0, 0, 0);
 }
@@ -127,6 +123,7 @@
 .table-view .table-cell{
     -fx-text-fill: #000;
     -fx-border-color: transparent;
+    -fx-text-alignment: center;
 }
 
 .table-row-cell{
@@ -135,12 +132,14 @@
     -fx-padding: 0.0em;
     -fx-cell-size: 58px;
     -fx-border-color: transparent;
+    -fx-text-alignment: center;
 }
 
 .table-row-cell:odd{
     -fx-background-color: -fx-table-cell-border-color, #FFF;
     -fx-background-insets: 0, 0 0 0 0;
     -fx-padding: 0.0em;
+    -fx-text-alignment: center;
 }
 
 .table-row-cell:selected {
@@ -169,7 +168,6 @@
 
 .MyTabPane {
     -fx-background-color: #FFF;
-
 }
 
 .MyTabPane .tab

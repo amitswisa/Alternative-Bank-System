@@ -10,12 +10,14 @@ public class CustomerAlertData extends DataTransferObject {
 
     private final Type alertType;
     private int readStatus;
+    private final String headline;
 
-    public CustomerAlertData(String message, int yazTime, Type alertType)
+    public CustomerAlertData(String headline, String message, int yazTime, Type alertType)
     {
         super(message, yazTime);
         this.alertType = alertType;
         this.readStatus = 1;
+        this.headline = headline;
     }
 
     public void markAsRead() {
@@ -32,5 +34,9 @@ public class CustomerAlertData extends DataTransferObject {
 
     public int getReadStatus() {
         return readStatus;
+    }
+
+    public String getHeadline() {
+        return this.headline;
     }
 }

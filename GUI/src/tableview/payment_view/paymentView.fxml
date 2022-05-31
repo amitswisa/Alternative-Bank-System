@@ -10,7 +10,7 @@
             <columns>
                 <TableColumn fx:id="loanID" prefWidth="242.0000203847885" text="Loan ID" />
                 <TableColumn fx:id="paymentYaz" prefWidth="153.3333740234375" text="Payment Time" />
-                <TableColumn fx:id="capitalANDIntrest" prefWidth="174.00003051757812" text="Payment Amount" />
+                <TableColumn fx:id="lastPayment" prefWidth="174.00003051757812" text="Payment Amount" />
                 <TableColumn fx:id="choseBtn" prefWidth="174.00003051757812" text="Choose" />
             </columns>
             <columnResizePolicy>
