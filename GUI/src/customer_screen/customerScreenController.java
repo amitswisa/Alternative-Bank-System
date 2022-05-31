@@ -207,6 +207,7 @@ public class customerScreenController implements Initializable {
 
         // send customer controller instance to payment table view to update payment area.
         paymentTableController.setCustomerController(this);
+        paymentAreaController.setCustomerController(this);
     }
 
     private void updatePayments() {
@@ -434,5 +435,9 @@ public class customerScreenController implements Initializable {
 
     public AnchorPane getCustomerMainPane() {
         return this.customerPane;
+    }
+
+    public int getCurrentCustomerBalance(){
+      return  currentCustomer.getBalance();
     }
 }
