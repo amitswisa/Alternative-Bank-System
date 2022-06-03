@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
@@ -176,7 +177,8 @@
                               <fx:include fx:id="loansToInvestTable" source="../tableview/loan_tableview/loanTableView.fxml" />
                            </center>
                         </BorderPane>
-                        <Button fx:id="makeInvestment" layoutX="830.0" layoutY="461.0" mnemonicParsing="false" onAction="#makeInvestmentClicked" prefHeight="31.0" prefWidth="132.0" styleClass="filterMenuBtn" text="Make investment" AnchorPane.bottomAnchor="14.333333333333371" AnchorPane.rightAnchor="14.0" />
+                        <Button fx:id="makeInvestment" layoutX="830.0" layoutY="468.0" mnemonicParsing="false" onAction="#makeInvestmentClicked" prefHeight="31.0" prefWidth="132.0" styleClass="filterMenuBtn" text="Make investment" AnchorPane.bottomAnchor="14.666666666666686" AnchorPane.rightAnchor="14.0" />
+                        <ProgressBar fx:id="progressBar" layoutX="4.0" visible="false" layoutY="475.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="795.0" progress="0.0" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="4.0" />
                      </children>
               </AnchorPane>
             </content>

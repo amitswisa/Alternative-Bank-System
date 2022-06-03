@@ -5,6 +5,7 @@ import dto.objectdata.CustomerDataObject;
 import dto.objectdata.CustomerOperationData;
 import dto.objectdata.LoanDataObject;
 import engine.convertor.Convertor;
+import generalObjects.LoanTask;
 import generalObjects.Triple;
 import javafx.util.Pair;
 import xmlgenerated.AbsDescriptor;
@@ -120,7 +121,7 @@ public class BankSystem {
     }
 
     //Section 6 - from menu.
-    public String makeInvestments(String customerName, int amountToInvest, List<Triple<String,Integer,String>> customerLoansToInvestList) {
+    public String makeInvestments(String customerName, int amountToInvest, List<Triple<String,Integer,String>> customerLoansToInvestList, LoanTask loanTask) {
 
         // Get list of Bank Loans from list of bank loans names.
         List<BankLoan> loansToInvest = this.makeLoansListFromLoansNames(customerLoansToInvestList);
@@ -129,12 +130,12 @@ public class BankSystem {
         this.sortLoanslist(loansToInvest);
 
         // go through the list and invest money as much as possible and equally between all loans.
-        return this.investEqually(getCustomerByName(customerName) , amountToInvest , loansToInvest);
+        return this.investEqually(getCustomerByName(customerName) , amountToInvest , loansToInvest, loanTask);
 
     }
 
     // go through the list and invest money as much as possible and equally berween all loans.
-    private String investEqually(BankCustomer customerName, int amountToInvest, List<BankLoan> loansToInvest) {
+    private String investEqually(BankCustomer customerName, int amountToInvest, List<BankLoan> loansToInvest, LoanTask loanTask) {
         String res = "New investments: \n";
         for (int i = 0 ; i < loansToInvest.size() ; i++) {
 
@@ -152,6 +153,9 @@ public class BankSystem {
 
             amountToInvest -= realTimeInvestedAmount;
             res += "Invested " + realTimeInvestedAmount + " in " + loansToInvest.get(i).getLoanID() + ".\n";
+            loanTask.setMessage(res);
+            loanTask.progressUpdate();
+            loanTask.sleepForAWhile();
         }
         return res;
     }
