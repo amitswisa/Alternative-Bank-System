@@ -5,6 +5,7 @@ import dto.objectdata.CustomerDataObject;
 import dto.objectdata.CustomerOperationData;
 import dto.objectdata.LoanDataObject;
 import engine.convertor.Convertor;
+import generalObjects.LoanTask;
 import generalObjects.Triple;
 import javafx.util.Pair;
 import xmlgenerated.AbsDescriptor;
@@ -30,15 +31,39 @@ public class BankSystem {
     }
 
     public void increaseYazDate() {
-        currentYaz++; // increase YAZ date by 1.
-
         // make relevant investments payment.
-        customers.values().forEach(customer -> {
-            customer.payCustomerTakenLoans(false);
-        });
+        customers.values().forEach(BankCustomer::updateCustomerLoansStatus);
+
+        currentYaz++; // increase YAZ date by 1.
     }
 
+    // Close all loans.
+    public void handleCustomerPayAllDebt(List<LoanDataObject> loans) throws DataTransferObject {
 
+        if(loans == null || loans.size() <= 0)
+            throw new DataTransferObject("There are no loans to pay debt for.", BankSystem.getCurrentYaz());
+
+        // Calculate amount to pay to cover all loans.
+        int totalToPay = 0;
+        for(LoanDataObject loan : loans)
+            totalToPay += loan.getInterestAmount() + loan.getLoanAmount();
+
+        // Check if customer has enough balance.
+        BankCustomer customer = this.getCustomerByName(loans.get(0).getOwner());
+        if(totalToPay > customer.getBalance())
+            throw new DataTransferObject("You dont have enough balance to cover all your loans.", BankSystem.getCurrentYaz());
+
+        loans.forEach(customer::payLoanAllDebt); // pay all loan.
+    }
+
+    // Pay for specific loan.
+    public void handleCustomerLoanPayment(LoanDataObject loan, int amountToPay) {
+
+        if(loan == null)
+            return;
+
+        this.getCustomerByName(loan.getOwner()).payCustomerTakenLoan(loan, amountToPay);
+    }
 
     // Return list of LoanDataObject -> all customers loans data goes inside that list.
     public List<LoanDataObject> getCustomersLoansData() {
@@ -96,7 +121,7 @@ public class BankSystem {
     }
 
     //Section 6 - from menu.
-    public String makeInvestments(String customerName, int amountToInvest, List<Triple<String,Integer,String>> customerLoansToInvestList) {
+    public String makeInvestments(String customerName, int amountToInvest, List<Triple<String,Integer,String>> customerLoansToInvestList, LoanTask loanTask) {
 
         // Get list of Bank Loans from list of bank loans names.
         List<BankLoan> loansToInvest = this.makeLoansListFromLoansNames(customerLoansToInvestList);
@@ -105,12 +130,12 @@ public class BankSystem {
         this.sortLoanslist(loansToInvest);
 
         // go through the list and invest money as much as possible and equally between all loans.
-        return this.investEqually(getCustomerByName(customerName) , amountToInvest , loansToInvest);
+        return this.investEqually(getCustomerByName(customerName) , amountToInvest , loansToInvest, loanTask);
 
     }
 
     // go through the list and invest money as much as possible and equally berween all loans.
-    private String investEqually(BankCustomer customerName, int amountToInvest, List<BankLoan> loansToInvest) {
+    private String investEqually(BankCustomer customerName, int amountToInvest, List<BankLoan> loansToInvest, LoanTask loanTask) {
         String res = "New investments: \n";
         for (int i = 0 ; i < loansToInvest.size() ; i++) {
 
@@ -120,14 +145,17 @@ public class BankSystem {
             int realTimeInvestedAmount = 0;
             if(i == (loansToInvest.size() -1)) {
                 if (amountToInvest > 0)
-                    realTimeInvestedAmount = loansToInvest.get(i).invest(customerName, amountToInvest);
+                    realTimeInvestedAmount = loansToInvest.get(i).invest(this.getCustomerByName(loansToInvest.get(i).getOwner()), customerName, amountToInvest);
             } else {
-                    if (avgInvestmentAmount > 0)
-                        realTimeInvestedAmount = loansToInvest.get(i).invest(customerName, avgInvestmentAmount);
-                }
+                if (avgInvestmentAmount > 0)
+                    realTimeInvestedAmount = loansToInvest.get(i).invest(this.getCustomerByName(loansToInvest.get(i).getOwner()), customerName, avgInvestmentAmount);
+            }
 
             amountToInvest -= realTimeInvestedAmount;
             res += "Invested " + realTimeInvestedAmount + " in " + loansToInvest.get(i).getLoanID() + ".\n";
+            loanTask.setMessage(res);
+            loanTask.progressUpdate();
+            loanTask.sleepForAWhile();
         }
         return res;
     }

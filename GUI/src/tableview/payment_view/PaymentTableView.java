@@ -96,4 +96,17 @@ public class PaymentTableView implements Initializable {
         this.customerController = controller;
     }
 
+    public void resetChoiceBtn() {
+        if(currentBtn != null) {
+            refreshTable();
+            currentBtn.setSelected(false);
+            currentBtn = null;
+            customerController.refreshPaymentView();
+        }
+    }
+
+    public void refreshTable() {
+        paymentTable.refresh();
+    }
+
 }

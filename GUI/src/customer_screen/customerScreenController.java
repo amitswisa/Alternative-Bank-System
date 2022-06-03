@@ -7,6 +7,7 @@ import dto.objectdata.CustomerAlertData;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
 import engine.EngineManager;
+import generalObjects.LoanTask;
 import generalObjects.Triple;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -42,6 +43,7 @@ public class customerScreenController implements Initializable {
     private TextInputDialog moneyPopup;
     private Alert alertDialog;
     private List<LoanDataObject> loansToInvestList; // Holds loans to invest in when user mark them.
+    private LoanTask loanTask;
 
     // FXML MEMBERS
     @FXML private AnchorPane customerPane;
@@ -58,6 +60,7 @@ public class customerScreenController implements Initializable {
     @FXML private Label amountLabel;
     @FXML private CheckComboBox<String> filterCats;
     @FXML private TextField minInterest, minYaz, maxOpenLoans, ownershipPrecent;
+    @FXML private ProgressBar progressBar;
 
     public customerScreenController() {
         currentUser = new User();
@@ -95,6 +98,13 @@ public class customerScreenController implements Initializable {
         depositBtn.setOnMouseClicked(event -> {
             moneyPopup.setTitle("Deposit");
             Optional<String> result = moneyPopup.showAndWait();
+
+            // If closed
+            if(!result.isPresent()) {
+                moneyPopup.getEditor().setText("");
+                return;
+            }
+
             String value = String.valueOf(moneyPopup.getEditor().getText());
             moneyPopup.getEditor().setText(""); // empty input text.
 
@@ -125,12 +135,21 @@ public class customerScreenController implements Initializable {
                     alertDialog.showAndWait();
                 }
             }
+
+            refreshPaymentView();
         });
 
         // Withdrawal button functionality
         withdrawalBtn.setOnMouseClicked(event -> {
             moneyPopup.setTitle("Withdrawal");
             Optional<String> result = moneyPopup.showAndWait();
+
+            // If closed
+            if(!result.isPresent()) {
+                moneyPopup.getEditor().setText("");
+                return;
+            }
+
             String value = String.valueOf(moneyPopup.getEditor().getText());
             moneyPopup.getEditor().setText(""); // empty input text.
 
@@ -162,6 +181,8 @@ public class customerScreenController implements Initializable {
                 }
 
             }
+
+            refreshPaymentView();
         });
 
         // adding checkbox for invest to scramble.
@@ -208,9 +229,29 @@ public class customerScreenController implements Initializable {
         // send customer controller instance to payment table view to update payment area.
         paymentTableController.setCustomerController(this);
         paymentAreaController.setCustomerController(this);
+
+        progressBar.progressProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+                if(newValue.intValue() == 1) {
+
+                    updateCustomerInfo(currentUser.getUsername());
+                    updateScramble();
+
+                    alertDialog.setTitle("Investment details");
+                    alertDialog.setAlertType(Alert.AlertType.INFORMATION);
+                    alertDialog.setHeaderText("Congratulations!");
+                    alertDialog.setContentText(loanTask.getMessage());
+                    alertDialog.show();
+
+                    currentBalance.setText("Current balance: " + engineManager.getBalanceOfCustomerByName(currentUser.getUsername()));
+                }
+            }
+        });
     }
 
-    private void updatePayments() {
+    public void updatePayments() {
         paymentTableController.setPaymentList(currentCustomer.getLoanList());
     }
 
@@ -291,6 +332,13 @@ public class customerScreenController implements Initializable {
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
 
         this.setCategoryList();
+
+        this.updatePayments();
+        paymentTableController.resetChoiceBtn();
+    }
+
+    public void updateCustomerInfo() {
+        this.updateCustomerInfo(this.currentUser.getUsername());
     }
 
     /* SCRAMBLE PAGE */
@@ -374,6 +422,9 @@ public class customerScreenController implements Initializable {
         moneyPopup.setTitle("Investment");
         moneyPopup.setContentText("Enter amount of money to invest: ");
         Optional<String> result = moneyPopup.showAndWait();
+        if(!result.isPresent())
+            return;
+
         String value = String.valueOf(moneyPopup.getEditor().getText());
 
         // Try parsing input to int and if success update user bank.
@@ -392,21 +443,18 @@ public class customerScreenController implements Initializable {
             for(LoanDataObject l : loansToInvestList)
                 nameOfLoansToInvest.add(new Triple<>(l.getOwner(), l.getLoanOpeningTime(), l.getLoanID()));
 
-            // make investments!
-            String res = this.engineManager.makeInvestments(this.currentUser.getUsername(), valueOfInput, nameOfLoansToInvest);
+            loanTask
+                    = new LoanTask(nameOfLoansToInvest, this.engineManager, valueOfInput, this.currentUser.getUsername(), alertDialog);
 
-            // update view.
-            updateCustomerInfo(this.currentUser.getUsername());
-            updateScramble();
+            // Progressbar
+            progressBar.setVisible(true);
+            progressBar.progressProperty().bind(loanTask.progressProperty());
 
-            // Popup dialog with result.
-            alertDialog.setTitle("Investment details");
-            alertDialog.setAlertType(Alert.AlertType.INFORMATION);
-            alertDialog.setHeaderText("Congratulations!");
-            alertDialog.setContentText(res);
-            alertDialog.showAndWait();
+            // Run task as a thread.
+            Thread taskThread = new Thread(loanTask);
+            taskThread.setDaemon(true);
+            taskThread.start();
 
-            currentBalance.setText("Current balance: " + this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
         } catch(NumberFormatException | DataTransferObject nfe) {
 
             // If ok button was pressed!
@@ -420,7 +468,7 @@ public class customerScreenController implements Initializable {
 
                 alertDialog.showAndWait();
             }
-        }  finally {
+        } finally {
             moneyPopup.getEditor().setText(""); // empty input text.
             alertDialog.setHeaderText("Error");
             alertDialog.setAlertType(Alert.AlertType.ERROR);
@@ -440,4 +488,22 @@ public class customerScreenController implements Initializable {
     public int getCurrentCustomerBalance(){
       return  currentCustomer.getBalance();
     }
+
+    // Payment page
+
+    // Pay all loans current payment.
+    public void handleCustomerLoansPayments(LoanDataObject loan, int amountToPay) {
+        this.engineManager.handleCustomerLoansPayments(loan, amountToPay);
+    }
+
+    // Close all loans debt or specific loan.
+    public void handleCustomerPayAllDebt(List<LoanDataObject> loans) throws DataTransferObject {
+        this.engineManager.handleCustomerPayAllDebt(loans);
+    }
+
+    public void refreshPaymentTable() {
+        paymentTableController.refreshTable();
+    }
+
+    public void refreshPaymentView() { paymentAreaController.refreshRelevantData(); }
 }

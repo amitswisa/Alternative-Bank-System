@@ -102,7 +102,7 @@ public class BankCustomer {
     }
 
     public void addInvestmentMoneyToBalance(String payerName, String loanName, int investmentMoney) {
-        customerLog.add(new CustomerOperationData("Investment Payment", "You received payment from " + payerName + ", from loan: " + loanName, this.getBalance(), investmentMoney));
+        customerLog.add(new CustomerOperationData("Investment payment", "You received payment from " + payerName + ", from loan: " + loanName, this.getBalance(), investmentMoney));
         this.balance += investmentMoney;
     }
 
@@ -164,28 +164,52 @@ public class BankCustomer {
         this.balance -= investment;
     }
 
-    // Section 7 - pay loans.
-    public void payCustomerTakenLoans(boolean doPayment) {
+    // Loan's payments.
+
+    // pay for specific loan.
+    public void payCustomerTakenLoan(LoanDataObject loan, int amountToPay) {
+        BankLoan currentLoanToPay = this.getLoanByNameAndYaz(loan.getLoanID(), loan.getLoanOpeningTime());
+        int res = currentLoanToPay.makePayment(this, amountToPay);
+        this.pay(res);
+    }
+
+    public void updateCustomerLoansStatus() {
+        List<BankLoan> loansToCheck = this.getNeedToPayLoans();
+        loansToCheck.forEach(e -> e.updateLoanStatus(this));
+    }
+
+    public List<BankLoan> getNeedToPayLoans() {
         List<BankLoan> loansToPay = new ArrayList<>();
         for(Set<BankLoan> setLoans : loansTaken.values()) {
             setLoans.forEach(loan -> {
-                if((loan.getLoanStatus() == LoanDataObject.Status.ACTIVE || loan.getLoanStatus() == LoanDataObject.Status.RISK) && loan.getNextPaymentTime() == BankSystem.getCurrentYaz())
+                if((loan.getLoanStatus() == LoanDataObject.Status.ACTIVE
+                        || loan.getLoanStatus() == LoanDataObject.Status.RISK)
+                            && loan.getNextPaymentTime() < BankSystem.getCurrentYaz()+1)
                     loansToPay.add(loan);
             });
         }
-
-        // make each loan payment.
-        loansToPay.forEach(loan ->  {
-            this.balance -= loan.makePayment(this, doPayment);
-        });
-
+        return loansToPay;
     }
 
+    // Notifications
     public void addAlert(String headline, String msg, CustomerAlertData.Type status) {
         listOfAlerts.add(new CustomerAlertData(headline, msg, BankSystem.getCurrentYaz(), status));
     }
 
     public List<CustomerAlertData> getListOfAlerts() {
         return this.listOfAlerts;
+    }
+
+    public void payLoanAllDebt(LoanDataObject e) {
+        BankLoan loan = this.getLoanByNameAndYaz(e.getLoanID(), e.getLoanOpeningTime());
+        loan.payLoanAllDebt(this, e);
+        this.addAlert(loan.getLoanID(), "Finished pay the loan!", CustomerAlertData.Type.CONFIRMATION);
+    }
+
+    public void pay(int amount) {
+        this.addOperationToCustomerLog(
+                new CustomerOperationData("Loan payment"
+                        , "", this.balance, -1*amount));
+        this.balance -= amount;
     }
 }

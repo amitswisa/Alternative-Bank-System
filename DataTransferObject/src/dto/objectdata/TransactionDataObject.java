@@ -11,6 +11,7 @@ public class TransactionDataObject {
     private final int paymentTime; // Displayed in yaz.
     private int paymentValue; // Amount of payment.
     private int interestValue; // Amount of interest.
+    private int totalPaid;
     private Status transactionStatus;
 
     public TransactionDataObject(int paymentTime, int paymentValue, int interestValue, Status transactionStatus) {
@@ -18,6 +19,7 @@ public class TransactionDataObject {
         this.paymentValue = paymentValue;
         this.interestValue = interestValue;
         this.transactionStatus = transactionStatus;
+        this.totalPaid = 0;
     }
 
     public int getPaymentTime() {
@@ -26,6 +28,10 @@ public class TransactionDataObject {
 
     public int getPaymentValue() {
         return paymentValue;
+    }
+
+    public int getTotalPayment() {
+        return this.getPaymentValue() + this.getInterestValue() - totalPaid;
     }
 
     public int getInterestValue() {
@@ -43,6 +49,16 @@ public class TransactionDataObject {
     public void addDebt(int capital, int interest) {
         paymentValue += capital;
         interestValue += interest;
+    }
+
+    public void pay(int amount) {
+        this.totalPaid += amount;
+        if(isPaid())
+            this.setTransactionStatus(Status.PAYED);
+    }
+
+    public boolean isPaid() {
+        return (totalPaid >= (this.getPaymentValue() + this.getInterestValue()));
     }
 
     @Override

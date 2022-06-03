@@ -51,7 +51,7 @@ public class BankLoan {
 
     }
 
-    public int invest(BankCustomer customer , int InvestmentAmount) {
+    public int invest(BankCustomer owner, BankCustomer customer , int InvestmentAmount) {
 
        int amountToActivate = this.getAmountLeftToActivateLoan();
 
@@ -61,6 +61,7 @@ public class BankLoan {
           //Change status loan
           this.loanStartTime = BankSystem.getCurrentYaz();
           this.loanStatus = LoanDataObject.Status.ACTIVE;
+          owner.addAlert(this.getLoanID(), "Loan became active!", CustomerAlertData.Type.CONFIRMATION);
           this.updateBankLoansTransactionsList(); // Update list to contain all future payments & updates status to not_paied.
           return amountToActivate; //return the amount actually success to invest
       }
@@ -222,68 +223,128 @@ public class BankLoan {
     }
 
     private int getLastPaymentDate() {
-        return this.getLoanStartTime() + this.getLoanTotalTime();
+        return this.getLoanTotalTime() / this.getPaymentInterval();
     }
 
-    // This function make payment according to investors investment part when payday is arrived
-    public int makePayment(BankCustomer loanOwner, boolean doPayment) {
+    // This function make payment according to investors investment part when payday is arrived.
+    // pay loan payment -> if amountToPay.equals(-1) amountToPay is all balane
+    public int makePayment(BankCustomer loanOwner, int amountToPay) {
 
         // if customer has enough money in his balance to make the payment of this loan.
-        int paymentNumber = (BankSystem.getCurrentYaz() - this.getLoanStartTime()) / this.getPaymentInterval();
-        int lastPaymentIndex = this.getLastPaymentDate() / this.getPaymentInterval();
-        if(paymentNumber > lastPaymentIndex)
-            paymentNumber = lastPaymentIndex;
+        int lastPaymentIndex = this.getLoanTotalTime() / this.getPaymentInterval(); // return amount of existing payments.
+        int paymentNumber = this.getLastPaymentIndex(lastPaymentIndex);
 
         TransactionDataObject loanToPay = transactionList.get(paymentNumber - 1);
 
-        // If loan owner have enough money to pay all loans.
-        if(doPayment && loanOwner.getBalance() >= (loanToPay.getPaymentValue() + loanToPay.getInterestValue())) {
+        // go through investors list and pay them accordingly
+        int numberOfUnPaidPayments = this.transactionList.stream().filter(e -> e.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED && e.getPaymentTime() <= BankSystem.getCurrentYaz()).collect(Collectors.toList()).size();
 
-            // go through ivestors list and pay them accordingly
-            loanInvestors.values().forEach(investor -> {
+        for(Investor investor : loanInvestors.values()) {
 
-                int numberOfUnPaidPayments = this.transactionList.stream().filter(e -> e.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED && e.getPaymentTime() <= BankSystem.getCurrentYaz()).collect(Collectors.toList()).size();
-                investor.getInvestor().addInvestmentMoneyToBalance(this.owner, this.getLoanID(), investor.getPaymentAmount() * numberOfUnPaidPayments);
-            });
+            int debtToInvestor = investor.getPaymentAmount() * numberOfUnPaidPayments;
 
-            // change current payment to payed.
-            loanToPay.setTransactionStatus(TransactionDataObject.Status.PAYED);
+            // Risk and wants to pay some of current payment.
+            if(amountToPay != 0)
+                debtToInvestor =
+                        investor.getMyShareInInvestment((this.getLoanAmount()+this.getTotalLoanInterestInMoney())/(this.getLoanTotalTime()/getPaymentInterval())) * amountToPay / 100;
 
-            // Change loan status to finish when last payment is made.
-            if (paymentNumber == this.getLoanNumberOfPayments()) {
-                this.setStatus(LoanDataObject.Status.FINISHED);
-                this.loanEndTime = BankSystem.getCurrentYaz();
-                loanOwner.addAlert(this.getLoanID(),"loan has been payed!", CustomerAlertData.Type.CONFIRMATION);
-            } else if (this.getLoanStatus() == LoanDataObject.Status.RISK) {
-                this.setStatus(LoanDataObject.Status.ACTIVE);
-                loanOwner.addAlert(this.getLoanID(), "loan's status changed back to ACTIVE!", CustomerAlertData.Type.CONFIRMATION);
+            System.out.println(debtToInvestor);
+            loanToPay.pay(debtToInvestor);
+            investor.getInvestor().addInvestmentMoneyToBalance(this.owner, this.getLoanID(), debtToInvestor);
+        }
 
-                // change previouse unpaid payments status from UN_PAID to DEBT_COVERED
-                for(int i = 0;i < paymentNumber;i++) {
-                    TransactionDataObject tranc = transactionList.get(i);
-                    if(tranc.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED)
-                        tranc.setTransactionStatus(TransactionDataObject.Status.DEPT_COVERED);
-                }
+        // Change loan status to finish when last payment is made.
+        if (paymentNumber == this.getLoanNumberOfPayments()) {
+            this.setStatus(LoanDataObject.Status.FINISHED);
+            this.loanEndTime = BankSystem.getCurrentYaz();
+            loanOwner.addAlert(this.getLoanID(),"loan has been payed!", CustomerAlertData.Type.CONFIRMATION);
+        } else if (this.getLoanStatus() == LoanDataObject.Status.RISK && loanToPay.isPaid()) {
+            this.setStatus(LoanDataObject.Status.ACTIVE);
+            loanOwner.addAlert(this.getLoanID(), "loan's status changed back to ACTIVE!", CustomerAlertData.Type.CONFIRMATION);
+
+            // change previouse unpaid payments status from UN_PAID to DEBT_COVERED
+            for(int i = 0;i < paymentNumber;i++) {
+                TransactionDataObject tranc = transactionList.get(i);
+                if(tranc.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED)
+                    tranc.setTransactionStatus(TransactionDataObject.Status.DEPT_COVERED);
             }
+        }
 
-            return (loanToPay.getPaymentValue() + loanToPay.getInterestValue());
-        } else {
+        if(amountToPay != 0) {
+            return amountToPay;
+        }
 
-            // Add notification message
-            if(this.getLoanStatus() == LoanDataObject.Status.ACTIVE)
-                loanOwner.addAlert(this.getLoanID(), "loan's status changed to RISK.", CustomerAlertData.Type.ALERT);
-            else
-                loanOwner.addAlert(this.getLoanID(), "Couldn't set payments due to low balance.", CustomerAlertData.Type.ALERT);
+        return (loanToPay.getPaymentValue() + loanToPay.getInterestValue());
+    }
 
-            // If balance is not enough to make the payment.
-            this.setStatus(LoanDataObject.Status.RISK); // set status to RISK.
+
+    // Update loan status according to current yaz.
+    public void updateLoanStatus(BankCustomer loanOwner) {
+
+        int lastPaymentIndex = this.getLoanTotalTime() / this.getPaymentInterval(); // return amount of existing payments.
+        int paymentNumber = this.getLastPaymentIndex(lastPaymentIndex);
+
+        TransactionDataObject loanToPay = transactionList.get(this.getLastPaymentIndex(paymentNumber) - 1);
+
+        if(loanToPay.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED)
+        {
+            this.setLoanStatusToRisk(loanOwner); // define loans status as risk and update notifications.
 
             // if this is not the last payment add this debt to next payment.
             if (paymentNumber < lastPaymentIndex)
                 transactionList.get(paymentNumber).addDebt(loanToPay.getPaymentValue(), loanToPay.getInterestValue());
-
-            return 0;
         }
+
+    }
+
+    // Change loan status to risk and add notifications.
+    private void setLoanStatusToRisk(BankCustomer loanOwner) {
+        // Add notification message
+        if(this.getLoanStatus() == LoanDataObject.Status.ACTIVE)
+            loanOwner.addAlert(this.getLoanID(), "loan's status changed to RISK.", CustomerAlertData.Type.ALERT);
+        else
+            loanOwner.addAlert(this.getLoanID(), "Couldn't set payments due to low balance.", CustomerAlertData.Type.ALERT);
+
+        // If balance is not enough to make the payment.
+        this.setStatus(LoanDataObject.Status.RISK); // set status to RISK.
+    }
+
+    // Returns the index of current payment need to pay.
+    private int getLastPaymentIndex(int lastPaymentIndex) {
+        int paymentNumber = (BankSystem.getCurrentYaz() - this.getLoanStartTime()) / this.getPaymentInterval();
+        if(paymentNumber > lastPaymentIndex)
+            paymentNumber = lastPaymentIndex;
+
+        return paymentNumber;
+    }
+
+    // Pay all loans payment and make it finished.
+    public void payLoanAllDebt(BankCustomer owner, LoanDataObject e) {
+
+        int totalLoanAmount = this.getLoanAmount() + this.getTotalLoanInterestInMoney();
+        int leftToPay = e.getAmountLeftToPayTofinished();
+
+        // pay and change status.
+        owner.pay(leftToPay);
+        this.setStatus(LoanDataObject.Status.FINISHED);
+        this.loanEndTime= BankSystem.getCurrentYaz();
+
+        // Pay all investors.
+        for(Investor investor : loanInvestors.values()) {
+            int debtToInvestor = investor.getMyShareInInvestment((this.getLoanAmount()+this.getTotalLoanInterestInMoney())/ (this.loanTotalTime/ this.paymentInterval)) * leftToPay /100;
+            investor.getInvestor().addInvestmentMoneyToBalance(this.owner, this.getLoanID(), debtToInvestor);
+        }
+
+        // Change all transactions status to PAYED and loan to FINISHED.
+        transactionList.forEach(f -> {
+            if(f.getPaymentTime() < BankSystem.getCurrentYaz()+1
+                    && f.getTransactionStatus() == TransactionDataObject.Status.NOT_PAYED)
+            {
+                f.setTransactionStatus(TransactionDataObject.Status.DEPT_COVERED);
+            } else {
+                f.setTransactionStatus(TransactionDataObject.Status.PAYED);
+            }
+        });
     }
 
     @Override
@@ -298,4 +359,6 @@ public class BankLoan {
     public int hashCode() {
         return loanID.hashCode();
     }
+
+
 }
