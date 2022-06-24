@@ -4,7 +4,6 @@ import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerAlertData;
 import dto.objectdata.CustomerOperationData;
 import dto.objectdata.LoanDataObject;
-import xmlgenerated.AbsCustomer;
 
 import java.util.*;
 
@@ -17,9 +16,9 @@ public class BankCustomer {
     private Map<Integer, Set<BankLoan>> loansInvested; // List of all loans current customer invest in.
     private List<CustomerAlertData> listOfAlerts; // List of notifications send to customer.
 
-    public BankCustomer(AbsCustomer customer){
-        this.name = customer.getName();
-        this.balance = customer.getAbsBalance();
+    public BankCustomer(String customer){
+        this.name = customer;
+        this.balance = 0 ;
         customerLog = new ArrayList<>();
         loansTaken = new HashMap<>();
         loansInvested = new HashMap<>();

@@ -1,9 +1,7 @@
 package generalObjects;
 
 import dto.infodata.DataTransferObject;
-import dto.objectdata.LoanDataObject;
 import engine.EngineManager;
-import generalObjects.Triple;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 

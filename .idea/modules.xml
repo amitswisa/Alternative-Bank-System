@@ -4,9 +4,12 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ABS.iml" filepath="$PROJECT_DIR$/ABS.iml" />
       <module fileurl="file://$PROJECT_DIR$/ABS - Engine/ABS - Engine.iml" filepath="$PROJECT_DIR$/ABS - Engine/ABS - Engine.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ABS - UI/ABS - UI.iml" filepath="$PROJECT_DIR$/ABS - UI/ABS - UI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AbsAdmin/AbsAdmin.iml" filepath="$PROJECT_DIR$/AbsAdmin/AbsAdmin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AbsClient/AbsClient.iml" filepath="$PROJECT_DIR$/AbsClient/AbsClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AbsServer/AbsServer.iml" filepath="$PROJECT_DIR$/AbsServer/AbsServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/DataTransferObject/DataTransferObject.iml" filepath="$PROJECT_DIR$/DataTransferObject/DataTransferObject.iml" />
       <module fileurl="file://$PROJECT_DIR$/GUI/GUI.iml" filepath="$PROJECT_DIR$/GUI/GUI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UniversalData/UniversalData.iml" filepath="$PROJECT_DIR$/UniversalData/UniversalData.iml" />
     </modules>
   </component>
 </project>

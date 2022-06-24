@@ -2,28 +2,34 @@ package abs;
 
 import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerDataObject;
-import dto.objectdata.CustomerOperationData;
 import dto.objectdata.LoanDataObject;
 import engine.convertor.Convertor;
 import generalObjects.LoanTask;
 import generalObjects.Triple;
-import javafx.util.Pair;
 import xmlgenerated.AbsDescriptor;
 
 import java.util.*;
 
 public class BankSystem {
 
-    private static int currentYaz = 0;
+    private static int currentYaz = 1;
     private BankCategories categories;
     private Map<String, BankCustomer> customers;
 
-    public BankSystem(AbsDescriptor absDescriptor)
+    public void LoadCustomerXML(AbsDescriptor absDescriptor, String username) // TODO - Add username as parameter.
     {
-        currentYaz = 1; // After file loaded successfully from xml -> start bank system from scratch.
-        categories = Convertor.parseAbsCategories(absDescriptor.getAbsCategories());
-        customers = Convertor.parseAbsCustomers(absDescriptor.getAbsCustomers());
-        Convertor.parseAbsLoans(customers, absDescriptor.getAbsLoans());
+        BankCustomer currentUser = getCustomerByName(username);
+
+        categories.addAnotherCategoriesSet(Convertor.parseAbsCategories(absDescriptor.getAbsCategories()));
+        Convertor.parseAbsLoans(currentUser, absDescriptor.getAbsLoans());
+    }
+
+    public BankSystem()
+    {
+        // Create empty bank when the server is running.
+        categories = new BankCategories();
+        customers = new HashMap<>();
+
     }
 
     public static int getCurrentYaz() {

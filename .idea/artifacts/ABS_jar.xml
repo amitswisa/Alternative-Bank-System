@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact name="ABS:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ABS_jar</output-path>
+    <root id="root">
+      <element id="archive" name="ABS.jar">
+        <element id="module-output" name="ABS" />
+        <element id="module-output" name="ABS - UI" />
+        <element id="module-output" name="ABS - Engine" />
+        <element id="module-output" name="DataTransferObject" />
+        <element id="module-output" name="GUI" />
+      </element>
+      <element id="library" level="project" name="controlsfx-8.40.18" />
+    </root>
+  </artifact>
+</component>

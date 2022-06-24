@@ -32,14 +32,12 @@ public class EngineManager {
         if(filePath.isEmpty())
             return new DataTransferObject("Please choose a file!", BankSystem.getCurrentYaz());
 
-        AbsDescriptor xmlObject;
         try {
-            xmlObject = this.xmlManager.loadXMLfile(filePath); // Try loading xml file and return AbdDescriptor.
+            this.xmlManager.loadXMLfile(filePath); // Try loading xml file and return AbdDescriptor.
         } catch(DataTransferObject e) {
             return e;
         }
 
-        bankSystem = new BankSystem(xmlObject); // Creating bank system from AbsDescriptor.
         return new DataTransferObject("File loaded successfully!", true, BankSystem.getCurrentYaz());
     }
 

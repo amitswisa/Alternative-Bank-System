@@ -25,8 +25,8 @@ public class BankLoan {
     private Map<String, Investor> loanInvestors; // List of investors and their amount of investment;
     private List<TransactionDataObject> transactionList; // hold all transaction's history.
 
-    public BankLoan(AbsLoan absLoan) {
-        this.owner = absLoan.getAbsOwner();
+    public BankLoan(AbsLoan absLoan, String owner) {
+        this.owner = owner;
         this.loanID = absLoan.getId();
         this.loanCategory = absLoan.getAbsCategory();
         this.loanAmount = absLoan.getAbsCapital();

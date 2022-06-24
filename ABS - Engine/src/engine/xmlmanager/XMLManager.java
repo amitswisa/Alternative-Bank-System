@@ -64,25 +64,11 @@ public class XMLManager {
             catNameStringMap.put(cat,true);
         }
 
-        // Validate that each Customer have different name.
-        AbsCustomers absCusts = toValidate.getAbsCustomers();
-        Map<String, Boolean> customersNameMap = new HashMap<>();
-        for(AbsCustomer customer : absCusts.getAbsCustomer()) {
-            if(customersNameMap.containsKey(customer.getName()))
-                throw new DataTransferObject("Error: customer " + customer.getName() + "exists more then once.", BankSystem.getCurrentYaz());
-
-            customersNameMap.put(customer.getName(), true);
-        }
-
         // Validate that each loan have existing category.
         for(AbsLoan loan : toValidate.getAbsLoans().getAbsLoan()) {
             // Check if loan has an existing category name.
             if(!catNameStringMap.containsKey(loan.getAbsCategory()))
                 throw new DataTransferObject("Loan Error: given category doesn't exist in loan with following id: " + loan.getId(), BankSystem.getCurrentYaz());
-
-            // Check if loan has an existing customer name.
-            if(!customersNameMap.containsKey(loan.getAbsOwner()))
-                throw new DataTransferObject("Loan Error: loan " + loan.getId() + " holds customer that doesnt exist.", BankSystem.getCurrentYaz());
 
             // Validate payment.
             float isValidPayment = (float)loan.getAbsTotalYazTime() / (float)loan.getAbsPaysEveryYaz();
