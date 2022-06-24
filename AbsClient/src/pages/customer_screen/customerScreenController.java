@@ -1,21 +1,11 @@
-package customer_screen;
+package pages.customer_screen;
 
 import Utils.*;
-import abs.BankSystem;
-import dto.infodata.DataTransferObject;
-import dto.objectdata.CustomerAlertData;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
-import engine.EngineManager;
-import generalObjects.LoanTask;
-import generalObjects.Triple;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -23,35 +13,31 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
-import payment_area.PaymentAreaController;
+/*import pages.payment_area.PaymentAreaController;
 import tableview.loan_tableview.loansTableView;
 import tableview.payment_view.PaymentTableView;
-import tableview.transactions_view.TransactionTable;
+import tableview.transactions_view.TransactionTable;*/
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class customerScreenController implements Initializable {
 
     // DATA MEMBERS
-    private EngineManager engineManager;
     private CustomerDataObject currentCustomer;
     private TextInputDialog moneyPopup;
     private Alert alertDialog;
     private List<LoanDataObject> loansToInvestList; // Holds loans to invest in when user mark them.
-    private LoanTask loanTask;
 
     // FXML MEMBERS
     @FXML private AnchorPane customerPane;
     @FXML private User currentUser;
-    @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController;
+    /*@FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController;
     @FXML private TransactionTable myTransactionListController;
     @FXML private PaymentTableView paymentTableController;
-    @FXML private PaymentAreaController paymentAreaController;
+    @FXML private PaymentAreaController paymentAreaController;*/
     @FXML private Label currentBalance;
     @FXML private Button depositBtn, withdrawalBtn;
 
@@ -78,24 +64,13 @@ public class customerScreenController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        // Do some changes when client changes user type.
-        currentUser.getUsernameProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(newValue.equals(currentUser.getDefaultUserName()))
-                    return;
-
-                updateCustomerInfo(newValue);
-                updateScramble();
-                updatePayments();
-            }
-        });
-
         // Set filtering listeners.
-        this.setFilterOptionsListeners();
+        //this.setFilterOptionsListeners();
 
         // Deposit button functionality
+        /*
         depositBtn.setOnMouseClicked(event -> {
+
             moneyPopup.setTitle("Deposit");
             Optional<String> result = moneyPopup.showAndWait();
 
@@ -183,7 +158,7 @@ public class customerScreenController implements Initializable {
             }
 
             refreshPaymentView();
-        });
+        });*/
 
         // adding checkbox for invest to scramble.
         TableColumn investColumn = new TableColumn("Invest");
@@ -220,37 +195,24 @@ public class customerScreenController implements Initializable {
 
         });
 
-        // adding CheckBox column to scramble tableview.
+        /*// adding CheckBox column to scramble tableview.
         loansToInvestTableController.addCheckboxColumn(investColumn);
 
         // send reference to list of loans to invest.
-        loansToInvestTableController.setLoansToInvestList(this.loansToInvestList);
+        loansToInvestTableController.setLoansToInvestList(this.loansToInvestList);*/
 
         // send customer controller instance to payment table view to update payment area.
-        paymentTableController.setCustomerController(this);
-        paymentAreaController.setCustomerController(this);
+        //paymentTableController.setCustomerController(this);
+        //paymentAreaController.setCustomerController(this);
 
-        progressBar.progressProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
-                if(newValue.intValue() == 1) {
-
-                    updateCustomerInfo(currentUser.getUsername());
-                    updateScramble();
-
-                    alertDialog.setTitle("Investment details");
-                    alertDialog.setAlertType(Alert.AlertType.INFORMATION);
-                    alertDialog.setHeaderText("Congratulations!");
-                    alertDialog.setContentText(loanTask.getMessage());
-                    alertDialog.show();
-
-                    currentBalance.setText("Current balance: " + engineManager.getBalanceOfCustomerByName(currentUser.getUsername()));
-                }
-            }
-        });
     }
 
+    // Update current customer.
+    public void setUser(String username) {
+        currentUser.setUsername(username);
+    }
+
+    /*
     public void updatePayments() {
         paymentTableController.setPaymentList(currentCustomer.getLoanList());
     }
@@ -341,7 +303,7 @@ public class customerScreenController implements Initializable {
         this.updateCustomerInfo(this.currentUser.getUsername());
     }
 
-    /* SCRAMBLE PAGE */
+    *//* SCRAMBLE PAGE *//*
 
     // Show and re-render all loans to invest in list.
     private void updateScramble() {
@@ -479,7 +441,7 @@ public class customerScreenController implements Initializable {
     public List<CustomerAlertData> getCustomerAlertList() {
         return currentCustomer.getListOfAlerts();
     }
-    /* END SCRAMBLE PAGE */
+    *//* END SCRAMBLE PAGE *//*
 
     public AnchorPane getCustomerMainPane() {
         return this.customerPane;
@@ -505,5 +467,5 @@ public class customerScreenController implements Initializable {
         paymentTableController.refreshTable();
     }
 
-    public void refreshPaymentView() { paymentAreaController.refreshRelevantData(); }
+    public void refreshPaymentView() { paymentAreaController.refreshRelevantData(); }*/
 }

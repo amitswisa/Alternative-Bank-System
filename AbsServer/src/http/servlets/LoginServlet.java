@@ -28,9 +28,8 @@ public class LoginServlet extends HttpServlet {
             if (usernameFromParameter == null || usernameFromParameter.isEmpty()) {
                 //no username in session and no username in parameter - not standard situation. it's a conflict
                 // stands for conflict in server state
-                response.getOutputStream().print("Conflict");
+                response.getOutputStream().print("Error: Username field cant be empty.");
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
-
             }
             else {
                 //normalize the username value
@@ -53,6 +52,7 @@ public class LoginServlet extends HttpServlet {
 
                         //redirect the request to the chat room - in order to actually change the URL
                         System.out.println("On login, request URI is: " + request.getRequestURI());
+                        response.getOutputStream().print("Logged in successfully!");
                         response.setStatus(HttpServletResponse.SC_OK);
                     }
                 }
@@ -62,6 +62,7 @@ public class LoginServlet extends HttpServlet {
         {
             //user is already logged in
             response.setStatus(HttpServletResponse.SC_OK);
+            response.getOutputStream().print("Welcome back, " + usernameFromSession + "!");
         }
     }
 }
