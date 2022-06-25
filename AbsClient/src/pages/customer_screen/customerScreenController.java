@@ -6,6 +6,7 @@ import dto.objectdata.LoanDataObject;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -13,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.controlsfx.control.CheckComboBox;
+import pages.tables_design.payment_area.PaymentAreaController;
 /*import pages.payment_area.PaymentAreaController;
 import tableview.loan_tableview.loansTableView;
 import tableview.payment_view.PaymentTableView;
@@ -36,8 +38,8 @@ public class customerScreenController implements Initializable {
     @FXML private User currentUser;
     /*@FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController;
     @FXML private TransactionTable myTransactionListController;
-    @FXML private PaymentTableView paymentTableController;
-    @FXML private PaymentAreaController paymentAreaController;*/
+    @FXML private PaymentTableView paymentTableController;*/
+    @FXML private PaymentAreaController paymentAreaController;
     @FXML private Label currentBalance;
     @FXML private Button depositBtn, withdrawalBtn;
 
@@ -263,12 +265,12 @@ public class customerScreenController implements Initializable {
         });
 
     }
-
+*/
     // Update view of payment area when choosing a loan.
     public void setPaymentArea(LoanDataObject d){
         paymentAreaController.updateInfo(d);
     }
-
+/*
     // Set engine.
     public void setEngineManager(EngineManager engineManager) {
         this.engineManager = engineManager;
@@ -370,7 +372,7 @@ public class customerScreenController implements Initializable {
         loansToInvestList.clear(); // clear loans to invest list.
         loansToInvestTableController.resetCheckboxColumn();
     }
-
+*/
     // Make investment button functionality.
     public void makeInvestmentClicked(ActionEvent actionEvent) {
 
@@ -381,7 +383,7 @@ public class customerScreenController implements Initializable {
             return;
         }
 
-        moneyPopup.setTitle("Investment");
+        /*moneyPopup.setTitle("Investment");
         moneyPopup.setContentText("Enter amount of money to invest: ");
         Optional<String> result = moneyPopup.showAndWait();
         if(!result.isPresent())
@@ -434,10 +436,10 @@ public class customerScreenController implements Initializable {
             moneyPopup.getEditor().setText(""); // empty input text.
             alertDialog.setHeaderText("Error");
             alertDialog.setAlertType(Alert.AlertType.ERROR);
-        }
+        }*/
 
     }
-
+/*
     public List<CustomerAlertData> getCustomerAlertList() {
         return currentCustomer.getListOfAlerts();
     }
@@ -446,11 +448,11 @@ public class customerScreenController implements Initializable {
     public AnchorPane getCustomerMainPane() {
         return this.customerPane;
     }
-
+*/
     public int getCurrentCustomerBalance(){
       return  currentCustomer.getBalance();
     }
-
+/*
     // Payment page
 
     // Pay all loans current payment.
@@ -465,7 +467,7 @@ public class customerScreenController implements Initializable {
 
     public void refreshPaymentTable() {
         paymentTableController.refreshTable();
-    }
-
-    public void refreshPaymentView() { paymentAreaController.refreshRelevantData(); }*/
+   }
+*/
+    public void refreshPaymentView() { paymentAreaController.refreshRelevantData(); }
 }

@@ -8,18 +8,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
 import pages.customer_screen.customerScreenController;
-import server_con.HttpClientUtil;
+import HttpClientUtil.HttpClientUtil;
 
 import java.io.IOException;
 import java.net.URL;
 
-import static server_con.HttpClientUtil.*;
+import static HttpClientUtil.HttpClientUtil.*;
 
 public class loginScreenController {
 
@@ -59,27 +58,27 @@ public class loginScreenController {
             // If user is authenticated and server approved login.
             // Then pass username to Customer's page Controller and open new scene with customer papge.
             if(res.code() == 200) {
-                /*FXMLLoader loader = new FXMLLoader();
+                FXMLLoader loader = new FXMLLoader();
                 URL customerPage = getClass().getResource("/pages/customer_screen/customerScreen.fxml");
                 loader.setLocation(customerPage);
 
                 // Get costumer controller and pass user name to it.
                 Parent root = loader.load();
-                customerScreenController customerController = loader.getController();*/
+                customerScreenController customerController = loader.getController();
 
-                this.primStage.setScene(new Scene(new AnchorPane(), 600, 600));
-                //customerController.setUser(usernameFieldContent);
+                this.primStage.setScene(new Scene(root));
+                customerController.setUser(usernameFieldContent);
                 this.primStage.show();
             }
 
             eMsg = res.body().string();
             System.out.println(eMsg);
 
-
         } catch(IOException e) {
             eMsg = e.getMessage();
         } finally {
             errorMsg.setText(eMsg);
+            System.out.println(eMsg);
         }
     }
 

@@ -1,210 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
-<?import org.controlsfx.control.CheckComboBox?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" styleClass="MyTabPane" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pages.customer_screen.customerScreenController">
-    <fx:include source="/main_screen/mainScreen.fxml" fx:id="mainScreen" />
-    <children>
-      <TabPane fx:id="myTabPane" layoutX="12.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="976.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="10.0">
-        <tabs>
-          <Tab text="Information">
-            <content>
-              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="20.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-               <content>
-                  <SplitPane dividerPositions="0.7" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="200.0">
-                    <items>
-                        <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
-                          <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
-                                 <children>
-                                    <fx:include fx:id="myLoansTable" source="/tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
-                                    <Label alignment="CENTER" layoutX="6.0" layoutY="1.0" prefHeight="25.0" prefWidth="668.0" text="My loans" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="1.0">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
-                                 <children>
-                                    <fx:include fx:id="myInvestmentsLoans" source="/tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
-                                    <Label alignment="CENTER" layoutX="7.0" layoutY="1.0" prefHeight="25.0" prefWidth="667.0" text="My lnvestments" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="1.0">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </AnchorPane>
-                          </items>
-                        </SplitPane>
-                      <AnchorPane maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #FFF;">
-                           <children>
-                              <Label alignment="CENTER" layoutX="2.0" layoutY="1.0" prefHeight="25.0" prefWidth="286.0" text="Account transactions" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                              <ScrollPane id="transactionsList" layoutX="44.0" layoutY="88.0" style="-fx-background-color: #FFF;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="30.0">
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="394.0" prefWidth="258.0" style="-fx-background-color: #FFF;">
-                                      <children>
-                                          <fx:include fx:id="myTransactionList" source="/tableview/transactions_view/transactionTable.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                          <Label alignment="CENTER" layoutX="308.0" layoutY="1.0" text="My loans" AnchorPane.leftAnchor="308.0" AnchorPane.rightAnchor="308.0" AnchorPane.topAnchor="1.0">
-                                              <font>
-                                                  <Font size="16.0" />
-                                              </font>
-                                          </Label>
-                                      </children>
-                                  </AnchorPane>
-                              </ScrollPane>
-                              <HBox alignment="CENTER" layoutX="14.0" layoutY="463.0" prefHeight="39.0" prefWidth="262.0" spacing="30.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="462.33333333333337">
-                                 <children>
-                                    <Button fx:id="depositBtn" mnemonicParsing="false" text="Deposit" />
-                                    <Button fx:id="withdrawalBtn" mnemonicParsing="false" text="Withdrawal" />
-                                 </children>
-                              </HBox>
-                              <Label id="currentBalance" fx:id="currentBalance" alignment="CENTER" layoutX="13.0" layoutY="444.0" prefHeight="17.0" prefWidth="265.0" text="Current balance: " AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" />
-                           </children>
-                      </AnchorPane>
-                    </items>
-                  </SplitPane>
-               </content>
-          </Tab>
-          <Tab text="Scramble">
-            <content>
-              <AnchorPane id="scramble" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #FFF;">
-                     <children>
-                        <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FFF;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
-                           <top>
-                              <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="976.0" spacing="10.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <Label id="labelFilter" text="Filter:" />
-                                    <MenuButton alignment="CENTER" mnemonicParsing="false" styleClass="filterMenuBtn" text="*Investment amount">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false">
-                                             <graphic>
-                                                <HBox alignment="CENTER">
-                                                   <children>
-                                                      <Slider fx:id="investmentAmount" />
-                                                      <Label fx:id="amountLabel" text="0" />
-                                                   </children>
-                                                </HBox>
-                                             </graphic>
-                                          </MenuItem>
-                                       </items>
-                                       <padding>
-                                          <Insets bottom="5.0" top="5.0" />
-                                       </padding>
-                                    </MenuButton>
-                                    <CheckComboBox fx:id="filterCats" prefHeight="37.333333333333336" styleClass="filterMenuBtn" title="Choose categories" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </CheckComboBox>
-                                    <MenuButton mnemonicParsing="false" styleClass="filterMenuBtn" text="Min Interest">
-                                      <items>
-                                        <MenuItem mnemonicParsing="false" text="\%">
-                                             <graphic>
-                                                <TextField fx:id="minInterest" promptText="Minimum interest value" text="0" />
-                                             </graphic>
-                                          </MenuItem>
-                                      </items>
-                                       <padding>
-                                          <Insets bottom="5.0" top="5.0" />
-                                       </padding>
-                                    </MenuButton>
-                                    <MenuButton mnemonicParsing="false" styleClass="filterMenuBtn" text="Min Yaz">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false">
-                                             <graphic>
-                                                <TextField fx:id="minYaz" promptText="Loan total time" text="0" />
-                                             </graphic>
-                                          </MenuItem>
-                                       </items>
-                                       <padding>
-                                          <Insets bottom="5.0" top="5.0" />
-                                       </padding>
-                                    </MenuButton>
-                                    <MenuButton mnemonicParsing="false" styleClass="filterMenuBtn" text="Max open loans">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false">
-                                             <graphic>
-                                                <TextField fx:id="maxOpenLoans" promptText="Max open loans for loaner" />
-                                             </graphic>
-                                          </MenuItem>
-                                       </items>
-                                       <padding>
-                                          <Insets bottom="5.0" top="5.0" />
-                                       </padding>
-                                    </MenuButton>
-                                    <MenuButton mnemonicParsing="false" styleClass="filterMenuBtn" text="Max ownership">
-                                       <items>
-                                           <MenuItem mnemonicParsing="false">
-                                             <graphic>
-                                                <TextField fx:id="ownershipPrecent" promptText="Max ownership precent (1-100)" />
-                                             </graphic>
-                                          </MenuItem>
-                                       </items>
-                                       <padding>
-                                          <Insets bottom="5.0" top="5.0" />
-                                       </padding>
-                                    </MenuButton>
-                                 </children>
-                                 <BorderPane.margin>
-                                    <Insets />
-                                 </BorderPane.margin>
-                                 <padding>
-                                    <Insets left="10.0" right="10.0" />
-                                 </padding>
-                              </HBox>
-                           </top>
-                           <center>
-                              <fx:include fx:id="loansToInvestTable" source="/tableview/loan_tableview/loanTableView.fxml" />
-                           </center>
-                        </BorderPane>
-                        <Button fx:id="makeInvestment" layoutX="830.0" layoutY="468.0" mnemonicParsing="false" onAction="#makeInvestmentClicked" prefHeight="31.0" prefWidth="132.0" styleClass="filterMenuBtn" text="Make investment" AnchorPane.bottomAnchor="14.666666666666686" AnchorPane.rightAnchor="14.0" />
-                        <ProgressBar fx:id="progressBar" layoutX="4.0" visible="false" layoutY="475.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="795.0" progress="0.0" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="4.0" />
-                     </children>
-              </AnchorPane>
-            </content>
-          </Tab>
-            <Tab text="Payment">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                    <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" orientation="VERTICAL" prefHeight="521.0" prefWidth="973.0">
-                        <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
-                                <children>
-                                    <fx:include fx:id="paymentTable" source="/tableview/payment_view/paymentView.fxml" />
-                                </children>
-                            </AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="220.0" prefWidth="952.0">
-                                <children>
-                                    <fx:include fx:id="paymentArea" source="/pages/payment_area/paymentArea.fxml" />
-                                </children>
-                            </AnchorPane>
-                        </items>
-                    </SplitPane>
-                </AnchorPane>
-              </content>
-            </Tab>
-        </tabs>
-      </TabPane>
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" stylesheets="@/resources/style/mainScreen.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pages.customer_screen.customerScreenController">
+   <children>
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <fx:include source="/pages/header_section/headerSection.fxml" />
+         </top>
+         <center>
+            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="1000.0" style="-fx-background-color: #FFF;" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets top="-270.0" />
+               </BorderPane.margin>
+               <children>
+                  <TabPane prefHeight="547.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <tabs>
+                      <Tab text="Untitled Tab 1">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </Tab>
+                      <Tab text="Untitled Tab 2">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+            </AnchorPane>
+         </center>
+      </BorderPane>
    </children>
 </AnchorPane>

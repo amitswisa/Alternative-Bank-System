@@ -1,10 +1,10 @@
 <component name="libraryTable">
   <library name="okHttp">
     <CLASSES>
-      <root url="file://$USER_HOME$/Downloads/okHttp" />
+      <root url="file://$USER_HOME$/Documents/JavaLib/JavaIncludes/okHttp" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
-    <jarDirectory url="file://$USER_HOME$/Downloads/okHttp" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Documents/JavaLib/JavaIncludes/okHttp" recursive="false" />
   </library>
 </component>

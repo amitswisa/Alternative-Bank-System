@@ -1,14 +1,9 @@
-package listview;
+package pages.listview;
 
 import dto.objectdata.CustomerAlertData;
 import javafx.scene.control.ListCell;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
-import listview.ListItem.ListItem;
-
-import java.awt.*;
+import pages.listview.ListItem.ListItem;
 
 public class ListViewCell extends ListCell<CustomerAlertData>
 {

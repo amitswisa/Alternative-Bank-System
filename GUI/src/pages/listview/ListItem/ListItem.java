@@ -1,4 +1,4 @@
-package listview.ListItem;
+package pages.listview.ListItem;
 
 import dto.objectdata.CustomerAlertData;
 import javafx.fxml.FXML;

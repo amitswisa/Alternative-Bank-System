@@ -4,7 +4,6 @@
     <root id="root">
       <element id="archive" name="ABS.jar">
         <element id="module-output" name="ABS" />
-        <element id="module-output" name="ABS - UI" />
         <element id="module-output" name="ABS - Engine" />
         <element id="module-output" name="DataTransferObject" />
         <element id="module-output" name="UniversalClientData" />
