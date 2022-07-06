@@ -8,39 +8,33 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class XMLManager {
 
-    private File currentWorkFile;
-
     // Empty constructor -> set currentWorkFile to null.
     public XMLManager() {
-        currentWorkFile = null;
+
     }
 
     // Validates given xml file and load if valid.
-    public AbsDescriptor loadXMLfile(String filePathString) throws DataTransferObject {
+    public AbsDescriptor loadXMLfile(String fileContent, String fileName) throws DataTransferObject {
 
-        // File validation.
-        File tempFileHolder = new File(filePathString); // Init temp file var.
+       /* if(!tempFileHolder.exists())  // Check if file is exist.
+            throw new DataTransferObject("Error: file doesnt exist.", BankSystem.getCurrentYaz());*/
 
-        if(!tempFileHolder.exists())  // Check if file is exist.
-            throw new DataTransferObject("Error: file doesnt exist.", BankSystem.getCurrentYaz());
-
-        if(!this.isFileHaveXmlExtension(tempFileHolder))  // Check if file extension is ".xml"
+        if(!this.isFileHaveXmlExtension(fileName))  // Check if file extension is ".xml"
             throw new DataTransferObject("Error: file must have .xml extension.", BankSystem.getCurrentYaz());
 
-        AbsDescriptor resValue = this.validateXML(tempFileHolder); // XML file content validation.
+        AbsDescriptor resValue = this.validateXML(fileContent); // XML file content validation.
 
-        this.currentWorkFile = tempFileHolder; // Save file instance after validation checks.
         return resValue;
     }
 
     // Check if file extension exist and equal to ".xml"
-    private boolean isFileHaveXmlExtension(File file) {
-        String fileName = file.getName();
+    private boolean isFileHaveXmlExtension(String fileName) {
         int dotIndex = fileName.lastIndexOf(".");
 
         // return boolean answer -> is extension equals ".xml".
@@ -48,13 +42,12 @@ public class XMLManager {
     }
 
     // validateXML function -> gets xml file and validate its content.
-    private AbsDescriptor validateXML(File f_xml) throws DataTransferObject {
+    private AbsDescriptor validateXML(String f_xml) throws DataTransferObject {
         AbsDescriptor toValidate = null;
         try {  // Load xml file stream and unmarshall it.
-            InputStream xml_InfoStream = new FileInputStream(f_xml); // open new file stream.
-            toValidate = this.deserializeFrom(xml_InfoStream); // deserialize from xml file to object.
-        } catch(FileNotFoundException | JAXBException e) {
-            throw new DataTransferObject("Error occurred while trying deserialize xml file.", BankSystem.getCurrentYaz());
+            toValidate = this.deserializeFrom(new StringReader(f_xml)); // deserialize from xml file to object.
+        } catch(JAXBException e) {
+            throw new DataTransferObject("Error occurred while trying deserialize xml file content.", BankSystem.getCurrentYaz());
         }
 
         // Adding categories name into Map Object.
@@ -80,13 +73,10 @@ public class XMLManager {
     }
 
     // deserializeFrom function -> gets InputStream and return Object from xml file.
-    private AbsDescriptor deserializeFrom(InputStream in) throws JAXBException {
+    private AbsDescriptor deserializeFrom(StringReader in) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance("xmlgenerated"); // Create new instance of schema's generated classes.
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         return (AbsDescriptor) unmarshaller.unmarshal(in); // return unmarshalled data.
     }
 
-    public boolean isFileLoaded() {
-        return (this.currentWorkFile != null);
-    }
 }

@@ -30,26 +30,16 @@ public class EngineManager {
     # arg::String filePath - path of xml file.
     # return value - DataTransferObject Object.*/
     // TODO - add information to specific customer.
-    public synchronized DataTransferObject loadXML(String filePath, String username) {
-
-        if(filePath.isEmpty())
-            return new DataTransferObject("Please choose a file!", BankSystem.getCurrentYaz());
+    public synchronized DataTransferObject loadXML(String fileContent,String fileName, String customerName) {
 
         try {
-           AbsDescriptor res = this.xmlManager.loadXMLfile(filePath); // Try loading xml file and return AbdDescriptor.
+           AbsDescriptor res = this.xmlManager.loadXMLfile(fileContent, fileName); // Try loading xml file and return AbdDescriptor.
+            bankSystem.LoadCustomerXML(res, customerName);
         } catch(DataTransferObject e) {
             return e;
         }
 
         return new DataTransferObject("File loaded successfully!", true, BankSystem.getCurrentYaz());
-    }
-
-    public synchronized void loadCustomerData(String filePathString, String username) {
-        DataTransferObject response = this.loadXML(filePathString, username);
-    }
-
-    public boolean isFileLoaded() {
-        return this.xmlManager.isFileLoaded();
     }
 
     // Section 2 from menu.

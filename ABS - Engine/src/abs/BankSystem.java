@@ -16,12 +16,10 @@ public class BankSystem {
     private BankCategories categories;
     private Map<String, BankCustomer> customers;
 
-    public void LoadCustomerXML(AbsDescriptor absDescriptor, String username) // TODO - Add username as parameter.
+    public void LoadCustomerXML(AbsDescriptor absDescriptor, String customerName)
     {
-        BankCustomer currentUser = getCustomerByName(username);
-
         categories.addAnotherCategoriesSet(Convertor.parseAbsCategories(absDescriptor.getAbsCategories()));
-        Convertor.parseAbsLoans(currentUser, absDescriptor.getAbsLoans());
+        Convertor.parseAbsLoans(this.getCustomerByName(customerName), absDescriptor.getAbsLoans());
     }
 
     public BankSystem()
