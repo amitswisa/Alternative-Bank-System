@@ -5,6 +5,7 @@ import abs.BankSystem;
 import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
+import engine.convertor.Convertor;
 import engine.xmlmanager.XMLManager;
 import generalObjects.LoanTask;
 import generalObjects.Triple;
@@ -21,24 +22,30 @@ public class EngineManager {
     private BankSystem bankSystem;
 
     public EngineManager() {
+        bankSystem = new BankSystem(); // Creating bank systenm for the first time.
         xmlManager = new XMLManager(); // Init xml manager.
     }
 
     /*# readXmlFile - Load relevant xml file to XMLManager.
     # arg::String filePath - path of xml file.
     # return value - DataTransferObject Object.*/
-    public DataTransferObject loadXML(String filePath) {
+    // TODO - add information to specific customer.
+    public synchronized DataTransferObject loadXML(String filePath, String username) {
 
         if(filePath.isEmpty())
             return new DataTransferObject("Please choose a file!", BankSystem.getCurrentYaz());
 
         try {
-            this.xmlManager.loadXMLfile(filePath); // Try loading xml file and return AbdDescriptor.
+           AbsDescriptor res = this.xmlManager.loadXMLfile(filePath); // Try loading xml file and return AbdDescriptor.
         } catch(DataTransferObject e) {
             return e;
         }
 
         return new DataTransferObject("File loaded successfully!", true, BankSystem.getCurrentYaz());
+    }
+
+    public synchronized void loadCustomerData(String filePathString, String username) {
+        DataTransferObject response = this.loadXML(filePathString, username);
     }
 
     public boolean isFileLoaded() {
@@ -143,5 +150,10 @@ public class EngineManager {
     // Close all loans debt or specific loan.
     public void handleCustomerPayAllDebt(List<LoanDataObject> loans) throws DataTransferObject {
         this.bankSystem.handleCustomerPayAllDebt(loans);
+    }
+
+    // Add new customer to customer's list when first logged in.
+    public void addNewCustomer(String customerName) {
+        this.bankSystem.addNewCustomer(customerName);
     }
 }

@@ -8,10 +8,10 @@ public class HttpClientUtil
 {
     public static final OkHttpClient client = new OkHttpClient();
     public static final String hostAddress = "http://localhost:8080";
-    public static final String BASE_URL = "/";
+    public static final String BASE_URL = "/Abs";
 
     // Pages paths
-    public static final String userLoginPage = "login";
+    public static final String userLoginPage = "/login";
 
     public static final String PATH = hostAddress + BASE_URL;
 

@@ -11,7 +11,7 @@ public class Convertor {
 
     // Parse AbsCategories to our BankCategories object.
     public static Set<String> parseAbsCategories(AbsCategories absCats) {
-        return  new HashSet<>(absCats.getAbsCategory()); // Create new set of categories name.
+        return new HashSet<>(absCats.getAbsCategory()); // Create new set of categories name.
     }
 
     // Parse AbsCategories to our BankCategories object.
@@ -27,6 +27,7 @@ public class Convertor {
 
         return customerMap;
     }*/
+
      public static void parseAbsLoans(BankCustomer customer, AbsLoans absLoans) {
          // Classify and add a loan to relevant customer.
         for(AbsLoan absLoan: absLoans.getAbsLoan()){

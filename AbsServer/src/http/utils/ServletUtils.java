@@ -1,6 +1,6 @@
 package http.utils;
 
-import abs.BankManager;
+import engine.EngineManager;
 import users.UserManager;
 
 import jakarta.servlet.ServletContext;
@@ -11,7 +11,7 @@ import static http.constants.Constants.INT_PARAMETER_ERROR;
 public class ServletUtils {
 
 	private static final String USER_MANAGER_ATTRIBUTE_NAME = "userManager";
-	private static final String BANK_MANAGER_ATTRIBUTE_NAME = "bankManager";
+	private static final String ENGINE_MANAGER_ATTRIBUTE_NAME = "engineManager";
 
 	/*
 	Note how the synchronization is done only on the question and\or creation of the relevant managers and once they exists -
@@ -30,13 +30,13 @@ public class ServletUtils {
 		return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
 	}
 
-	public static BankManager getBankManager(ServletContext servletContext) {
+	public static EngineManager getEngineManager(ServletContext servletContext) {
 		synchronized (AbsManagerLock) {
-			if (servletContext.getAttribute(BANK_MANAGER_ATTRIBUTE_NAME) == null)
-				servletContext.setAttribute(BANK_MANAGER_ATTRIBUTE_NAME, new BankManager());
+			if (servletContext.getAttribute(ENGINE_MANAGER_ATTRIBUTE_NAME) == null)
+				servletContext.setAttribute(ENGINE_MANAGER_ATTRIBUTE_NAME, new EngineManager());
 
 		}
-		return (BankManager) servletContext.getAttribute(BANK_MANAGER_ATTRIBUTE_NAME);
+		return (EngineManager) servletContext.getAttribute(ENGINE_MANAGER_ATTRIBUTE_NAME);
 	}
 
 	public static int getIntParameter(HttpServletRequest request, String name) {

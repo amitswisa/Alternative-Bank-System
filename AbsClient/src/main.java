@@ -19,7 +19,7 @@ public class main extends Application {
             fxmlLoader.setLocation(loginPage);
             Parent root = fxmlLoader.load();
             loginScreenController loginScreenController = fxmlLoader.getController();
-            loginScreenController.setPostLoginData("/pages/customer_screen/customerScreen.fxml", primaryStage);
+            loginScreenController.setPostLoginData("/pages/Customer_Screen/customerScreen.fxml", primaryStage);
 
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);

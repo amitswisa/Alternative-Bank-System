@@ -1,5 +1,7 @@
 package users;
 
+import engine.EngineManager;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,12 +19,9 @@ public class UserManager {
         usersSet = new HashSet<>();
     }
 
-    public synchronized void addUser(String username) {
-        usersSet.add(username);
-    }
-
-    public synchronized void removeUser(String username) {
-        usersSet.remove(username);
+    public synchronized void addUser(String customerName, EngineManager engineManager) {
+        usersSet.add(customerName);
+        engineManager.addNewCustomer(customerName);
     }
 
     public synchronized Set<String> getUsers() {

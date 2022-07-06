@@ -1,5 +1,6 @@
 package dto.objectdata;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,15 @@ public class CustomerDataObject {
         this.loanList = loanList;
         this.balance = balance;
         this.listOfAlerts = listOfAlerts;
+    }
+
+    public CustomerDataObject(String name) {
+        this.name = name;
+        this.logCustomer = new ArrayList<>();
+        this.investmentList = new ArrayList<>();
+        this.loanList = new ArrayList<>();
+        this.balance = 0;
+        this.listOfAlerts = new ArrayList<>();
     }
 
     public String getName() {

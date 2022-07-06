@@ -1,5 +1,6 @@
 package pages.Login_Screen;
 
+import dto.objectdata.CustomerDataObject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +14,8 @@ import javafx.stage.Stage;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
-import pages.customer_screen.customerScreenController;
+import pages.Customer_Screen.customerScreenController;
+import pages.Main_Screen.mainScreenController;
 import server_con.HttpClientUtil;
 
 import java.io.IOException;
@@ -59,16 +61,16 @@ public class loginScreenController {
             // If user is authenticated and server approved login.
             // Then pass username to Customer's page Controller and open new scene with customer papge.
             if(res.code() == 200) {
-                /*FXMLLoader loader = new FXMLLoader();
-                URL customerPage = getClass().getResource("/pages/customer_screen/customerScreen.fxml");
+                FXMLLoader loader = new FXMLLoader();
+                URL customerPage = getClass().getResource("/pages/Main_Screen/mainScreen.fxml");
                 loader.setLocation(customerPage);
 
                 // Get costumer controller and pass user name to it.
                 Parent root = loader.load();
-                customerScreenController customerController = loader.getController();*/
+                mainScreenController mainController = loader.getController();
 
-                this.primStage.setScene(new Scene(new AnchorPane(), 600, 600));
-                //customerController.setUser(usernameFieldContent);
+                this.primStage.setScene(new Scene(root));
+                mainController.setUser(new CustomerDataObject(usernameFieldContent));
                 this.primStage.show();
             }
 

@@ -1,5 +1,6 @@
 package http.servlets;
 
+import engine.EngineManager;
 import http.constants.Constants;
 import http.utils.SessionUtils;
 import http.utils.ServletUtils;
@@ -44,8 +45,13 @@ public class LoginServlet extends HttpServlet {
                         response.getOutputStream().print(errorMessage);
                     }
                     else {
-                        //add the new user to the users list
-                        userManager.addUser(usernameFromParameter);
+                        // Get engine from servlet context.
+                        EngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
+
+                        //add the new user to the users list.
+                        userManager.addUser(usernameFromParameter, engineManager);
+                        System.out.println(engineManager.getAllCustomersNames());
+
                         //set the username in a session so it will be available on each request
                         //the true parameter means that if a session object does not exists yet create a new one
                         request.getSession(true).setAttribute(Constants.USERNAME, usernameFromParameter);
@@ -54,6 +60,7 @@ public class LoginServlet extends HttpServlet {
                         System.out.println("On login, request URI is: " + request.getRequestURI());
                         response.getOutputStream().print("Logged in successfully!");
                         response.setStatus(HttpServletResponse.SC_OK);
+
                     }
                 }
             }

@@ -1,14 +1,10 @@
 package main_screen;
 
 import Utils.User;
-import admin_screen.AdminController;
-import customer_screen.customerScreenController;
 import dto.objectdata.CustomerAlertData;
-import engine.EngineManager;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -27,7 +23,6 @@ import java.util.*;
 public class mainScreenController implements Initializable {
 
     // Data members
-    private final EngineManager engineManager;
     private User currentUser;
     private TranslateTransition translateTransition;
     private ChoiceDialog<String> dialog;
@@ -35,15 +30,9 @@ public class mainScreenController implements Initializable {
     // Pages
     @FXML private AnchorPane mainPane;
     @FXML private AnchorPane dataDiv;
-    @FXML private AnchorPane adminPageComponent;
-    @FXML private AdminController adminPageComponentController;
-    @FXML private AnchorPane customerPageComponent;
-    @FXML private customerScreenController customerPageComponentController;
 
     // FXML members
-    @FXML private ChoiceBox<String> userTypeChoice;
     @FXML private ImageView settingsBtn;
-    @FXML private Label pathLabel;
     @FXML private Label yazLabel;
     @FXML private Label alertMessageCounter;
     @FXML private ImageView alertBtn;
@@ -53,7 +42,6 @@ public class mainScreenController implements Initializable {
     private ObservableList<CustomerAlertData> alertObservableList;
 
     public mainScreenController() {
-        engineManager = new EngineManager();
         alertObservableList = FXCollections.observableArrayList();
 
         // Dialog to settings
@@ -80,20 +68,6 @@ public class mainScreenController implements Initializable {
         translateTransition.setCycleCount(Animation.INDEFINITE);
         translateTransition.setInterpolator(Interpolator.EASE_BOTH);
 
-        // Initial settings.
-        customerPageComponent.setVisible(false);
-        customerPageComponentController.setEngineManager(this.engineManager);
-        currentUser = customerPageComponentController.getCurrentUser();
-
-        // Transfer engine to included fxmls.
-        adminPageComponentController.setInitData(this.engineManager, this);
-
-        // Bind data-members
-        this.pathLabel.textProperty().bind(adminPageComponentController.getPathTextProperty());
-
-        //Set init values for choice-box (only admin).
-        adminPageComponentController.setCustomersNamesChoiceBox();
-
         // Alerts list view init to invisible.
         alertPane.setVisible(false);
         alertsViewList.setPlaceholder(new Label("No content found"));
@@ -114,48 +88,13 @@ public class mainScreenController implements Initializable {
 
     }
 
-    public ChoiceBox<String> getUserTypeChoice() {
-        return userTypeChoice;
-    }
-
-    // Return current chosen customer name.
-    public String getCurrentUser() {
-        return this.currentUser.getUsername();
-    }
-
     public void setYazLabelText(String yazString) {
         this.yazLabel.setText(yazString);
     }
 
-    // Reset settings and setup customer changing event.
-    public void changeUserType(ActionEvent actionEvent) {
-        String newUser = userTypeChoice.getValue();
-
-        if(newUser == null)
-            return;
-
-        // Update details according to customer select. (different "Admin" Or Other).
-        if(newUser.equals(this.currentUser.getDefaultUserName())) { // if Admin chosen.
-            this.customerPageComponent.setVisible(false);
-            this.adminPageComponent.setVisible(true);
-            this.currentUser.setUsername(this.currentUser.getDefaultUserName());
-            this.alertBox.setVisible(false);
-            this.adminPageComponentController.updateAdminLists();
-        } else {
-            this.customerPageComponent.setVisible(true);
-            this.adminPageComponent.setVisible(false);
-            this.currentUser.setUsername(newUser);
-            customerPageComponentController.resetSettings();
-            this.getCustomerAlerts();
-            this.alertBox.setVisible(true);
-        }
-
-        this.alertPane.setVisible(false); // Set alert view invisible when changing user.
-    }
-
     private void getCustomerAlerts() {
         // Alerts handling.
-        alertObservableList.setAll(customerPageComponentController.getCustomerAlertList());
+        //alertObservableList.setAll(customerPageComponentController.getCustomerAlertList());
         FXCollections.reverse(alertObservableList); // sort from end to beginning.
         alertsViewList.setItems(alertObservableList);
 
@@ -167,10 +106,10 @@ public class mainScreenController implements Initializable {
 
     private void handleAlertBoxClick() {
 
-        if(userTypeChoice.getValue().equals("Admin")) {
+        /*if(userTypeChoice.getValue().equals("Admin")) {
             alertPane.setVisible(false);
             return;
-        }
+        }*/
 
         // Refresh changes.
         alertPane.setVisible(!alertPane.isVisible());
@@ -180,15 +119,16 @@ public class mainScreenController implements Initializable {
         else {
             this.alertMessageCounter.setText("0");
             translateTransition.stop();
-            customerPageComponentController.getCustomerAlertList().forEach(CustomerAlertData::markAsRead);
+            //customerPageComponentController.getCustomerAlertList().forEach(CustomerAlertData::markAsRead);
         }
     }
 
     private int countUnReadMsg() {
         // Count number of unread notifications.
-        int count = (int) customerPageComponentController.getCustomerAlertList().stream().filter(e -> !e.isAlertGotRead()).count();
+        /*int count = (int) customerPageComponentController.getCustomerAlertList().stream().filter(e -> !e.isAlertGotRead()).count();
         this.alertMessageCounter.setText(count + "");
-        return count;
+        return count;*/
+        return 0;
     }
 
     public void settingsFunctionallity(MouseEvent mouseEvent) {

@@ -29,7 +29,6 @@ public class BankSystem {
         // Create empty bank when the server is running.
         categories = new BankCategories();
         customers = new HashMap<>();
-
     }
 
     public static int getCurrentYaz() {
@@ -187,5 +186,10 @@ public class BankSystem {
         });
 
         return loansToInvest;
+    }
+
+    // Add new customer to customers' list when first logged in.
+    public void addNewCustomer(String customerName) {
+        this.customers.put(customerName, new BankCustomer(customerName));
     }
 }
