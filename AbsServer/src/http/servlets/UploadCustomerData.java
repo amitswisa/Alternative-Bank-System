@@ -41,6 +41,6 @@ public class UploadCustomerData extends HttpServlet {
         else
             response.setStatus(HttpServletResponse.SC_CONFLICT);
 
-            response.getOutputStream().print(backRes.getMessage());
+        response.getOutputStream().print(backRes.getMessage());
     }
 }
