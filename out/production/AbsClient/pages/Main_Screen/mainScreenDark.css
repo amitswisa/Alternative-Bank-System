@@ -1,0 +1,113 @@
+#mainPane {
+    -fx-background-color: #F8F9FA;
+    -fx-font-family: Roboto;
+}
+
+#header {
+    -fx-background-color: #212529;
+    -fx-effect: dropshadow(three-pass-box, #dcdcdc, 6, 0, 0, 0);
+}
+
+#header #timeSpan {
+    -fx-background-color: #E9ECEF;
+    -fx-padding: 5px 0 5px 0;
+    -fx-border-color: #CED4DA;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+}
+
+#header #timeSpan .label {
+    -fx-text-fill:#343A40;
+    -fx-font-weight: bold;
+}
+
+.choice-box {
+    -fx-background-color: #E9ECEF;
+    -fx-border-radius: 5px;
+    -fx-text-font: #343A40;
+    -fx-border-color: #fff;
+}
+
+.choice-box .label {
+    -fx-text-fill: #343A40;
+    -fx-font-weight: bold;
+}
+
+.choice-box .menu-item .label {
+    -fx-text-fill: #000;
+}
+
+#pathLabel {
+    -fx-background-color: #E9ECEF;
+    -fx-text-fill: #343A40;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, #dcdcdc, 2, 0, 0, 0);
+}
+
+.button {
+    -fx-background-color: #E9ECEF;
+    -fx-border-color: #212529;
+    -fx-cursor: hand;
+    -fx-border-radius: 2px;
+    -fx-text-alignment: center;
+    -fx-text-fill: #212529;
+    -fx-font-weight: bold;
+}
+
+.button:hover {
+    -fx-background-color: #212529;
+    -fx-text-fill: #E9ECEF;
+    -fx-border-radius: 12px !important;
+}
+
+#alertMessageCounter {
+    -fx-background-color: #E9ECEF;
+    -fx-background-radius: 50px;
+    -fx-padding: 0px 3px 0px 3px;
+    -fx-font-size: 9px;
+    -fx-text-fill: #2e2e2e;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #E9ECEF;
+    -fx-border-color: #212529;
+    -fx-text-fill: #2e2e2e;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell{
+    -fx-background-color: -fx-table-cell-border-color, #E9ECEF;
+    -fx-background-insets: 0, 0 0 0 0;
+    -fx-padding: 0.0em;
+    -fx-cell-size: 58px;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #6C757D;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+}
+
+/* Customer */
+.filterMenuBtn {
+    -fx-background-color: #E9ECEF;
+    -fx-border-color: #212529;
+    -fx-cursor: hand;
+    -fx-border-radius: 2px;
+    -fx-text-alignment: center;
+    -fx-text-fill: #212529;
+    -fx-font-weight: bold;
+}
+
+.MyTabPane .tab
+{
+    -fx-background-color: #343A40;
+}
+
+.MyTabPane .tab:selected
+{
+    -fx-background-color: #212529;
+}
