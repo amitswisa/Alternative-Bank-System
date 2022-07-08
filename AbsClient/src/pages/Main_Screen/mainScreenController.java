@@ -46,7 +46,6 @@ public class mainScreenController implements Initializable {
     // Pages
     @FXML private AnchorPane mainPane;
     @FXML private AnchorPane dataDiv;
-    @FXML private AnchorPane adminPageComponent;
     @FXML private AnchorPane customerPageComponent;
     @FXML private customerScreenController customerPageComponentController;
 

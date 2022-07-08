@@ -1,0 +1,248 @@
+@font-face {
+    font-family: Roboto;
+    src: url('../resources/fonts/Roboto-Regular.ttf');
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url('../resources/fonts/Roboto-Bold.ttf');
+}
+
+#mainPane {
+    -fx-background-color: #FFF;
+    -fx-font-family: Roboto;
+}
+
+#header {
+    -fx-background-color: #FFF;
+    -fx-effect: dropshadow(three-pass-box, #dcdcdc, 6, 0, 0, 0);
+}
+
+#header #timeSpan {
+    -fx-background-color: #FFF;
+    -fx-padding: 5px 0 5px 0;
+    -fx-border-color: #cf6a87;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+}
+
+#header #timeSpan .label {
+    -fx-text-fill:#cf6a87;
+    -fx-font-weight: bold;
+}
+
+.choice-box {
+    -fx-background-color: #FFF;
+    -fx-border-radius: 5px;
+    -fx-text-font: #cf6a87;
+    -fx-border-color: #cf6a87;
+}
+
+.choice-box .label {
+    -fx-text-fill: #cf6a87;
+    -fx-font-weight: bold;
+}
+
+.choice-box .menu-item .label {
+    -fx-text-fill: #000;
+}
+
+.choice-box .menu-item:hover {
+    -fx-background-color: #ececec;
+    -fx-text-fill: #7e7e7e;
+}
+
+.choice-box .menu-item .label {
+    -fx-text-fill: #000;
+}
+
+#pathLabel {
+    -fx-background-color: #cf6a87;
+    -fx-text-fill: #FFF;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, #dcdcdc, 2, 0, 0, 0);
+}
+
+.button {
+    -fx-background-color: #FFF;
+    -fx-border-color: #cf6a87;
+    -fx-cursor: hand;
+    -fx-border-radius: 2px;
+    -fx-text-alignment: center;
+    -fx-text-fill: #cf6a87;
+    -fx-font-weight: bold;
+}
+
+.button:hover {
+    -fx-background-color: #cf6a87;
+    -fx-text-fill: #FFF;
+    -fx-border-radius: 12px !important;
+}
+
+#alertMessageCounter {
+    -fx-background-color: #cf6a87;
+    -fx-background-radius: 50px;
+    -fx-padding: 0px 3px 0px 3px;
+    -fx-font-size: 9px;
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+#alertPane {
+    -fx-effect: dropshadow(three-pass-box, #dcdcdc, 5, 0, 0, 0);
+}
+
+#notification {
+    -fx-font-weight:bold;
+    -fx-effect: dropshadow(three-pass-box, #dcdcdc, 2, 0, 0, 0);
+}
+
+.list-view {
+    -fx-background-insets: 0; -fx-padding: 1;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #FFF;
+    -fx-border-color: #cf6a87;
+    -fx-text-fill: #2e2e2e;
+}
+
+.table-view{
+    -fx-background-color: #FFF;
+}
+
+.table-view:focused{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: #FFF;
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: #2e2e2e;
+}
+
+.table-view .column-header {
+    -fx-background-color: #FFF;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: #000;
+    -fx-border-color: transparent;
+    -fx-text-alignment: center;
+}
+
+.table-row-cell{
+    -fx-background-color: -fx-table-cell-border-color, #ffe9ec;
+    -fx-background-insets: 0, 0 0 0 0;
+    -fx-padding: 0.0em;
+    -fx-cell-size: 58px;
+    -fx-border-color: transparent;
+    -fx-text-alignment: center;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: -fx-table-cell-border-color, #FFF;
+    -fx-background-insets: 0, 0 0 0 0;
+    -fx-padding: 0.0em;
+    -fx-text-alignment: center;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #f8a5c2;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+}
+
+.table-column {
+    -fx-alignment: center;
+    -fx-font-weight: bold;
+}
+
+.table-view .scroll-bar:vertical,
+.table-view .scroll-bar:horizontal,
+.table-view .corner {
+    -fx-background-color: #FFF;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #E0E1DD;
+    -fx-padding: 0 0 0 0;
+    -fx-pref-width: 5;
+}
+
+.MyTabPane {
+    -fx-background-color: #FFF;
+}
+
+.MyTabPane .tab
+{
+    -fx-background-color: #f8a5c2;
+}
+
+.MyTabPane .tab:selected
+{
+    -fx-background-color: #cf6a87;
+}
+
+.tab-pane *.tab-header-background {
+    -fx-background-color: #FFF;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #FFF;
+    -fx-font-size: 12px;
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-width: 0;
+    -fx-border-color: -fx-focus-color;
+}
+
+.scroll-pane {
+    -fx-background-color: #FFF;
+}
+
+.split-pane {
+    -fx-background-color: #FFF;
+}
+
+#currentBalance {
+    -fx-font-weight: bold;
+    -fx-fint-size: 14px;
+}
+
+/* SCRAMNLE */
+
+#labelFilter {
+    font-weight:bold;
+}
+
+.filterMenuBtn {
+    -fx-background-color: #FFF;
+    -fx-border-color: #cf6a87;
+    -fx-border-radius: 2px;
+    -fx-text-alignment: center;
+    -fx-text-fill: #343A40;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.menu-item {
+    -fx-background-color: #FFF;
+}
+
+.menu-item:hover, .menu-item:selected {
+    -fx-background-color: transparent;
+    -fx-text-fill: #000;
+}

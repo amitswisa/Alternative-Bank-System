@@ -6,9 +6,9 @@ public class User {
     private final String defaultUserName;
     private SimpleStringProperty username;
 
-    public User() {
+    public User(String usernameFieldContent) {
         this.defaultUserName = "Admin";
-        username = new SimpleStringProperty(this.defaultUserName);
+        username = new SimpleStringProperty(usernameFieldContent);
     }
 
     public String getUsername() {
