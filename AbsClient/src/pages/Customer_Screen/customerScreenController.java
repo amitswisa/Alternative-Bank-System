@@ -1,6 +1,5 @@
 package pages.Customer_Screen;
 
-import Utils.*;
 import dto.objectdata.CustomerAlertData;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
@@ -17,12 +16,18 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import okhttp3.FormBody;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.controlsfx.control.CheckComboBox;
 import payment_area.PaymentAreaController;
+import server_con.HttpClientUtil;
 import tableview.loan_tableview.loansTableView;
 import tableview.payment_view.PaymentTableView;
 import tableview.transactions_view.TransactionTable;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +39,8 @@ public class customerScreenController implements Initializable {
     // DATA MEMBERS
     private CustomerDataObject currentCustomer;
     private TextInputDialog moneyPopup;
-    private Alert alertDialog;
-    private List<LoanDataObject> loansToInvestList; // Holds loans to invest in when user mark them.
+    private final Alert alertDialog;
+    private final List<LoanDataObject> loansToInvestList; // Holds loans to invest in when user mark them.
     //private LoanTask loanTask;
 
     // FXML MEMBERS
@@ -54,14 +59,14 @@ public class customerScreenController implements Initializable {
     @FXML private TextField minInterest, minYaz, maxOpenLoans, ownershipPrecent;
 
     public customerScreenController() {
+
         //Text dialog settings
         loansToInvestList = new ArrayList<>();
-        alertDialog = new Alert(Alert.AlertType.ERROR);
+        alertDialog = new Alert(Alert.AlertType.INFORMATION);
         moneyPopup = new TextInputDialog();
         moneyPopup.setHeaderText("Enter amount of money: ");
         moneyPopup.initStyle(StageStyle.UTILITY);
         moneyPopup.setGraphic(null);
-
     }
 
     @Override
@@ -72,98 +77,12 @@ public class customerScreenController implements Initializable {
 
         // Deposit button functionality
         depositBtn.setOnMouseClicked(event -> {
-            moneyPopup.setTitle("Deposit");
-            Optional<String> result = moneyPopup.showAndWait();
-
-            // If closed
-            if(!result.isPresent()) {
-                moneyPopup.getEditor().setText("");
-                return;
-            }
-
-            String value = String.valueOf(moneyPopup.getEditor().getText());
-            moneyPopup.getEditor().setText(""); // empty input text.
-
-            // Try parsing input to int and if success update user bank.
-            try {
-                int valueOfInput = Integer.parseInt(value);
-
-                // Trying to deposit negative number.
-                if(valueOfInput <= 0) {
-                    throw new NumberFormatException("Negative");
-                }
-
-                // Deposite money and refresh view.
-                //TODO- servlet that handle with bank opertion : deposit, withdraw ...
-                //this.engineManager.depositeMoney(this.currentUser.getUsername(), valueOfInput);
-                //this.updateCustomerInfo();
-                //this.setMaxAmountToInvest();
-
-                //TODO- servlet that handle with customer information.
-                //currentBalance.setText("Current balance: " + this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
-            } catch(NumberFormatException nfe) {
-
-                // If ok button was pressed!
-                if(result.isPresent()) {
-                    if(nfe.getMessage().equals("Negstive"))
-                        alertDialog.setContentText("Cant deposit negative numbers.");
-                    else
-                        alertDialog.setContentText("Please enter a number.");
-
-                    alertDialog.showAndWait();
-                }
-            }
-
-            refreshPaymentView();
+            this.fundsActionsFunction("Deposit");
         });
 
         // Withdrawal button functionality
         withdrawalBtn.setOnMouseClicked(event -> {
-            moneyPopup.setTitle("Withdrawal");
-            Optional<String> result = moneyPopup.showAndWait();
-
-            // If closed
-            if(!result.isPresent()) {
-                moneyPopup.getEditor().setText("");
-                return;
-            }
-
-            String value = String.valueOf(moneyPopup.getEditor().getText());
-            moneyPopup.getEditor().setText(""); // empty input text.
-
-            // Try parsing input to int and if success update user bank.
-           // try {
-                int valueOfInput = Integer.parseInt(value);
-
-                // Trying to deposit negative number.
-                if(valueOfInput <= 0) {
-                    throw new NumberFormatException("Cant Withdrawal negative numbers.");
-                }
-
-                // Withdraw money and refresh view.
-                //TODO- servlet that handle with bank opertion : deposit, withdraw ...
-                //this.engineManager.withdrawMoney(this.currentUser.getUsername(), valueOfInput);
-                //this.updateCustomerInfo();
-                //this.setMaxAmountToInvest();
-
-                //TODO- servlet that handle with customer information.
-                //currentBalance.setText("Current balance: " + this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
-            /*} catch(NumberFormatException | DataTransferObject nfe) {
-
-                // If ok button was pressed!
-                if(result.isPresent()) {
-                    if(nfe instanceof DataTransferObject)
-                        alertDialog.setContentText(nfe.getMessage());
-                    else
-                        alertDialog.setContentText("Please enter a number.");
-
-                    alertDialog.showAndWait();
-                }
-                } */
-
-
-
-            refreshPaymentView();
+            fundsActionsFunction("Withdraw");
         });
 
         // adding checkbox for invest to scramble.
@@ -210,6 +129,74 @@ public class customerScreenController implements Initializable {
         // send customer controller instance to payment table view to update payment area.
         paymentTableController.setCustomerController(this);
         paymentAreaController.setCustomerController(this);
+    }
+
+    // Handle Deposit/Withdrawal requests.
+    private void fundsActionsFunction(String action) {
+        moneyPopup.setTitle(action);
+        Optional<String> result = moneyPopup.showAndWait();
+
+        // If closed
+        if(!result.isPresent()) {
+            moneyPopup.getEditor().setText("");
+            return;
+        }
+
+        String value = String.valueOf(moneyPopup.getEditor().getText());
+        moneyPopup.getEditor().setText(""); // empty input text.
+
+        // Try parsing input to int and if success update user bank.
+        try {
+            int valueOfInput = Integer.parseInt(value);
+
+            // Trying to deposit negative number.
+            if(valueOfInput <= 0) {
+                throw new NumberFormatException("Negative");
+            }
+
+            // Building HTTP POST Request.
+            Request fundRequest =
+                    new Request.Builder()
+                            .url(HttpClientUtil.PATH + "/FundsActions")
+                            .post(new FormBody.Builder()
+                                    .add("customerName", this.currentCustomer.getName())
+                                    .add("moneyAmount", String.valueOf(valueOfInput))
+                                    .add("action", action)
+                                    .build())
+                            .build();
+
+            // Send POST Request and receive response from server.
+            Response fundResponse = HttpClientUtil.sendSyncRequest(fundRequest);
+
+            // Deposit happened.
+            if(fundResponse.code() == 200) {
+                alertDialog.setContentText(fundResponse.body().string());
+
+                if(action.equals("Deposit"))
+                    this.currentCustomer.depositMoney(valueOfInput);
+                else
+                    this.currentCustomer.withdrawMoney(valueOfInput);
+
+                //this.setMaxAmountToInvest();
+
+            } else
+                alertDialog.setContentText("Unexpected problem occurred.");
+
+        } catch(NumberFormatException nfe) {
+
+            // If ok button was pressed!
+            if(nfe.getMessage().equals("Negstive"))
+                alertDialog.setContentText("Cant " + action + " negative numbers.");
+            else
+                alertDialog.setContentText("Please enter a number.");
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            alertDialog.showAndWait();
+        }
+
+        refreshPaymentView();
     }
 
     public void updatePayments() {
@@ -268,27 +255,6 @@ public class customerScreenController implements Initializable {
         paymentAreaController.updateInfo(d);
     }
 
-    // When changings customer view rerender all customer details.
-    //TODO - servlet that handle with customer information.
-   public void updateCustomerInfo() {
-
-        // update current user Customer information DTO when selected user changes.
-        //this.currentCustomer = this.engineManager.getCustomerByName(newName);
-
-        // Update user balance text.
-        //currentBalance.setText("Current balance: " + this.engineManager.getBalanceOfCustomerByName(newName));
-
-        // Update tables that shows user loans, investments and transactions.
-        myLoansTableController.setLoanItems(this.currentCustomer.getLoanList());
-        myInvestmentsLoansController.setLoanItems(this.currentCustomer.getInvestmentList());
-        myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
-
-        this.setCategoryList();
-
-        this.updatePayments();
-        paymentTableController.resetChoiceBtn();
-    }
-
     /* SCRAMBLE PAGE */
 
     // Show and re-render all loans to invest in list.
@@ -332,14 +298,6 @@ public class customerScreenController implements Initializable {
         this.resetCheckBoxToInvestList();
     }
 
-    // Update and init category list to choose from in filter.
-    //TODO- servlet that handle with set Category List.
-    private void setCategoryList() {
-        ObservableList<String> strings = FXCollections.observableArrayList();
-        //strings.setAll(this.engineManager.getBankCategories());
-        this.filterCats.getItems().setAll(strings);
-    }
-
     // Validator function for binding textfield to check textfield dont contain non-integers.
     private String validateTextField(String oldValue, String newValue, TextField tf) {
 
@@ -353,7 +311,6 @@ public class customerScreenController implements Initializable {
     }
 
     private void resetCheckBoxToInvestList() {
-
         loansToInvestList.clear(); // clear loans to invest list.
         loansToInvestTableController.resetCheckboxColumn();
     }
@@ -435,7 +392,7 @@ public class customerScreenController implements Initializable {
     }
 
     public int getCurrentCustomerBalance(){
-      return  currentCustomer.getBalance();
+      return currentCustomer.getBalance();
     }
 
     // Payment page
@@ -458,5 +415,28 @@ public class customerScreenController implements Initializable {
 
     public void setCusomter(CustomerDataObject customer) {
         this.currentCustomer = customer;
+        this.currentBalance.setText("Current balance: " + this.currentCustomer.getBalance());
+
+        // Set-up balance change listener.
+        this.currentCustomer.getBalanceAsIntegerProperty().addListener((observable, oldValue, newValue) -> {
+            currentBalance.setText("Current balance: " + newValue.intValue());
+        });
+
+        // Bind tables that shows user loans, investments and transactions.
+        myLoansTableController.setLoansObservableList(this.currentCustomer.getLoanList());
+        myInvestmentsLoansController.setLoansObservableList(this.currentCustomer.getInvestmentList());
+        myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
+
+        //this.updatePayments();
+        //paymentTableController.resetChoiceBtn();
+
+    }
+
+    public CheckComboBox<String> getCategoryComboBox() {
+        return this.filterCats;
+    }
+
+    public void addCategoryToList(String category_name) {
+        filterCats.getItems().add(category_name);
     }
 }

@@ -1,13 +1,14 @@
 package pages.Main_Screen;
 
 import com.google.gson.Gson;
-import dto.infodata.DataTransferObject;
+import com.google.gson.reflect.TypeToken;
 import dto.objectdata.CustomerDataObject;
+import dto.objectdata.LoanDataObject;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import okhttp3.*;
-import okio.Buffer;
+import org.controlsfx.control.CheckComboBox;
 import pages.Customer_Screen.customerScreenController;
 import dto.objectdata.CustomerAlertData;
 import javafx.animation.*;
@@ -29,9 +30,8 @@ import server_con.HttpClientUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class mainScreenController implements Initializable {
@@ -42,6 +42,8 @@ public class mainScreenController implements Initializable {
     private ChoiceDialog<String> dialog;
     private FileChooser fileChooser;
     private ObservableList<CustomerAlertData> alertObservableList;
+    private Alert informationPopup;
+    private Gson gson;
 
     // Pages
     @FXML private AnchorPane mainPane;
@@ -61,6 +63,8 @@ public class mainScreenController implements Initializable {
 
     public mainScreenController() {
         fileChooser = new FileChooser();
+        gson = new Gson();
+        informationPopup = new Alert(Alert.AlertType.INFORMATION);
         alertObservableList = FXCollections.observableArrayList();
 
         // Dialog to settings
@@ -202,19 +206,44 @@ public class mainScreenController implements Initializable {
                     .url(HttpClientUtil.PATH + "/UploadCustomerData")
                             .post(formBody).build();
 
-            String msg = "";
+            String responseMessage = "";
             try {
                 Response response = HttpClientUtil.sendSyncRequest(upload_xml_request);
-                msg = response.body().string();
+                String msg = response.body().string();
+
+                // If response succeed (Status between 200-299).
+                if(response.isSuccessful()) {
+                    responseMessage = "File loaded successfully!";
+
+                    Type listType = new TypeToken<ArrayList<LoanDataObject>>(){}.getType(); // Get returned type in run-time.
+                    List<LoanDataObject> newLoansUploadedList = new Gson().fromJson(msg, listType); // Parse to List of LoanDataObject.
+                    insertLoansToLists(newLoansUploadedList);
+
+                } else
+                    responseMessage = msg;
+
             }catch(IOException e) {
-                msg = e.getMessage();
+                responseMessage = e.getMessage();
             } finally {
-                // Pop an alert message.
-                Alert alertDialog = new Alert(Alert.AlertType.INFORMATION);
-                alertDialog.setContentText(msg);
-                alertDialog.showAndWait();
+                System.out.println(responseMessage);
+                informationPopup.setContentText(responseMessage);
+                informationPopup.showAndWait(); // Pop an alert message.
             }
 
         }
+    }
+
+    private void insertLoansToLists(List<LoanDataObject> newLoansUploadedList) {
+
+        for(LoanDataObject loan : newLoansUploadedList) {
+
+            // Add category if its not there.
+            CheckComboBox<String> catList = customerPageComponentController.getCategoryComboBox();
+            if(!catList.getItems().contains(loan.getLoanCategory()))
+                customerPageComponentController.addCategoryToList(loan.getLoanCategory());
+        }
+
+        // Add loan to customer and then refresh his lists.
+        this.currentCustomer.addLoans(newLoansUploadedList);
     }
 }
