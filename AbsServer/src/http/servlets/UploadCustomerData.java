@@ -1,6 +1,9 @@
 package http.servlets;
 
+import com.google.gson.*;
 import dto.infodata.DataTransferObject;
+import dto.infodata.XmlFileData;
+import dto.objectdata.LoanDataObject;
 import engine.EngineManager;
 import http.utils.ServletUtils;
 import jakarta.servlet.ServletException;
@@ -10,13 +13,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import xmlgenerated.AbsDescriptor;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Scanner;
+import java.io.PrintWriter;
+import java.lang.reflect.Type;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @WebServlet(name = "Upload Customer Data Servlet", urlPatterns = "/UploadCustomerData")
@@ -27,6 +30,7 @@ public class UploadCustomerData extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/plain"); // Support response with utf-8 format.
 
+        PrintWriter out = response.getWriter(); // Write response data.
         EngineManager engineManager = ServletUtils.getEngineManager(getServletContext()); // Get engine from servlet context.
 
         // Get content of file sent.
@@ -34,13 +38,25 @@ public class UploadCustomerData extends HttpServlet {
         InputStream is = part.getInputStream(); // Get file input stream -> file data.
         String fileData = new Scanner(is).useDelimiter("\\Z").next(); // Parse file input stream into a string.
 
-        DataTransferObject backRes = engineManager.loadXML(fileData,part.getSubmittedFileName(), request.getParameter("customerName"));
+        // Try parse, load and return xml data.
+        try {
+            // Get xml data.
+            List<LoanDataObject> backRes = engineManager.loadXML(fileData,part.getSubmittedFileName(), request.getParameter("customerName"));
+            response.setStatus(HttpServletResponse.SC_OK); // Set ok status to request.
 
-        if(backRes.getMessage().equals("File loaded successfully!"))
-            response.setStatus(HttpServletResponse.SC_OK);
-        else
+            // Parse data into Json and return it to customer to load in client side.
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            Gson gson = gsonBuilder.registerTypeAdapter(LoanDataObject.class, new LoanDataObject.LoanDataObjectAdapter()).create();
+            String myJsonObjects = gson.toJson(backRes);
+
+            System.out.println(myJsonObjects);
+            out.println(myJsonObjects);
+
+        } catch (DataTransferObject e) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
+            out.println(e.getMessage());
+        }
 
-        response.getOutputStream().print(backRes.getMessage());
     }
+
 }

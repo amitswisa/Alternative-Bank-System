@@ -3,6 +3,7 @@ package engine;
 import abs.BankCustomer;
 import abs.BankSystem;
 import dto.infodata.DataTransferObject;
+import dto.infodata.XmlFileData;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
 import engine.convertor.Convertor;
@@ -30,16 +31,15 @@ public class EngineManager {
     # arg::String filePath - path of xml file.
     # return value - DataTransferObject Object.*/
     // TODO - add information to specific customer.
-    public synchronized DataTransferObject loadXML(String fileContent,String fileName, String customerName) {
+    public synchronized List<LoanDataObject> loadXML(String fileContent,String fileName, String customerName) throws DataTransferObject {
 
         try {
            AbsDescriptor res = this.xmlManager.loadXMLfile(fileContent, fileName); // Try loading xml file and return AbdDescriptor.
-            bankSystem.LoadCustomerXML(res, customerName);
+            return bankSystem.LoadCustomerXML(res, customerName);
         } catch(DataTransferObject e) {
-            return e;
+            throw e;
         }
 
-        return new DataTransferObject("File loaded successfully!", true, BankSystem.getCurrentYaz());
     }
 
     // Section 2 from menu.
@@ -70,8 +70,8 @@ public class EngineManager {
     }
 
     // Section 4
-    public void depositeMoney(String userName, int depositeAmount) {
-        this.bankSystem.makeDepositeByName(userName, depositeAmount);
+    public boolean depositMoney(String userName, int depositeAmount) {
+        return this.bankSystem.makeDepositeByName(userName, depositeAmount);
     }
 
     // Section 5

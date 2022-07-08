@@ -76,20 +76,6 @@ public class loansTableView implements Initializable {
         maxOpenLoans = new SimpleIntegerProperty(0);
         catsList = new SimpleListProperty<>();
 
-        // Init list of loans.
-        obsList = FXCollections.observableArrayList();
-        list = new FilteredList<LoanDataObject>(obsList);
-
-        // Filter binding
-        list.predicateProperty().bind(Bindings.createObjectBinding(() ->
-                        i -> ((catsList.isEmpty()) ? !i.getLoanCategory().equals(""): catsList.contains(i.getLoanCategory()))
-                        && ((this.investAmount.get() == 0) ? i.getLoanAmount() > 0 : i.getLoanAmount() <= this.investAmount.get())
-                            && (i.getLoanInterestPerPayment() > this.minInterest.get())
-                                && (i.getLoanTotalTime() >= this.minYaz.get())
-                                && ((this.maxOpenLoans.get() == 0) ? i.getUnfinishedLoansNumber() >= 0 : i.getUnfinishedLoansNumber() <= this.maxOpenLoans.get()),
-                this.catsList, this.investAmount, this.minInterest, this.minYaz, this.maxOpenLoans
-        ));
-
         TableColumn<LoanDataObject, Void> colBtn = new TableColumn("View Loan");
         Callback<TableColumn<LoanDataObject, Void>, TableCell<LoanDataObject, Void>> cellFactory = param -> {
             return new TableCell<LoanDataObject, Void>() {
@@ -121,18 +107,6 @@ public class loansTableView implements Initializable {
         loansTable.getColumns().add(colBtn);
     }
 
-    public void setLoanItems(List<LoanDataObject> loansList) {
-
-        obsList.clear();
-
-        if(loansList == null || loansList.isEmpty())
-            return;
-
-        obsList.addAll(loansList);
-        loansTable.setItems(list);
-        this.loansTable.refresh();
-    }
-
     public void setMinAmount(int amountToInvest) {
         this.investAmount.set(amountToInvest);
     }
@@ -140,10 +114,6 @@ public class loansTableView implements Initializable {
     public void updateFilterCategories(ObservableList<String> checkedItems) {
         if(!checkedItems.isEmpty())
             this.catsList.set(checkedItems);
-    }
-
-    public void resetFilterCategories() {
-        this.catsList.set(null);
     }
 
     public void setMinInterest(int newV) {
@@ -169,5 +139,23 @@ public class loansTableView implements Initializable {
 
     public void setLoansToInvestList(List<LoanDataObject> loansToInvestList) {
         this.loansToInvestList = loansToInvestList;
+    }
+
+    public void setLoansObservableList(ObservableList<LoanDataObject> loanList) {
+
+        // Init list of loans.
+        list = new FilteredList<LoanDataObject>(loanList);
+
+        // Filter binding
+        list.predicateProperty().bind(Bindings.createObjectBinding(() ->
+                        i -> ((catsList.isEmpty()) ? !i.getLoanCategory().equals(""): catsList.contains(i.getLoanCategory()))
+                                && ((this.investAmount.get() == 0) ? i.getLoanAmount() > 0 : i.getLoanAmount() <= this.investAmount.get())
+                                && (i.getLoanInterestPerPayment() > this.minInterest.get())
+                                && (i.getLoanTotalTime() >= this.minYaz.get())
+                                && ((this.maxOpenLoans.get() == 0) ? i.getUnfinishedLoansNumber() >= 0 : i.getUnfinishedLoansNumber() <= this.maxOpenLoans.get()),
+                this.catsList, this.investAmount, this.minInterest, this.minYaz, this.maxOpenLoans
+        ));
+
+        this.loansTable.setItems(list);
     }
 }

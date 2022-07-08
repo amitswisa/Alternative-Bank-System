@@ -1,5 +1,10 @@
 package dto.objectdata;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,28 +12,28 @@ import java.util.stream.Collectors;
 public class CustomerDataObject {
 
     private final String name;
-    private int balance;
-    private List<CustomerOperationData> logCustomer;
-    private List<LoanDataObject> investmentList;
-    private List<LoanDataObject> loanList;
-    private List<CustomerAlertData> listOfAlerts;
+    private SimpleIntegerProperty balance;
+    private ObservableList<CustomerOperationData> logCustomer;
+    private ObservableList<LoanDataObject> investmentList; // My investments
+    private ObservableList<LoanDataObject> loanList; // my Loans
+    private ObservableList<CustomerAlertData> listOfAlerts;
 
     public CustomerDataObject(String name, List<CustomerOperationData> logCustomer, List<LoanDataObject> investmentList, List<LoanDataObject> loanList, int balance, List<CustomerAlertData> listOfAlerts){
         this.name = name;
-        this.logCustomer = logCustomer;
-        this.investmentList = investmentList;
-        this.loanList = loanList;
-        this.balance = balance;
-        this.listOfAlerts = listOfAlerts;
+        this.logCustomer = FXCollections.observableArrayList(logCustomer);
+        this.investmentList = FXCollections.observableArrayList(investmentList);
+        this.loanList = FXCollections.observableArrayList(loanList);
+        this.balance = new SimpleIntegerProperty(balance);
+        this.listOfAlerts = FXCollections.observableArrayList(listOfAlerts);
     }
 
     public CustomerDataObject(String name) {
         this.name = name;
-        this.logCustomer = new ArrayList<>();
-        this.investmentList = new ArrayList<>();
-        this.loanList = new ArrayList<>();
-        this.balance = 0;
-        this.listOfAlerts = new ArrayList<>();
+        this.logCustomer = FXCollections.observableArrayList();
+        this.investmentList = FXCollections.observableArrayList();
+        this.loanList = FXCollections.observableArrayList();
+        this.balance = new SimpleIntegerProperty(0);
+        this.listOfAlerts = FXCollections.observableArrayList();
     }
 
     public String getName() {
@@ -36,6 +41,10 @@ public class CustomerDataObject {
     }
 
     public int getBalance() {
+        return this.balance.get();
+    }
+
+    public SimpleIntegerProperty getBalanceAsIntegerProperty() {
         return this.balance;
     }
 
@@ -87,15 +96,15 @@ public class CustomerDataObject {
         return res;
     }
 
-    public List<CustomerOperationData> getLogCustomer() {
+    public ObservableList<CustomerOperationData> getLogCustomer() {
         return this.logCustomer;
     }
 
-    public List<LoanDataObject> getInvestmentList() {
+    public ObservableList<LoanDataObject> getInvestmentList() {
         return investmentList;
     }
 
-    public List<LoanDataObject> getLoanList() {
+    public ObservableList<LoanDataObject> getLoanList() {
         return this.loanList;
     }
 
@@ -104,8 +113,20 @@ public class CustomerDataObject {
                 .filter(i -> i.getLoanStatus() != LoanDataObject.Status.FINISHED).count();
     }
 
-    public List<CustomerAlertData> getListOfAlerts() {
+    public ObservableList<CustomerAlertData> getListOfAlerts() {
         return this.listOfAlerts;
     }
 
+    // Adding customer loans to his own list of loans.
+    public void addLoans(List<LoanDataObject> newLoansUploadedList) {
+        this.loanList.addAll(newLoansUploadedList);
+    }
+
+    public void depositMoney(int depositAmount) {
+        this.balance.set(this.balance.get() + depositAmount);
+    }
+
+    public void withdrawMoney(int withdrawAmount) {
+        this.balance.set(this.balance.get() - withdrawAmount);
+    }
 }

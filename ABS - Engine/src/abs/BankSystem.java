@@ -1,12 +1,14 @@
 package abs;
 
 import dto.infodata.DataTransferObject;
+import dto.infodata.XmlFileData;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
 import engine.convertor.Convertor;
 import generalObjects.LoanTask;
 import generalObjects.Triple;
 import xmlgenerated.AbsDescriptor;
+import xmlgenerated.AbsLoan;
 
 import java.util.*;
 
@@ -15,18 +17,28 @@ public class BankSystem {
     private static int currentYaz = 1;
     private BankCategories categories;
     private Map<String, BankCustomer> customers;
-
-    public void LoadCustomerXML(AbsDescriptor absDescriptor, String customerName)
-    {
-        categories.addAnotherCategoriesSet(Convertor.parseAbsCategories(absDescriptor.getAbsCategories()));
-        Convertor.parseAbsLoans(this.getCustomerByName(customerName), absDescriptor.getAbsLoans());
-    }
+    private List<AbsLoan> uploaded_loans_data_list; // Hold all loans pre-parse objects to compare with new ones.
 
     public BankSystem()
     {
         // Create empty bank when the server is running.
         categories = new BankCategories();
         customers = new HashMap<>();
+        uploaded_loans_data_list = new ArrayList<>();
+    }
+
+    public List<LoanDataObject> LoadCustomerXML(AbsDescriptor absDescriptor, String customerName) throws DataTransferObject
+    {
+        // Check if there is an existing loan and return error if so.
+        if(!Collections.disjoint(uploaded_loans_data_list, absDescriptor.getAbsLoans().getAbsLoan()))
+            throw new DataTransferObject("Error: There are loans that already exists in the system.", BankSystem.getCurrentYaz());
+
+        uploaded_loans_data_list.addAll(absDescriptor.getAbsLoans().getAbsLoan()); // If all loans are new add the to list.
+
+        // Parse and upload data into existing lists and data.
+        categories.addAnotherCategoriesSet(Convertor.parseAbsCategories(absDescriptor.getAbsCategories()));
+
+        return Convertor.parseAbsLoans(this.getCustomerByName(customerName), absDescriptor.getAbsLoans());
     }
 
     public static int getCurrentYaz() {
@@ -93,8 +105,13 @@ public class BankSystem {
     }
 
     // Makes a deposite for given user.
-    public void makeDepositeByName(String nameOfUserToDeposite, int depositeAmount) {
-        customers.get(nameOfUserToDeposite).deposite(depositeAmount);
+    public boolean makeDepositeByName(String nameOfUserToDeposit, int depositAmount) {
+
+        if(customers.get(nameOfUserToDeposit) == null)
+            return false;
+
+        customers.get(nameOfUserToDeposit).deposite(depositAmount);
+        return true;
     }
 
     public List<CustomerDataObject> getAllCustomersLoansAndLogs() {

@@ -129,7 +129,6 @@ public class PaymentAreaController implements Initializable {
     }
 
     public void refreshRelevantData() {
-        customerController.updateCustomerInfo();
         customerController.refreshPaymentTable();
         currentLoan = null;
         payAll.setDisable(true);

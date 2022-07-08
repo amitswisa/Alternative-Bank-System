@@ -16,13 +16,11 @@ import java.util.ResourceBundle;
 
 public class TransactionTable implements Initializable {
 
-    private ObservableList<CustomerOperationData> list;
-
     @FXML private TableView<CustomerOperationData> transactionTable;
     @FXML private TableColumn<CustomerOperationData, String> operationName, currentOptAmount, balanceAfter;
 
     public TransactionTable() {
-        this.list = FXCollections.observableArrayList();
+
     }
 
     @Override
@@ -32,14 +30,7 @@ public class TransactionTable implements Initializable {
         balanceAfter.setCellValueFactory(new PropertyValueFactory<>("balanceAfter"));
     }
 
-    public void setTransactionList(List<CustomerOperationData> transactionList) {
-        list.clear();
-
-        if(transactionList == null || transactionList.isEmpty())
-            return;
-
-
-        list.addAll(transactionList);
-        transactionTable.setItems(list);
+    public void setTransactionList(ObservableList<CustomerOperationData> transactionList) {
+        transactionTable.itemsProperty().set(transactionList);
     }
 }
