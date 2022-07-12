@@ -359,6 +359,4 @@ public class BankLoan {
     public int hashCode() {
         return loanID.hashCode();
     }
-
-
 }

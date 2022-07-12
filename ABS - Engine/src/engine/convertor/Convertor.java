@@ -3,8 +3,12 @@ package engine.convertor;
 
 import abs.BankCustomer;
 import abs.BankLoan;
+import dto.objectdata.LoanDataObject;
 import xmlgenerated.*;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Convertor {
@@ -28,10 +32,26 @@ public class Convertor {
         return customerMap;
     }*/
 
-     public static void parseAbsLoans(BankCustomer customer, AbsLoans absLoans) {
+     public static List<LoanDataObject> parseAbsLoans(BankCustomer customer, AbsLoans absLoans) {
+
+         // List of all new loans as "LoanDataObject" so it can be sent to customer and json parse it.
+         // Customer holds "LoanDataObject" lists.
+         List<LoanDataObject> resLoanList = new ArrayList<>();
+
          // Classify and add a loan to relevant customer.
         for(AbsLoan absLoan: absLoans.getAbsLoan()){
-            customer.addLoan(new BankLoan(absLoan, customer.getName()));
+            BankLoan B_l = new BankLoan(absLoan, customer.getName());
+            customer.addLoan(B_l);
+
+            LoanDataObject d = new LoanDataObject(B_l.getOwner(), B_l.getLoanID(), B_l.getLoanCategory(), B_l.getLoanAmount(),
+                    B_l.getLoanOpeningTime(), B_l.getLoanTotalTime(), B_l.getLoanStartTime(), B_l.getLoanEndTime(),
+                    B_l.getLoanInterestPerPayment(), B_l.getPaymentInterval(), B_l.getLoanStatus(),
+                    B_l.getAmountLeftToActivateLoan(), B_l.getTransactionList(), B_l.getLoanInvestorsToView());
+
+            resLoanList.add(d);
+
         }
+
+        return resLoanList;
      }
 }

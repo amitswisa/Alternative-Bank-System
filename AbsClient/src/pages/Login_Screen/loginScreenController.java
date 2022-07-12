@@ -1,5 +1,6 @@
 package pages.Login_Screen;
 
+import components.Customer.AppCustomer;
 import dto.objectdata.CustomerDataObject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,12 +10,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
-import pages.Customer_Screen.customerScreenController;
 import pages.Main_Screen.mainScreenController;
 import server_con.HttpClientUtil;
 
@@ -70,7 +69,8 @@ public class loginScreenController {
                 mainScreenController mainController = loader.getController();
 
                 this.primStage.setScene(new Scene(root));
-                mainController.setUser(new CustomerDataObject(usernameFieldContent));
+                mainController.setUser(new AppCustomer(usernameFieldContent));
+                this.primStage.setOnHidden(e -> mainController.shutdown());
                 this.primStage.show();
             }
 

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.text.TextFlow?>
+<AnchorPane prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="parts.loan_information.LoanInfoController">
+   <children>
+      <GridPane layoutX="35.0" layoutY="51.0" prefHeight="171.0" prefWidth="329.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.33333333333334" minWidth="10.0" prefWidth="163.6666463216146" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.66670735677084" minWidth="10.0" prefWidth="165.0000203450521" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="294.0" minHeight="0.0" percentHeight="0.0" prefHeight="25.999996185302734" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="383.0" minHeight="10.0" percentHeight="14.0" prefHeight="11.000003814697266" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="383.0" minHeight="10.0" percentHeight="14.0" prefHeight="346.6666717529297" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="383.0" minHeight="10.0" percentHeight="14.0" prefHeight="346.6666717529297" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="383.0" minHeight="10.0" percentHeight="14.0" prefHeight="346.6666717529297" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="383.0" minHeight="10.0" percentHeight="14.0" prefHeight="346.6666717529297" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="383.0" minHeight="10.0" percentHeight="14.0" prefHeight="346.6666717529297" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="383.0" minHeight="10.0" percentHeight="14.0" prefHeight="346.6666717529297" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <children>
+                  <Label alignment="CENTER" text="Owner" textAlignment="CENTER" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <children>
+                  <Label text="Category" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
+               <children>
+                  <Label text="Capital" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
+               <children>
+                  <Label text="Interest (%)" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">
+               <children>
+                  <Label text="Total loan time" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="6">
+               <children>
+                  <Label text="Payment interval" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="7">
+               <children>
+                  <Label text="Status" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label fx:id="owner" text="Label" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <Label fx:id="category" text="Label" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+                  <Label fx:id="capital" text="Label" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <children>
+                  <Label fx:id="interest" text="Label" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <children>
+                  <Label fx:id="totalTime" text="Label" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <children>
+                  <Label fx:id="interval" text="Label" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+               <children>
+                  <Label fx:id="status" text="Label" />
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+      <Label fx:id="loanName" alignment="CENTER" layoutX="11.0" layoutY="14.0" prefHeight="27.0" prefWidth="379.0" text="Name of loan" textAlignment="CENTER" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="14.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="11.0" layoutY="240.0" prefHeight="20.0" prefWidth="379.0" text="Status details" textAlignment="CENTER">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <ScrollPane fx:id="scrollPane" layoutX="11.0" layoutY="268.0" prefHeight="218.0" prefWidth="379.0">
+
+      </ScrollPane>
+   </children>
+</AnchorPane>

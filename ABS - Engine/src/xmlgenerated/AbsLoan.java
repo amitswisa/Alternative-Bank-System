@@ -176,4 +176,18 @@ public class AbsLoan {
         this.id = value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AbsLoan absLoan = (AbsLoan) o;
+
+        return id != null ? id.equals(absLoan.id) : absLoan.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

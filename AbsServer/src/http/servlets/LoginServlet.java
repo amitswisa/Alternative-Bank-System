@@ -1,5 +1,8 @@
 package http.servlets;
 
+import abs.BankSystem;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import engine.EngineManager;
 import http.constants.Constants;
 import http.utils.SessionUtils;
@@ -58,7 +61,8 @@ public class LoginServlet extends HttpServlet {
 
                         //redirect the request to the chat room - in order to actually change the URL
                         System.out.println("On login, request URI is: " + request.getRequestURI());
-                        response.getOutputStream().print("Logged in successfully!");
+
+                        response.getOutputStream().print(BankSystem.getCurrentYaz());
                         response.setStatus(HttpServletResponse.SC_OK);
 
                     }

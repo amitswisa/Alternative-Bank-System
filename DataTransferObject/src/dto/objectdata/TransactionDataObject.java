@@ -1,5 +1,12 @@
 package dto.objectdata;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+
+import java.lang.reflect.Type;
+
 public class TransactionDataObject {
 
     public enum Status {
@@ -46,6 +53,10 @@ public class TransactionDataObject {
         this.transactionStatus = transactionStatus;
     }
 
+    public int getTotalPaid() {
+        return this.totalPaid;
+    }
+
     public void addDebt(int capital, int interest) {
         paymentValue += capital;
         interestValue += interest;
@@ -65,5 +76,19 @@ public class TransactionDataObject {
     public String toString() {
         return "   Payment time: " + this.paymentTime + "\n   Payment Value: " + this.paymentValue
                 + "\n   Payment Interest: " + this.interestValue + "\n   Toal payment: " + (this.paymentValue+this.interestValue);
+    }
+
+    public static class TransactionDataObjectAdapter implements JsonSerializer<TransactionDataObject> {
+
+        @Override
+        public JsonElement serialize(TransactionDataObject transactionDataObject, Type type, JsonSerializationContext jsonSerializationContext) {
+            JsonObject json = new JsonObject();
+            json.addProperty("paymentTime", transactionDataObject.getPaymentTime());
+            json.addProperty("paymentValue", transactionDataObject.getPaymentValue());
+            json.addProperty("interestValue", transactionDataObject.getInterestValue());
+            json.addProperty("totalPaid", transactionDataObject.getTotalPaid());
+            json.addProperty("transactionStatus", transactionDataObject.getTransactionStatus().toString());
+            return json;
+        }
     }
 }

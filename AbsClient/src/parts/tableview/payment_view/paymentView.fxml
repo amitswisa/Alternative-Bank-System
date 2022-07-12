@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0"  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="parts.tableview.payment_view.PaymentTableView">
+    <children>
+        <TableView fx:id="paymentTable" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <columns>
+                <TableColumn fx:id="loanID" prefWidth="242.0000203847885" text="Loan ID" />
+                <TableColumn fx:id="paymentYaz" prefWidth="153.3333740234375" text="Payment Time" />
+                <TableColumn fx:id="lastPayment" prefWidth="174.00003051757812" text="Payment Amount" />
+                <TableColumn fx:id="choseBtn" prefWidth="174.00003051757812" text="Choose" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+    </children>
+</AnchorPane>

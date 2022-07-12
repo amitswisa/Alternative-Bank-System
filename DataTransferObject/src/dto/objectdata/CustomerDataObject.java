@@ -1,34 +1,35 @@
 package dto.objectdata;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CustomerDataObject {
 
     private final String name;
-    private int balance;
-    private List<CustomerOperationData> logCustomer;
-    private List<LoanDataObject> investmentList;
-    private List<LoanDataObject> loanList;
-    private List<CustomerAlertData> listOfAlerts;
+    private final SimpleIntegerProperty balance;
+    private final List<CustomerOperationData> logCustomer;
+    private final List<LoanDataObject> investmentList; // My investments
+    private final List<LoanDataObject> loanList; // my Loans
+    private final List<CustomerAlertData> listOfAlerts;
 
     public CustomerDataObject(String name, List<CustomerOperationData> logCustomer, List<LoanDataObject> investmentList, List<LoanDataObject> loanList, int balance, List<CustomerAlertData> listOfAlerts){
+
+        if(loanList == null)
+            this.loanList = new ArrayList<>();
+        else
+            this.loanList = loanList;
+
+        if(investmentList == null)
+            this.investmentList = new ArrayList<>();
+        else
+            this.investmentList = investmentList;
+
         this.name = name;
         this.logCustomer = logCustomer;
-        this.investmentList = investmentList;
-        this.loanList = loanList;
-        this.balance = balance;
+        this.balance = new SimpleIntegerProperty(balance);
         this.listOfAlerts = listOfAlerts;
-    }
-
-    public CustomerDataObject(String name) {
-        this.name = name;
-        this.logCustomer = new ArrayList<>();
-        this.investmentList = new ArrayList<>();
-        this.loanList = new ArrayList<>();
-        this.balance = 0;
-        this.listOfAlerts = new ArrayList<>();
     }
 
     public String getName() {
@@ -36,55 +37,7 @@ public class CustomerDataObject {
     }
 
     public int getBalance() {
-        return this.balance;
-    }
-
-    public String getTakenLoansNumber() {
-        String res = "";
-        if(this.loanList != null && !this.loanList.isEmpty()) {
-            int temp = this.loanList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.NEW)).collect(Collectors.toList()).size();
-           res += temp;
-           res += " / ";
-
-            temp = this.loanList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.PENDING)).collect(Collectors.toList()).size();
-            res += temp;
-            res += " / ";
-
-            temp = this.loanList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.ACTIVE)).collect(Collectors.toList()).size();
-            res += temp;
-            res += " / ";
-
-            temp = this.loanList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.RISK)).collect(Collectors.toList()).size();
-            res += temp;
-        }
-        else
-            res += "0";
-
-        return res;
-    }
-
-    public String getInvestedLoansNumber() {
-        String res = "";
-        if(this.investmentList != null && !this.investmentList.isEmpty()){
-            int temp = this.investmentList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.NEW)).collect(Collectors.toList()).size();
-        res += temp;
-        res += " / ";
-
-        temp = this.investmentList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.PENDING)).collect(Collectors.toList()).size();
-        res += temp;
-        res += " / ";
-
-        temp = this.investmentList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.ACTIVE)).collect(Collectors.toList()).size();
-        res += temp;
-        res += " / ";
-
-        temp = this.investmentList.stream().filter(e -> e.getLoanStatus().equals(LoanDataObject.Status.RISK)).collect(Collectors.toList()).size();
-        res += temp;
-    }
-        else
-    res += "0";
-
-        return res;
+        return this.balance.get();
     }
 
     public List<CustomerOperationData> getLogCustomer() {
@@ -92,20 +45,19 @@ public class CustomerDataObject {
     }
 
     public List<LoanDataObject> getInvestmentList() {
-        return investmentList;
+        return this.investmentList;
     }
 
     public List<LoanDataObject> getLoanList() {
         return this.loanList;
     }
 
-    public int countUnfinishedLoans() {
-        return (int) this.getLoanList().stream()
-                .filter(i -> i.getLoanStatus() != LoanDataObject.Status.FINISHED).count();
-    }
-
     public List<CustomerAlertData> getListOfAlerts() {
         return this.listOfAlerts;
     }
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

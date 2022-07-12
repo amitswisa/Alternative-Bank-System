@@ -1,10 +1,14 @@
 package dto.objectdata;
 
+import com.google.gson.*;
 import dto.infodata.DataTransferObject;
 import javafx.util.Pair;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static dto.objectdata.LoanDataObject.Status.*;
@@ -12,12 +16,12 @@ import static dto.objectdata.LoanDataObject.Status.*;
 public class LoanDataObject extends DataTransferObject {
 
     public enum Status {
-        NEW,
-        PENDING,
-        ACTIVE,
-        RISK,
-        FINISHED
-    }
+    NEW,
+    PENDING,
+    ACTIVE,
+    RISK,
+    FINISHED
+}
 
     private final String owner;
     private final String loanID;
@@ -32,8 +36,17 @@ public class LoanDataObject extends DataTransferObject {
     private final int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
     private int unfinishedLoansNumber;
     private final Status loanStatus;
-    private final List<Pair<String, Integer>> investersList;
-    private List<TransactionDataObject> transactionList; // hold all transaction's history.
+    private List<Pair<String, Integer>> investersList = new ArrayList<>();
+    private List<TransactionDataObject> transactionList = new ArrayList<>(); // hold all transaction's history.
+
+    // XML Constructor.
+    public LoanDataObject(String loan_owner, String loan_id, String loan_category, int loan_amount, int loan_interest
+            ,int loan_payment_interval, int loan_opening_time, int loan_total_time) {
+
+        this(loan_owner, loan_id, loan_category, loan_amount, loan_opening_time,
+                loan_total_time, 0, 0, loan_interest, loan_payment_interval, NEW, 0, new ArrayList<>(), new ArrayList<>());
+
+    }
 
     public LoanDataObject(String owner, String loanID, String loanCategory, int loanAmount, int loanOpeningTime, int loanTotalTime,
                           int loanStartTime, int loanEndTime, int loanInterestPerPayment, int paymentInterval, Status loanStatus,
@@ -175,7 +188,6 @@ public class LoanDataObject extends DataTransferObject {
         return ((this.getLoanAmount() * this.getLoanInterestPerPayment()) / 100);
     }
 
-
     /* Loan data show */
     // Section 2 from menu.
     public String showLoanData(int yaz) {
@@ -259,4 +271,50 @@ public class LoanDataObject extends DataTransferObject {
                 + (this.getLastUnPaidTransaction(yaz).getPaymentValue() + this.getLastUnPaidTransaction(yaz).getInterestValue()) + ".\n";
         return res;
     }
+
+    public int getLoanStartTime() {
+        return loanStartTime;
+    }
+
+    public int getLoanEndTime() {
+        return loanEndTime;
+    }
+
+    public List<Pair<String, Integer>> getInvestersList() {
+        return investersList;
+    }
+
+    public List<TransactionDataObject> getTransactionList() {
+        return transactionList;
+    }
+
+    @Override
+    public String toString() {
+        return this.getLoanID();
+    }
+
+    public static class LoanDataObjectAdapter implements JsonSerializer<LoanDataObject> {
+
+        @Override
+        public JsonElement serialize(LoanDataObject loan, Type type, JsonSerializationContext jsc) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("owner", loan.getOwner());
+            jsonObject.addProperty("loanID", loan.getLoanID());
+            jsonObject.addProperty("loanCategory", loan.getLoanCategory());
+            jsonObject.addProperty("loanAmount", loan.getLoanAmount());
+            jsonObject.addProperty("loanOpeningTime", loan.getLoanOpeningTime());
+            jsonObject.addProperty("loanTotalTime", loan.getLoanTotalTime());
+            jsonObject.addProperty("amountLeftToPay", loan.getAmountLeftToPay());
+            jsonObject.addProperty("loanStartTime", loan.getLoanStartTime());
+            jsonObject.addProperty("loanEndTime", loan.getLoanEndTime());
+            jsonObject.addProperty("loanInterestPerPayment", loan.getLoanInterestPerPayment());
+            jsonObject.addProperty("paymentInterval", loan.getPaymentInterval());
+            jsonObject.addProperty("unfinishedLoansNumber", loan.getUnfinishedLoansNumber());
+            jsonObject.addProperty("loanStatus", loan.getLoanStatus().toString());
+            jsonObject.add("investersList", new Gson().toJsonTree(loan.getInvestersList()));
+            jsonObject.add("transactionList", new Gson().toJsonTree(loan.getTransactionList()));
+            return jsonObject;
+        }
+    }
 }
+
