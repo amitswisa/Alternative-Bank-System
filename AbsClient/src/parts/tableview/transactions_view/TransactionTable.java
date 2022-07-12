@@ -1,4 +1,4 @@
-package tableview.transactions_view;
+package parts.tableview.transactions_view;
 
 import dto.objectdata.CustomerOperationData;
 import javafx.collections.FXCollections;

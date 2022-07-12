@@ -2,7 +2,8 @@ package pages.Main_Screen;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import dto.objectdata.CustomerDataObject;
+import components.Customer.AppCustomer;
+import components.Customer.CustomerRefresher;
 import dto.objectdata.LoanDataObject;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
@@ -28,6 +29,7 @@ import javafx.util.Duration;
 import listview.ListViewCell;
 import server_con.HttpClientUtil;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -37,7 +39,10 @@ import java.util.*;
 public class mainScreenController implements Initializable {
 
     // Data members
-    private CustomerDataObject currentCustomer;
+    private AppCustomer currentCustomer;
+    private Timer timer;
+    private CustomerRefresher customerRefresher;
+
     private TranslateTransition translateTransition;
     private ChoiceDialog<String> dialog;
     private FileChooser fileChooser;
@@ -62,6 +67,8 @@ public class mainScreenController implements Initializable {
     @FXML private Button uploadXMLBtn;
 
     public mainScreenController() {
+
+        // Object data members init.
         fileChooser = new FileChooser();
         gson = new Gson();
         informationPopup = new Alert(Alert.AlertType.INFORMATION);
@@ -111,7 +118,17 @@ public class mainScreenController implements Initializable {
                 return new ListViewCell();
             }
         });
+    }
 
+    // Start running TimerTask AppCustomer run method every 400 ms.
+    private void startCustomerDataUpdate() {
+        customerRefresher = new CustomerRefresher(currentCustomer::setLogCustomerList
+                                                    ,currentCustomer::setInvestmentList
+                                                        ,currentCustomer::setLoanList
+                                                            ,currentCustomer::setListOfAlerts
+                                                                ,currentCustomer.getName());
+        timer = new Timer();
+        timer.schedule(customerRefresher, 400, 400);
     }
 
     public void setYazLabelText(String yazString) {
@@ -185,8 +202,12 @@ public class mainScreenController implements Initializable {
     }
 
     // Updates current customer project when customer logged in - called from login controller.
-    public void setUser(CustomerDataObject newCustomer) {
+    public void setUser(AppCustomer newCustomer) {
         this.currentCustomer = newCustomer;
+
+        // Make customer updates run asyncly.
+        startCustomerDataUpdate();
+
         this.customerPageComponentController.setCusomter(this.currentCustomer);
     }
 
@@ -244,6 +265,17 @@ public class mainScreenController implements Initializable {
         }
 
         // Add loan to customer and then refresh his lists.
-        this.currentCustomer.addLoans(newLoansUploadedList);
+        this.currentCustomer.addToMyLoansList(newLoansUploadedList);
+    }
+
+    // Shutdown process when program close.
+    public void shutdown() {
+        // When closing app stop refresher task.
+        if(customerRefresher != null && timer != null)
+        {
+            customerRefresher.cancel();
+            timer.cancel();
+        }
+        System.exit(0);
     }
 }

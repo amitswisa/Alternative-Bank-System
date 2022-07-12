@@ -1,4 +1,4 @@
-package payment_area;
+package parts.payment_area;
 
 
 import pages.Customer_Screen.customerScreenController;

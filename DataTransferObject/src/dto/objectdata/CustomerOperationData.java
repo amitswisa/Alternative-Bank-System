@@ -1,6 +1,12 @@
 package dto.objectdata;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import dto.infodata.DataTransferObject;
+
+import java.lang.reflect.Type;
 
 public class CustomerOperationData extends DataTransferObject {
 
@@ -44,5 +50,19 @@ public class CustomerOperationData extends DataTransferObject {
                 +Math.abs(getCurrentOptAmount())+".\n      Operation: " + getOperationName()
                         + ".\n      Balance before operation: " + this.getBalanceBefore()
                              + ".\n      Balance after operation: "+this.getBalanceAfter();
+    }
+
+    // Adapter for serialize this object into json object.
+    public static class CustomerOperationDataAdapter implements JsonSerializer<CustomerOperationData> {
+
+        @Override
+        public JsonElement serialize(CustomerOperationData customerOperationData, Type type, JsonSerializationContext jsonSerializationContext) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("operationName", customerOperationData.getOperationName());
+            jsonObject.addProperty("currentOptAmount", customerOperationData.getCurrentOptAmount());
+            jsonObject.addProperty("balanceBefore", customerOperationData.getBalanceBefore());
+            jsonObject.addProperty("balanceAfter", customerOperationData.getBalanceAfter());
+            return jsonObject;
+        }
     }
 }

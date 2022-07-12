@@ -1,4 +1,4 @@
-package tableview.payment_view;
+package parts.tableview.payment_view;
 
 import pages.Customer_Screen.customerScreenController;
 import dto.objectdata.LoanDataObject;

@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.text.TextFlow?>
-<AnchorPane prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="popups.loan_information.LoanInfoController">
+<AnchorPane prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="parts.loan_information.LoanInfoController">
    <children>
       <GridPane layoutX="35.0" layoutY="51.0" prefHeight="171.0" prefWidth="329.0">
         <columnConstraints>

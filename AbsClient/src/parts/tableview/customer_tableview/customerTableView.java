@@ -1,4 +1,4 @@
-package tableview.customer_tableview;
+package parts.tableview.customer_tableview;
 
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;

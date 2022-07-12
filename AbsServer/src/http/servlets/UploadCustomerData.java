@@ -49,7 +49,6 @@ public class UploadCustomerData extends HttpServlet {
             Gson gson = gsonBuilder.registerTypeAdapter(LoanDataObject.class, new LoanDataObject.LoanDataObjectAdapter()).create();
             String myJsonObjects = gson.toJson(backRes);
 
-            System.out.println(myJsonObjects);
             out.println(myJsonObjects);
 
         } catch (DataTransferObject e) {

@@ -1,14 +1,13 @@
 package pages.Customer_Screen;
 
+import components.Customer.AppCustomer;
 import dto.objectdata.CustomerAlertData;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,14 +17,13 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import okhttp3.FormBody;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.controlsfx.control.CheckComboBox;
-import payment_area.PaymentAreaController;
+import parts.payment_area.PaymentAreaController;
 import server_con.HttpClientUtil;
-import tableview.loan_tableview.loansTableView;
-import tableview.payment_view.PaymentTableView;
-import tableview.transactions_view.TransactionTable;
+import parts.tableview.loan_tableview.loansTableView;
+import parts.tableview.payment_view.PaymentTableView;
+import parts.tableview.transactions_view.TransactionTable;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,8 +35,8 @@ import java.util.ResourceBundle;
 public class customerScreenController implements Initializable {
 
     // DATA MEMBERS
-    private CustomerDataObject currentCustomer;
-    private TextInputDialog moneyPopup;
+    private AppCustomer currentCustomer;
+    private final TextInputDialog moneyPopup;
     private final Alert alertDialog;
     private final List<LoanDataObject> loansToInvestList; // Holds loans to invest in when user mark them.
     //private LoanTask loanTask;
@@ -413,7 +411,7 @@ public class customerScreenController implements Initializable {
 
     public void refreshPaymentView() { paymentAreaController.refreshRelevantData(); }
 
-    public void setCusomter(CustomerDataObject customer) {
+    public void setCusomter(AppCustomer customer) {
         this.currentCustomer = customer;
         this.currentBalance.setText("Current balance: " + this.currentCustomer.getBalance());
 

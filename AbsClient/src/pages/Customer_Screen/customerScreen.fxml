@@ -33,7 +33,7 @@
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
                                  <children>
-                                    <fx:include fx:id="myLoansTable" source="/tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+                                    <fx:include fx:id="myLoansTable" source="/parts/tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
                                     <Label alignment="CENTER" layoutX="6.0" layoutY="1.0" prefHeight="25.0" prefWidth="668.0" text="My loans" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="1.0">
                                        <font>
                                           <Font size="16.0" />
@@ -43,7 +43,7 @@
                               </AnchorPane>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
                                  <children>
-                                    <fx:include fx:id="myInvestmentsLoans" source="/tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+                                    <fx:include fx:id="myInvestmentsLoans" source="/parts/tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
                                     <Label alignment="CENTER" layoutX="7.0" layoutY="1.0" prefHeight="25.0" prefWidth="667.0" text="My lnvestments" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="1.0">
                                        <font>
                                           <Font size="16.0" />
@@ -63,7 +63,7 @@
                               <ScrollPane id="transactionsList" layoutX="44.0" layoutY="88.0" style="-fx-background-color: #FFF;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="30.0">
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="394.0" prefWidth="258.0" style="-fx-background-color: #FFF;">
                                       <children>
-                                          <fx:include fx:id="myTransactionList" source="/tableview/transactions_view/transactionTable.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <fx:include fx:id="myTransactionList" source="/parts/tableview/transactions_view/transactionTable.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                           <Label alignment="CENTER" layoutX="308.0" layoutY="1.0" text="My loans" AnchorPane.leftAnchor="308.0" AnchorPane.rightAnchor="308.0" AnchorPane.topAnchor="1.0">
                                               <font>
                                                   <Font size="16.0" />
@@ -174,7 +174,7 @@
                               </HBox>
                            </top>
                            <center>
-                              <fx:include fx:id="loansToInvestTable" source="/tableview/loan_tableview/loanTableView.fxml" />
+                              <fx:include fx:id="loansToInvestTable" source="/parts/tableview/loan_tableview/loanTableView.fxml" />
                            </center>
                         </BorderPane>
                         <Button fx:id="makeInvestment" layoutX="830.0" layoutY="468.0" mnemonicParsing="false" onAction="#makeInvestmentClicked" prefHeight="31.0" prefWidth="132.0" styleClass="filterMenuBtn" text="Make investment" AnchorPane.bottomAnchor="14.666666666666686" AnchorPane.rightAnchor="14.0" />
@@ -190,12 +190,12 @@
                         <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
                                 <children>
-                                    <fx:include fx:id="paymentTable" source="/tableview/payment_view/paymentView.fxml" />
+                                    <fx:include fx:id="paymentTable" source="/parts/tableview/payment_view/paymentView.fxml" />
                                 </children>
                             </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="220.0" prefWidth="952.0">
                                 <children>
-                                    <fx:include fx:id="paymentArea" source="/payment_area/paymentArea.fxml" />
+                                    <fx:include fx:id="paymentArea" source="/parts/payment_area/paymentArea.fxml" />
                                 </children>
                             </AnchorPane>
                         </items>

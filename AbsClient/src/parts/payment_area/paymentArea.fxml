@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="payment_area.PaymentAreaController" prefHeight="400.0" prefWidth="600.0">
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="parts.payment_area.PaymentAreaController" prefHeight="400.0" prefWidth="600.0">
     <children>
         <GridPane layoutX="2.0" layoutY="1.0" prefHeight="253.0" prefWidth="968.0">
             <columnConstraints>

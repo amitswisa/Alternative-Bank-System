@@ -19,10 +19,13 @@ public class BankCustomer {
     public BankCustomer(String customer){
         this.name = customer;
         this.balance = 0 ;
-        customerLog = new ArrayList<>();
-        loansTaken = new HashMap<>();
-        loansInvested = new HashMap<>();
-        listOfAlerts = new ArrayList<>();
+        this.customerLog = new ArrayList<>();
+        this.loansTaken = new HashMap<>();
+        this.loansInvested = new HashMap<>();
+        this.listOfAlerts = new ArrayList<>();
+
+        this.listOfAlerts.add(new CustomerAlertData("Headline", "Msg", 1, CustomerAlertData.Type.CONFIRMATION));
+        this.listOfAlerts.add(new CustomerAlertData("Headline2", "Msg2", 1, CustomerAlertData.Type.CONFIRMATION));
     }
 
     // addLoan -> function adding loan to specific customer.

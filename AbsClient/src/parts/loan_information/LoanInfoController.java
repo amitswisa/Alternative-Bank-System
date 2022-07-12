@@ -1,4 +1,4 @@
-package popups.loan_information;
+package parts.loan_information;
 
 import dto.objectdata.LoanDataObject;
 import javafx.fxml.FXML;

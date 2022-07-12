@@ -1,5 +1,6 @@
 package pages.Login_Screen;
 
+import components.Customer.AppCustomer;
 import dto.objectdata.CustomerDataObject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -68,7 +69,8 @@ public class loginScreenController {
                 mainScreenController mainController = loader.getController();
 
                 this.primStage.setScene(new Scene(root));
-                mainController.setUser(new CustomerDataObject(usernameFieldContent));
+                mainController.setUser(new AppCustomer(usernameFieldContent));
+                this.primStage.setOnHidden(e -> mainController.shutdown());
                 this.primStage.show();
             }
 

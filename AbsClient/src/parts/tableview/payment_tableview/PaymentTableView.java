@@ -1,4 +1,4 @@
-package tableview.payment_tableview;
+package parts.tableview.payment_tableview;
 
 import dto.objectdata.LoanDataObject;
 import javafx.beans.property.SimpleStringProperty;

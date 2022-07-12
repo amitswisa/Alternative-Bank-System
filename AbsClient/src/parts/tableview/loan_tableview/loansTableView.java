@@ -1,9 +1,8 @@
-package tableview.loan_tableview;
+package parts.tableview.loan_tableview;
 
 import dto.objectdata.LoanDataObject;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -17,7 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import popups.loan_information.LoanInfoController;
+import parts.loan_information.LoanInfoController;
 
 import java.io.IOException;
 import java.net.URL;
@@ -51,7 +50,7 @@ public class loansTableView implements Initializable {
         popUpStage.initModality(Modality.APPLICATION_MODAL);
         popUpStage.setTitle("Loan details");
 
-        loader = new FXMLLoader(getClass().getResource("/popups/loan_information/loanInfo.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/parts/loan_information/loanInfo.fxml"));
         firstScene = new Scene(loader.load());
         controller = loader.getController();
         popUpStage.setScene(firstScene);
