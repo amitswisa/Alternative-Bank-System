@@ -15,6 +15,8 @@ import static dto.objectdata.LoanDataObject.Status.*;
 
 public class LoanDataObject extends DataTransferObject {
 
+
+
     public enum Status {
     NEW,
     PENDING,
@@ -68,6 +70,16 @@ public class LoanDataObject extends DataTransferObject {
         this.amountLeftToPay = amountLeftToPay;
         this.transactionList = transactionList;
         this.investersList = investersList;
+    }
+
+    //check if the loan details it's ok. when the client open loan by himself.
+    public boolean isValidLoan() {
+        // Validate payment.
+        float isValidPayment = (float)this.loanTotalTime / (float)this.paymentInterval;
+        if(isValidPayment != (int)isValidPayment)
+            return  false;
+
+        return  true;
     }
 
     public int getUnpayedTransactionsAmount(int yaz) {

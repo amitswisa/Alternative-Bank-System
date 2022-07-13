@@ -18,18 +18,20 @@
    <children>
       <GridPane id="header" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="43.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="22.0" prefWidth="223.0" />
-          <ColumnConstraints hgrow="ALWAYS" maxWidth="720.6666666666667" minWidth="10.0" percentWidth="56.0" prefWidth="555.6666666666667" />
-            <ColumnConstraints hgrow="ALWAYS" maxWidth="229.0" minWidth="10.0" percentWidth="5.0" prefWidth="152.33329264322913" />
-            <ColumnConstraints hgrow="ALWAYS" maxWidth="229.0" minWidth="10.0" percentWidth="14.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="ALWAYS" maxWidth="229.0" minWidth="10.0" percentWidth="5.0" prefWidth="72.00002034505212" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="23.0" prefWidth="223.0" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="20.0" prefWidth="223.0" />
+          <ColumnConstraints hgrow="ALWAYS" maxWidth="720.6666666666667" minWidth="10.0" percentWidth="77.0" prefWidth="555.6666666666667" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="720.6666666666667" minWidth="10.0" percentWidth="26.0" prefWidth="555.6666666666667" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="229.0" minWidth="10.0" percentWidth="9.0" prefWidth="152.33329264322913" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="229.0" minWidth="10.0" percentWidth="16.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="ALWAYS" maxWidth="229.0" minWidth="10.0" percentWidth="6.0" prefWidth="72.00002034505212" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <HBox alignment="CENTER" minWidth="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-cursor: hand;" GridPane.columnIndex="4" GridPane.rowIndex="1">
+            <HBox alignment="CENTER" minWidth="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-cursor: hand;" GridPane.columnIndex="6" GridPane.rowIndex="1">
                <children>
                   <ImageView fx:id="settingsBtn" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#settingsFunctionallity" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -38,7 +40,7 @@
                   </ImageView>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
                <children>
                   <HBox id="timeSpan" alignment="CENTER" minWidth="10.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <padding>
@@ -51,7 +53,7 @@
                   </HBox>
                </children>
             </HBox>
-            <HBox fx:id="alertBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <HBox fx:id="alertBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
                <children>
                   <ImageView fx:id="alertBtn" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                      <image>
@@ -68,12 +70,12 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+            <HBox alignment="CENTER" prefHeight="27.0" prefWidth="153.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Button fx:id="uploadXMLBtn" onMouseClicked="#loadXmlFile" mnemonicParsing="false" text="Upload XML" />
+                  <Button fx:id="uploadXMLBtn" mnemonicParsing="false" onMouseClicked="#loadXmlFile" text="Upload XML" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <HBox alignment="CENTER" prefHeight="27.0" prefWidth="389.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
                   <ImageView fitHeight="27.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -82,6 +84,7 @@
                   </ImageView>
                </children>
             </HBox>
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="213.0" text="Hello #" GridPane.rowIndex="1" />
          </children>
          <padding>
             <Insets bottom="10.0" top="10.0" />

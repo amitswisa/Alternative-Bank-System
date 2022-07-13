@@ -44,7 +44,7 @@ public class UploadCustomerData extends HttpServlet {
             List<LoanDataObject> backRes = engineManager.loadXML(fileData,part.getSubmittedFileName(), request.getParameter("customerName"));
             response.setStatus(HttpServletResponse.SC_OK); // Set ok status to request.
 
-            // Parse data into Json and return it to customer to load in client side.
+          // Parse data into Json and return it to customer to load in client side.
             GsonBuilder gsonBuilder = new GsonBuilder();
             Gson gson = gsonBuilder.registerTypeAdapter(LoanDataObject.class, new LoanDataObject.LoanDataObjectAdapter()).create();
             String myJsonObjects = gson.toJson(backRes);

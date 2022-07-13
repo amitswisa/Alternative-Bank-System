@@ -16,6 +16,7 @@ public class AppInitializer implements ServletContextListener {
         // Initialize both Bank and User management systems.
         ServletUtils.getEngineManager(sce.getServletContext());
         ServletUtils.getUserManager(sce.getServletContext());
+        ServletUtils.getAbsStatus(sce.getServletContext());
     }
 
     @Override

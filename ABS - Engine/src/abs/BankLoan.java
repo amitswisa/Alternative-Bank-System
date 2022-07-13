@@ -31,6 +31,7 @@ public class BankLoan {
         this.loanCategory = absLoan.getAbsCategory();
         this.loanAmount = absLoan.getAbsCapital();
         this.loanTotalTime = absLoan.getAbsTotalYazTime();
+        //TODO- change the start time to current yaz
         this.loanOpeningTime = 1;
         this.loanStartTime = 0;
         this.loanInterestPerPayment = absLoan.getAbsIntristPerPayment();
@@ -39,6 +40,22 @@ public class BankLoan {
         this.loanStatus = LoanDataObject.Status.NEW;
         transactionList = new ArrayList<>();
     }
+
+    public BankLoan(LoanDataObject loan) {
+        this.owner = loan.getOwner();
+        this.loanID = loan.getLoanID();
+        this.loanCategory = loan.getLoanCategory();
+        this.loanAmount = loan.getLoanAmount();
+        this.loanTotalTime = loan.getLoanTotalTime();
+        this.loanOpeningTime = loan.getLoanOpeningTime();
+        this.loanStartTime = 0;
+        this.loanInterestPerPayment = loan.getLoanInterestPerPayment();
+        this.paymentInterval = loan.getPaymentInterval();
+        this.loanInvestors = new HashMap<>();
+        this.loanStatus = LoanDataObject.Status.NEW;
+        transactionList = new ArrayList<>();
+    }
+
 
     // Return next payment time for current loan in Yaz.
     public int getNextPaymentTime(){

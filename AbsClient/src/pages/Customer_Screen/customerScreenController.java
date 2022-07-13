@@ -1,5 +1,7 @@
 package pages.Customer_Screen;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import components.Customer.AppCustomer;
 import dto.objectdata.CustomerAlertData;
 import dto.objectdata.CustomerDataObject;
@@ -15,10 +17,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.controlsfx.control.CheckComboBox;
+import org.jetbrains.annotations.NotNull;
 import parts.payment_area.PaymentAreaController;
 import server_con.HttpClientUtil;
 import parts.tableview.loan_tableview.loansTableView;
@@ -50,11 +54,16 @@ public class customerScreenController implements Initializable {
     @FXML private Label currentBalance;
     @FXML private Button depositBtn, withdrawalBtn;
 
-    // SCRAMBLE
+    // Invest
     @FXML private Slider investmentAmount;
     @FXML private Label amountLabel;
     @FXML private CheckComboBox<String> filterCats;
     @FXML private TextField minInterest, minYaz, maxOpenLoans, ownershipPrecent;
+
+    //Make New Loan
+    @FXML private TextField loanID, capital, interestPerPayment, paymentsInterval, loanTotalTime;
+    @FXML private ChoiceBox category;
+    @FXML private Button createLoan;
 
     public customerScreenController() {
 
@@ -436,5 +445,41 @@ public class customerScreenController implements Initializable {
 
     public void addCategoryToList(String category_name) {
         filterCats.getItems().add(category_name);
+    }
+
+    //Make New Loan page
+    //loanID, capital, interestPerPayment, paymentsInterval, loanTotalTime;
+
+    public void makeNewLoanClicked(ActionEvent actionEvent) {
+
+        try {
+            LoanDataObject newLoan = new LoanDataObject(currentCustomer.getName(), loanID.getText(), category.toString() , Integer.parseInt(capital.getText()),
+                    Integer.parseInt(interestPerPayment.getText()), Integer.parseInt(paymentsInterval.getText()),
+                    /*TODO- loan opening time = current yaz*/0, Integer.parseInt(loanTotalTime.getText()));
+
+            if(newLoan.isValidLoan()){
+             //TODO- request to the servlet to add the loan
+               Gson gson = new GsonBuilder().registerTypeAdapter(LoanDataObject.class, new LoanDataObject.LoanDataObjectAdapter()).create();
+               String jsonLoan = gson.toJson(newLoan, LoanDataObject.class);
+
+               HttpClientUtil.runAsync(HttpClientUtil.PATH + "/ClientMakeLoanServlet", jsonLoan, new okhttp3.Callback() {
+                   @Override
+                   public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                       System.out.println(e.getMessage());
+                   }
+
+                   @Override
+                   public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    //TODO
+                   }
+               });
+           } else {
+
+           }
+
+        } catch (Error e){
+
+}
+
     }
 }

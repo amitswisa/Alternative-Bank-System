@@ -1,6 +1,7 @@
 package engine;
 
 import abs.BankCustomer;
+import abs.BankLoan;
 import abs.BankSystem;
 import dto.infodata.DataTransferObject;
 import dto.infodata.XmlFileData;
@@ -145,5 +146,12 @@ public class EngineManager {
     // Add new customer to customer's list when first logged in.
     public void addNewCustomer(String customerName) {
         this.bankSystem.addNewCustomer(customerName);
+    }
+
+    public void addLoan(CustomerDataObject customer, LoanDataObject loan) {
+
+        //TODO- CHECK IF THE ID IS VALID
+        BankLoan bankLoan= new BankLoan(loan);
+        this.bankSystem.getCustomerByName(customer.getName()).addLoan(bankLoan);
     }
 }
