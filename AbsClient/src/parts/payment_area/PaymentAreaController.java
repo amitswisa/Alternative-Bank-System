@@ -50,7 +50,7 @@ public class PaymentAreaController implements Initializable {
                 try {
                     int num = Integer.parseInt(res.get());
 
-                    if(num <= 0 || num > customerController.getCurrentCustomerBalance())
+                    if(num <= 0 || num > customerController.getCustomerBalance())
                         //TODO - servlet that return current yaz
                         throw new DataTransferObject("Unvalid amount of money.",0/* TODO- BankSystem.getCurrentYaz()*/);
 
@@ -103,7 +103,7 @@ public class PaymentAreaController implements Initializable {
     public void activateBtnPayThisPayment(LoanDataObject dataObject){
         //Status active
         if(dataObject.getLoanStatus() == LoanDataObject.Status.ACTIVE) {
-            if (customerController.getCurrentCustomerBalance() >= dataObject.getThisPaymentAmount() &&
+            if (customerController.getCustomerBalance() >= dataObject.getThisPaymentAmount() &&
                     0/* TODO- BankSystem.getCurrentYaz()*/ == dataObject.getPaymentYaz())
                 payThisPayment.setDisable(false);
             else
@@ -112,7 +112,7 @@ public class PaymentAreaController implements Initializable {
         else {
             //Status risk
             if (dataObject.getLoanStatus() == LoanDataObject.Status.RISK &&
-                    customerController.getCurrentCustomerBalance() > 0)
+                    customerController.getCustomerBalance() > 0)
                 payThisPayment.setDisable(false);
             else
                 payThisPayment.setDisable(true);
@@ -121,7 +121,7 @@ public class PaymentAreaController implements Initializable {
 
     public void activateBtnPayAll(LoanDataObject dataObject){
 
-        if(customerController.getCurrentCustomerBalance() >= dataObject.getAmountLeftToPayTofinished())
+        if(customerController.getCustomerBalance() >= dataObject.getAmountLeftToPayTofinished())
             payAll.setDisable(false);
         else
             payAll.setDisable(true);

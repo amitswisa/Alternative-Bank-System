@@ -148,6 +148,10 @@ public class EngineManager {
         this.bankSystem.addNewCustomer(customerName);
     }
 
+    public void markCustomerMessagesAsRead(String customerName) {
+        this.bankSystem.markCustomerMessagesAsRead(customerName);
+    }
+
     public void addLoan(CustomerDataObject customer, LoanDataObject loan) {
 
         //TODO- CHECK IF THE ID IS VALID

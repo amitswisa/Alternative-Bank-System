@@ -78,7 +78,7 @@ public class BankLoan {
           //Change status loan
           this.loanStartTime = BankSystem.getCurrentYaz();
           this.loanStatus = LoanDataObject.Status.ACTIVE;
-          owner.addAlert(this.getLoanID(), "Loan became active!", CustomerAlertData.Type.CONFIRMATION);
+          owner.addAlert(this.getLoanID(), "Loan became active!");
           this.updateBankLoansTransactionsList(); // Update list to contain all future payments & updates status to not_paied.
           return amountToActivate; //return the amount actually success to invest
       }
@@ -274,10 +274,10 @@ public class BankLoan {
         if (paymentNumber == this.getLoanNumberOfPayments()) {
             this.setStatus(LoanDataObject.Status.FINISHED);
             this.loanEndTime = BankSystem.getCurrentYaz();
-            loanOwner.addAlert(this.getLoanID(),"loan has been payed!", CustomerAlertData.Type.CONFIRMATION);
+            loanOwner.addAlert(this.getLoanID(),"loan has been payed!");
         } else if (this.getLoanStatus() == LoanDataObject.Status.RISK && loanToPay.isPaid()) {
             this.setStatus(LoanDataObject.Status.ACTIVE);
-            loanOwner.addAlert(this.getLoanID(), "loan's status changed back to ACTIVE!", CustomerAlertData.Type.CONFIRMATION);
+            loanOwner.addAlert(this.getLoanID(), "loan's status changed back to ACTIVE!");
 
             // change previouse unpaid payments status from UN_PAID to DEBT_COVERED
             for(int i = 0;i < paymentNumber;i++) {
@@ -318,9 +318,9 @@ public class BankLoan {
     private void setLoanStatusToRisk(BankCustomer loanOwner) {
         // Add notification message
         if(this.getLoanStatus() == LoanDataObject.Status.ACTIVE)
-            loanOwner.addAlert(this.getLoanID(), "loan's status changed to RISK.", CustomerAlertData.Type.ALERT);
+            loanOwner.addAlert(this.getLoanID(), "loan's status changed to RISK.");
         else
-            loanOwner.addAlert(this.getLoanID(), "Couldn't set payments due to low balance.", CustomerAlertData.Type.ALERT);
+            loanOwner.addAlert(this.getLoanID(), "Couldn't set payments due to low balance.");
 
         // If balance is not enough to make the payment.
         this.setStatus(LoanDataObject.Status.RISK); // set status to RISK.

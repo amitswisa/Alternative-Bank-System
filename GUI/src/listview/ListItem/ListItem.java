@@ -42,20 +42,6 @@ public class ListItem {
         this.title.setText(this.data.getMessage());
         this.notificationDesc.setText(this.data.getHeadline());
         this.timeInYaz.setText("Time to receive: " + this.data.getTimeInYaz());
-
-        // Change bg color.
-        switch(data.getAlertType())
-        {
-            case CONFIRMATION: {
-                alertBackground.setStyle("-fx-background-color: #93faa5;");
-                break;
-            }
-            default: {
-                alertBackground.setStyle("-fx-background-color: red;");
-                break;
-            }
-
-        }
     }
 
     public HBox getItem() {

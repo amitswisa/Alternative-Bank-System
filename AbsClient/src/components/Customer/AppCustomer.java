@@ -2,8 +2,10 @@ package components.Customer;
 
 
 import dto.objectdata.CustomerAlertData;
+import dto.objectdata.CustomerDataObject;
 import dto.objectdata.CustomerOperationData;
 import dto.objectdata.LoanDataObject;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +16,7 @@ public class AppCustomer {
 
     private final String name;
     private final SimpleIntegerProperty balance;
+    private final SimpleIntegerProperty timeInYaz;
     private ObservableList<CustomerOperationData> logCustomer;
     private ObservableList<LoanDataObject> investmentList; // My investments
     private ObservableList<LoanDataObject> loanList; // my Loans
@@ -25,6 +28,7 @@ public class AppCustomer {
         this.investmentList = FXCollections.observableArrayList();
         this.loanList = FXCollections.observableArrayList();
         this.balance = new SimpleIntegerProperty(0);
+        this.timeInYaz = new SimpleIntegerProperty(0);
         this.listOfAlerts = FXCollections.observableArrayList();
     }
 
@@ -135,7 +139,28 @@ public class AppCustomer {
     }
 
     public void setListOfAlerts(List<CustomerAlertData> listOfAlerts) {
-        this.listOfAlerts.setAll(listOfAlerts);
+        if(listOfAlerts != null && !listOfAlerts.isEmpty()) {
+            listOfAlerts.forEach(e -> {
+                if(e != null)
+                    this.listOfAlerts.add(e);
+            });
+        }
+    }
+
+    // Updates customer from data returns from server.
+    public void updateUser(CustomerDataObject data) {
+        this.setInvestmentList(data.getInvestmentList());
+        this.setListOfAlerts(data.getListOfAlerts());
+        this.setLogCustomerList(data.getLogCustomer());
+        this.setLoanList(data.getLoanList());
+    }
+
+    public IntegerProperty getTimeInYaz() {
+        return timeInYaz;
+    }
+
+    public void setTimeInYaz(Integer timeInYaz) {
+        this.timeInYaz.set(timeInYaz);
     }
 }
 

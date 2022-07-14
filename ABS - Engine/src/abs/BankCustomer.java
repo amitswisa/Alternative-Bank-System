@@ -24,8 +24,8 @@ public class BankCustomer {
         this.loansInvested = new HashMap<>();
         this.listOfAlerts = new ArrayList<>();
 
-        this.listOfAlerts.add(new CustomerAlertData("Headline", "Msg", 1, CustomerAlertData.Type.CONFIRMATION));
-        this.listOfAlerts.add(new CustomerAlertData("Headline2", "Msg2", 1, CustomerAlertData.Type.CONFIRMATION));
+        this.listOfAlerts.add(new CustomerAlertData("Headline", "Msg", 1));
+        this.listOfAlerts.add(new CustomerAlertData("Headline2", "Msg2", 1));
     }
 
     // addLoan -> function adding loan to specific customer.
@@ -194,8 +194,13 @@ public class BankCustomer {
     }
 
     // Notifications
-    public void addAlert(String headline, String msg, CustomerAlertData.Type status) {
-        listOfAlerts.add(new CustomerAlertData(headline, msg, BankSystem.getCurrentYaz(), status));
+    public void addAlert(String headline, String msg) {
+        listOfAlerts.add(new CustomerAlertData(headline, msg, BankSystem.getCurrentYaz()));
+    }
+
+    // Mark all user messages as read.
+    public void markCustomerMessagesAsRead() {
+        this.listOfAlerts.forEach(CustomerAlertData::markAsRead);
     }
 
     public List<CustomerAlertData> getListOfAlerts() {
@@ -205,7 +210,7 @@ public class BankCustomer {
     public void payLoanAllDebt(LoanDataObject e) {
         BankLoan loan = this.getLoanByNameAndYaz(e.getLoanID(), e.getLoanOpeningTime());
         loan.payLoanAllDebt(this, e);
-        this.addAlert(loan.getLoanID(), "Finished pay the loan!", CustomerAlertData.Type.CONFIRMATION);
+        this.addAlert(loan.getLoanID(), "Finished pay the loan!");
     }
 
     public void pay(int amount) {

@@ -207,4 +207,8 @@ public class BankSystem {
     public void addNewCustomer(String customerName) {
         this.customers.put(customerName, new BankCustomer(customerName));
     }
+
+    public void markCustomerMessagesAsRead(String customerName) {
+        this.customers.get(customerName).markCustomerMessagesAsRead();
+    }
 }

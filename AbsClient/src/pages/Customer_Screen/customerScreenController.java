@@ -9,7 +9,9 @@ import dto.objectdata.LoanDataObject;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -43,6 +45,7 @@ public class customerScreenController implements Initializable {
     private final TextInputDialog moneyPopup;
     private final Alert alertDialog;
     private final List<LoanDataObject> loansToInvestList; // Holds loans to invest in when user mark them.
+    private final ObservableList<LoanDataObject> allLoans;
     //private LoanTask loanTask;
 
     // FXML MEMBERS
@@ -54,7 +57,7 @@ public class customerScreenController implements Initializable {
     @FXML private Label currentBalance;
     @FXML private Button depositBtn, withdrawalBtn;
 
-    // Invest
+    // SCRAMBLE
     @FXML private Slider investmentAmount;
     @FXML private Label amountLabel;
     @FXML private CheckComboBox<String> filterCats;
@@ -68,6 +71,7 @@ public class customerScreenController implements Initializable {
     public customerScreenController() {
 
         //Text dialog settings
+        allLoans = FXCollections.observableArrayList();
         loansToInvestList = new ArrayList<>();
         alertDialog = new Alert(Alert.AlertType.INFORMATION);
         moneyPopup = new TextInputDialog();
@@ -431,12 +435,17 @@ public class customerScreenController implements Initializable {
 
         // Bind tables that shows user loans, investments and transactions.
         myLoansTableController.setLoansObservableList(this.currentCustomer.getLoanList());
+        paymentTableController.setPaymentList(currentCustomer.getLoanList());
         myInvestmentsLoansController.setLoansObservableList(this.currentCustomer.getInvestmentList());
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
+        loansToInvestTableController.setLoansObservableList(allLoans);
 
         //this.updatePayments();
         //paymentTableController.resetChoiceBtn();
+    }
 
+    public void updateAllLoansList(List<LoanDataObject> list) {
+        allLoans.setAll(list);
     }
 
     public CheckComboBox<String> getCategoryComboBox() {
@@ -445,6 +454,10 @@ public class customerScreenController implements Initializable {
 
     public void addCategoryToList(String category_name) {
         filterCats.getItems().add(category_name);
+    }
+
+    public int getCustomerBalance() {
+        return this.currentCustomer.getBalance();
     }
 
     //Make New Loan page

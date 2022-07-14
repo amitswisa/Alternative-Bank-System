@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="mainPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-effect: dropshadow(three-pass-box, #dcdcdc, 6, 0, 0, 0);;" stylesheets="@mainScreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pages.Main_Screen.mainScreenController">
+<AnchorPane id="mainPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-effect: dropshadow(three-pass-box, #dcdcdc, 6, 0, 0, 0);" stylesheets="@mainScreen.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pages.Main_Screen.mainScreenController">
    <children>
       <GridPane id="header" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="43.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -63,7 +63,7 @@
                         <Insets left="5.0" right="10.0" />
                      </HBox.margin>
                   </ImageView>
-                   <Label id="alertMessageCounter" fx:id="alertMessageCounter" text="1">
+                   <Label id="alertMessageCounter" fx:id="alertMessageCounter" text="0">
                      <HBox.margin>
                         <Insets bottom="-15.0" left="-25.0" right="10.0" />
                      </HBox.margin>
@@ -79,7 +79,7 @@
                <children>
                   <ImageView fitHeight="27.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../resources/images/logo.jpg" />
+                        <Image url="@../../resources/images/logo.png" />
                      </image>
                   </ImageView>
                </children>

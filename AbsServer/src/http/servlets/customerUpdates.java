@@ -1,8 +1,10 @@
 package http.servlets;
 
+import abs.BankSystem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import dto.JSON.SystemUpdates;
 import dto.objectdata.*;
 import engine.EngineManager;
 import http.utils.ServletUtils;
@@ -14,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "Customer Data Update Servlet", urlPatterns = "/customerUpdates")
 public class customerUpdates extends HttpServlet {
@@ -36,7 +39,7 @@ public class customerUpdates extends HttpServlet {
         // Get engine and fetch all data to send it by HTTP Request to customer.
         EngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
 
-        // Get relevant user from CustomerDataObject map.
+        // Get data.
         String customerName = request.getParameter("customerName"); // Get customer name from request.
         CustomerDataObject curCustomer = engineManager.getCustomerByName(customerName); // Get customer object according to his name.
 
@@ -46,11 +49,27 @@ public class customerUpdates extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
 
+            // Get Data.
+            List<LoanDataObject> all_loans
+                    = engineManager.getAllLoansData()
+                    .stream()
+                        .filter(e -> !e.getOwner().equals(customerName))
+                            .collect(Collectors.toList());
+
+            int timeInYaz = BankSystem.getCurrentYaz();
+
+            // Create the return object.
+            SystemUpdates resObj = new SystemUpdates(curCustomer, all_loans, timeInYaz);
+
             final Gson gson = gsonBuilder.create(); // Create Gson object with classes adapters.
-            String customerJsonString = gson.toJson(curCustomer, CustomerDataObject.class);
+            String customerJsonString = gson.toJson(resObj, SystemUpdates.class);
+
+            // Logic after getting data.
+            engineManager.markCustomerMessagesAsRead(customerName);
 
             // Write json string as response to client.
             response.getOutputStream().println(customerJsonString);
+            System.out.println(customerJsonString);
             response.setStatus(HttpServletResponse.SC_OK); // Set request status as success.
         }
 

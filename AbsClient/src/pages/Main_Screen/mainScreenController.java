@@ -5,6 +5,9 @@ import com.google.gson.reflect.TypeToken;
 import components.Customer.AppCustomer;
 import components.Customer.CustomerRefresher;
 import dto.objectdata.LoanDataObject;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -29,12 +32,12 @@ import javafx.util.Duration;
 import listview.ListViewCell;
 import server_con.HttpClientUtil;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class mainScreenController implements Initializable {
 
@@ -46,14 +49,10 @@ public class mainScreenController implements Initializable {
     private TranslateTransition translateTransition;
     private ChoiceDialog<String> dialog;
     private FileChooser fileChooser;
-    private ObservableList<CustomerAlertData> alertObservableList;
     private Alert informationPopup;
-    private Gson gson;
 
     // Pages
     @FXML private AnchorPane mainPane;
-    @FXML private AnchorPane dataDiv;
-    @FXML private AnchorPane customerPageComponent;
     @FXML private customerScreenController customerPageComponentController;
 
     // FXML members
@@ -70,9 +69,7 @@ public class mainScreenController implements Initializable {
 
         // Object data members init.
         fileChooser = new FileChooser();
-        gson = new Gson();
         informationPopup = new Alert(Alert.AlertType.INFORMATION);
-        alertObservableList = FXCollections.observableArrayList();
 
         // Dialog to settings
         List<String> choices = new ArrayList<String>();
@@ -98,18 +95,15 @@ public class mainScreenController implements Initializable {
         translateTransition.setCycleCount(Animation.INDEFINITE);
         translateTransition.setInterpolator(Interpolator.EASE_BOTH);
 
-        /*// Bind data-members
-        this.pathLabel.textProperty().bind(adminPageComponentController.getPathTextProperty());*/
-
         // Alerts list view init to invisible.
         alertPane.setVisible(false);
-        alertsViewList.setPlaceholder(new Label("No content found"));
 
         // Handling clicking on alert icon open listview event.
         alertBtn.onMouseClickedProperty().set(e -> handleAlertBoxClick());
         alertMessageCounter.onMouseClickedProperty().set(e -> handleAlertBoxClick());
 
         // Set alert listview cell factory.
+        alertsViewList.setPlaceholder(new Label("No content found"));
         alertsViewList.setCellFactory(new Callback<ListView<CustomerAlertData>, ListCell<CustomerAlertData>>()
         {
             @Override
@@ -122,37 +116,12 @@ public class mainScreenController implements Initializable {
 
     // Start running TimerTask AppCustomer run method every 400 ms.
     private void startCustomerDataUpdate() {
-        customerRefresher = new CustomerRefresher(currentCustomer::setLogCustomerList
-                                                    ,currentCustomer::setInvestmentList
-                                                        ,currentCustomer::setLoanList
-                                                            ,currentCustomer::setListOfAlerts
-                                                                ,currentCustomer.getName());
+        customerRefresher = new CustomerRefresher(currentCustomer::updateUser
+                                                    ,currentCustomer::setTimeInYaz
+                                                    ,customerPageComponentController::updateAllLoansList
+                                                    ,currentCustomer.getName());
         timer = new Timer();
         timer.schedule(customerRefresher, 400, 400);
-    }
-
-    public void setYazLabelText(String yazString) {
-        this.yazLabel.setText(yazString);
-    }
-
-    // Reset settings and setup customer changing event.
-    //TODO- get customer name from login page
-    public void loadUserData(ActionEvent actionEvent) {
-        customerPageComponentController.resetSettings();
-        this.getCustomerAlerts();
-        this.alertBox.setVisible(false);
-    }
-
-    private void getCustomerAlerts() {
-        // Alerts handling.
-        alertObservableList.setAll(customerPageComponentController.getCustomerAlertList());
-        FXCollections.reverse(alertObservableList); // sort from end to beginning.
-        alertsViewList.setItems(alertObservableList);
-
-        if(countUnReadMsg() > 0)
-            translateTransition.play();
-        else
-            translateTransition.stop();
     }
 
     private void handleAlertBoxClick() {
@@ -171,7 +140,7 @@ public class mainScreenController implements Initializable {
 
     private int countUnReadMsg() {
         // Count number of unread notifications.
-        int count = (int) customerPageComponentController.getCustomerAlertList().stream().filter(e -> !e.isAlertGotRead()).count();
+        int count = (int) this.currentCustomer.getListOfAlerts().stream().filter(e -> !e.isAlertGotRead()).count();
         this.alertMessageCounter.setText(count + "");
         return count;
     }
@@ -205,10 +174,13 @@ public class mainScreenController implements Initializable {
     public void setUser(AppCustomer newCustomer) {
         this.currentCustomer = newCustomer;
 
-        // Make customer updates run asyncly.
-        startCustomerDataUpdate();
-
+        // Bindings.
+        // TODO - Number of unread notification change.
+        alertsViewList.setItems(this.currentCustomer.getListOfAlerts());
         this.customerPageComponentController.setCusomter(this.currentCustomer);
+
+        // Make customer updates run async.
+        startCustomerDataUpdate();
     }
 
     public void loadXmlFile(MouseEvent mouseEvent) throws IOException {
@@ -278,4 +250,5 @@ public class mainScreenController implements Initializable {
         }
         System.exit(0);
     }
+
 }
