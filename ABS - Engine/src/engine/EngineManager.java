@@ -3,14 +3,11 @@ package engine;
 import abs.BankCustomer;
 import abs.BankLoan;
 import abs.BankSystem;
+import dto.JSON.InvestmentData;
 import dto.infodata.DataTransferObject;
-import dto.infodata.XmlFileData;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
-import engine.convertor.Convertor;
 import engine.xmlmanager.XMLManager;
-import generalObjects.LoanTask;
-import generalObjects.Triple;
 import xmlgenerated.AbsDescriptor;
 
 import java.util.ArrayList;
@@ -118,8 +115,8 @@ public class EngineManager {
     }
 
     // Get list of loans to invest.
-    public String makeInvestments(String customerName, int amountToInvest, List<Triple<String, Integer, String>> customerLoansToInvestList, LoanTask loanTask) throws DataTransferObject {
-        return this.bankSystem.makeInvestments(customerName, amountToInvest, customerLoansToInvestList, loanTask);
+    public String makeInvestments(InvestmentData investmentData) throws DataTransferObject {
+        return this.bankSystem.makeInvestments(investmentData);
     }
 
     // Increase YAZ date by 1.
@@ -152,10 +149,13 @@ public class EngineManager {
         this.bankSystem.markCustomerMessagesAsRead(customerName);
     }
 
-    public void addLoan(CustomerDataObject customer, LoanDataObject loan) {
+    public boolean addLoan(CustomerDataObject customer, LoanDataObject loan) {
 
-        //TODO- CHECK IF THE ID IS VALID
-        BankLoan bankLoan= new BankLoan(loan);
+        if(this.getAllLoansData().contains(loan))
+            return false;
+
+        BankLoan bankLoan = new BankLoan(loan);
         this.bankSystem.getCustomerByName(customer.getName()).addLoan(bankLoan);
+        return true;
     }
 }

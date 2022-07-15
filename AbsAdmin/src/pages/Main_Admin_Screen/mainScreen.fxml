@@ -55,7 +55,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="27.0" prefWidth="200.0" GridPane.columnIndex="3">
                <children>
-                  <Button fx:id="increaseYAZBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="195.0" text="Increase YAZ" />
+                  <Button fx:id="increaseYAZBtn" onMouseClicked="#increaseYaz" alignment="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="195.0" text="Increase YAZ" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="27.0" prefWidth="249.0" GridPane.columnIndex="1">

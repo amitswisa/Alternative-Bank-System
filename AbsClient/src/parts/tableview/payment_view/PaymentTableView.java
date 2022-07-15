@@ -13,29 +13,31 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+
+import static components.Customer.AppCustomer.getTimeInYazAsInteger;
 
 public class PaymentTableView implements Initializable {
 
     private RadioButton currentBtn = null;
     private customerScreenController customerController;
 
-    private ObservableList<LoanDataObject> obsList;
     @FXML private TableView<LoanDataObject> paymentTable;
     @FXML private TableColumn<LoanDataObject, String> loanID, paymentYaz, lastPayment;
     @FXML private TableColumn<LoanDataObject, Void> choseBtn;
 
     public PaymentTableView() {
-        obsList = FXCollections.observableArrayList();
+
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loanID.setCellValueFactory(new PropertyValueFactory<>("loanID"));
         paymentYaz.setCellValueFactory(new PropertyValueFactory<>("paymentYaz"));
-        lastPayment.setCellValueFactory((TableColumn.CellDataFeatures<LoanDataObject, String> d) -> new SimpleStringProperty(d.getValue().getLastPayment(0/*TODO- BankSystem.getCurrentYaz()*/)+""));
+        lastPayment.setCellValueFactory((TableColumn.CellDataFeatures<LoanDataObject, String> d) -> new SimpleStringProperty(d.getValue().getLastPayment(getTimeInYazAsInteger())+""));
 
         Callback<TableColumn<LoanDataObject, Void>, TableCell<LoanDataObject, Void>> cellFactory = param -> {
             return new TableCell<LoanDataObject, Void>() {
@@ -75,17 +77,12 @@ public class PaymentTableView implements Initializable {
         choseBtn.setCellFactory(cellFactory);
     }
 
-    public void setPaymentList(List<LoanDataObject> list) {
+    public void setPaymentList(ObservableList<LoanDataObject> list) {
 
         if(list == null || list.isEmpty())
             return;
 
-        // Filter my loans list to active and risk only.
-        list = list.stream().filter(e -> e.getLoanStatus() == LoanDataObject.Status.ACTIVE
-                || e.getLoanStatus() == LoanDataObject.Status.RISK).collect(Collectors.toList());
-
-        obsList.setAll(list);
-        paymentTable.setItems(obsList);
+        paymentTable.setItems(list);
     }
 
     public void setCustomerController(customerScreenController controller) {

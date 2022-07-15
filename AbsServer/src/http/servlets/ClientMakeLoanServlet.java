@@ -33,18 +33,24 @@ public class ClientMakeLoanServlet extends HttpServlet {
         EngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
 
         // Get relevant user from CustomerDataObject map.
-        String json = request.getParameter("customerName"); // Get customer name from request.
+        String json = request.getParameter("loanData"); // Get customer name from request.
         LoanDataObject reqValue = gson.fromJson(json, LoanDataObject.class);
 
         CustomerDataObject customer = engineManager.getCustomerByName(reqValue.getOwner());
 
         // If received customer name doesn't exist.
         if(customer == null) {
-            response.getOutputStream().println("Error: " + reqValue.getOwner() + " cannot be found.");
+            response.getOutputStream().print("Error: " + reqValue.getOwner() + " cannot be found.");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            engineManager.addLoan(customer, reqValue);
-
+            boolean loanExist = engineManager.addLoan(customer, reqValue);
+            if(!loanExist){
+                response.getOutputStream().print("Loan " + reqValue.getLoanID() + " already exist.");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            } else{
+                response.getOutputStream().print("Loan added successfully!");
+                response.setStatus(HttpServletResponse.SC_OK);
+            }
         }
 
 

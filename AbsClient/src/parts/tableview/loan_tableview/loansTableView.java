@@ -3,9 +3,11 @@ package parts.tableview.loan_tableview;
 import dto.objectdata.LoanDataObject;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,7 +33,6 @@ public class loansTableView implements Initializable {
     private Scene firstScene = null;
 
     // this Data-Members
-    private ObservableList<LoanDataObject> obsList;
     private FilteredList<LoanDataObject> list = null;
     private Stage popUpStage;
 
@@ -110,6 +111,10 @@ public class loansTableView implements Initializable {
         this.investAmount.set(amountToInvest);
     }
 
+    public void refresh() {
+        this.loansTable.refresh();
+    }
+
     public void updateFilterCategories(ObservableList<String> checkedItems) {
         if(!checkedItems.isEmpty())
             this.catsList.set(checkedItems);
@@ -143,7 +148,7 @@ public class loansTableView implements Initializable {
     public void setLoansObservableList(ObservableList<LoanDataObject> loanList) {
 
         // Init list of loans.
-        list = new FilteredList<LoanDataObject>(loanList);
+        list = new FilteredList<>(loanList);
 
         // Filter binding
         list.predicateProperty().bind(Bindings.createObjectBinding(() ->

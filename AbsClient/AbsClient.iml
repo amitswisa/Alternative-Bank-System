@@ -10,7 +10,7 @@
     <orderEntry type="module" module-name="DataTransferObject" />
     <orderEntry type="module" module-name="UniversalClientData" />
     <orderEntry type="library" name="controlsfx-8.40.18" level="project" />
-    <orderEntry type="library" name="gson-2.1" level="application" />
+    <orderEntry type="library" name="gson-2.11" level="project" />
     <orderEntry type="library" name="okHttp" level="application" />
   </component>
 </module>

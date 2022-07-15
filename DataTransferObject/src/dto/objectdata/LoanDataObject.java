@@ -15,8 +15,6 @@ import static dto.objectdata.LoanDataObject.Status.*;
 
 public class LoanDataObject extends DataTransferObject {
 
-
-
     public enum Status {
     NEW,
     PENDING,
@@ -31,13 +29,13 @@ public class LoanDataObject extends DataTransferObject {
     private final int loanAmount; // Loan amount of money.
     private final int loanOpeningTime; // Time in YAZ that customer opened new loan.
     private final int loanTotalTime;
-    private final int amountLeftToPay; //left to pay to activate
-    private final int loanStartTime; // in yaz - set value when being active.
-    private final int loanEndTime;
+    private int amountLeftToPay; //left to pay to activate
+    private int loanStartTime; // in yaz - set value when being active.
+    private int loanEndTime;
     private final int loanInterestPerPayment;
     private final int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
     private int unfinishedLoansNumber;
-    private final Status loanStatus;
+    private Status loanStatus;
     private List<Pair<String, Integer>> investersList = new ArrayList<>();
     private List<TransactionDataObject> transactionList = new ArrayList<>(); // hold all transaction's history.
 
@@ -76,10 +74,7 @@ public class LoanDataObject extends DataTransferObject {
     public boolean isValidLoan() {
         // Validate payment.
         float isValidPayment = (float)this.loanTotalTime / (float)this.paymentInterval;
-        if(isValidPayment != (int)isValidPayment)
-            return  false;
-
-        return  true;
+        return isValidPayment == ((int)isValidPayment);
     }
 
     public int getUnpayedTransactionsAmount(int yaz) {
@@ -300,9 +295,48 @@ public class LoanDataObject extends DataTransferObject {
         return transactionList;
     }
 
+    /*
+    private final int amountLeftToPay; //left to pay to activate
+    private final int loanStartTime; // in yaz - set value when being active.
+    private final int loanEndTime;
+    private final int loanInterestPerPayment;
+    private final int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
+    private int unfinishedLoansNumber;
+    private final Status loanStatus;
+    private List<Pair<String, Integer>> investersList = new ArrayList<>();
+    private List<TransactionDataObject> transactionList = new ArrayList<>();
+
+     */
+
+    public void update(LoanDataObject e) {
+        this.amountLeftToPay = e.getAmountLeftToPay();
+        this.loanStartTime = e.getLoanStartTime();
+        this.loanEndTime = e.getLoanEndTime();
+        this.unfinishedLoansNumber = e.getUnfinishedLoansNumber();
+        this.loanStatus = e.getLoanStatus();
+        this.investersList = e.getInvestersList();
+        this.transactionList = e.getTransactionList();
+    }
+
+
     @Override
     public String toString() {
         return this.getLoanID();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LoanDataObject that = (LoanDataObject) o;
+
+        return loanID.equals(that.loanID);
+    }
+
+    @Override
+    public int hashCode() {
+        return loanID.hashCode();
     }
 
     public static class LoanDataObjectAdapter implements JsonSerializer<LoanDataObject> {

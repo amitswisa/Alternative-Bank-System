@@ -5,9 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import components.Customer.AppCustomer;
 import components.Customer.CustomerRefresher;
 import dto.objectdata.LoanDataObject;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -16,9 +13,6 @@ import org.controlsfx.control.CheckComboBox;
 import pages.Customer_Screen.customerScreenController;
 import dto.objectdata.CustomerAlertData;
 import javafx.animation.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -37,7 +31,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class mainScreenController implements Initializable {
 
@@ -47,9 +40,9 @@ public class mainScreenController implements Initializable {
     private CustomerRefresher customerRefresher;
 
     private TranslateTransition translateTransition;
-    private ChoiceDialog<String> dialog;
-    private FileChooser fileChooser;
-    private Alert informationPopup;
+    private final ChoiceDialog<String> dialog;
+    private final FileChooser fileChooser;
+    private final Alert informationPopup;
 
     // Pages
     @FXML private AnchorPane mainPane;
@@ -63,7 +56,7 @@ public class mainScreenController implements Initializable {
     @FXML private AnchorPane alertPane;
     @FXML private ListView<CustomerAlertData> alertsViewList;
     @FXML private HBox alertBox;
-    @FXML private Button uploadXMLBtn;
+    public Label customerNameLabel;
 
     public mainScreenController() {
 
@@ -119,10 +112,12 @@ public class mainScreenController implements Initializable {
         customerRefresher = new CustomerRefresher(currentCustomer::updateUser
                                                     ,currentCustomer::setTimeInYaz
                                                     ,customerPageComponentController::updateAllLoansList
+                                                    ,customerPageComponentController::addCategoriesToList
                                                     ,currentCustomer.getName());
         timer = new Timer();
         timer.schedule(customerRefresher, 400, 400);
     }
+
 
     private void handleAlertBoxClick() {
 
@@ -145,7 +140,7 @@ public class mainScreenController implements Initializable {
         return count;
     }
 
-    public void settingsFunctionallity(MouseEvent mouseEvent) {
+    public void loadAndChaneSettings(MouseEvent mouseEvent) {
 
         String formResult = dialog.getResult();
         Optional<String> result = dialog.showAndWait();
@@ -171,18 +166,32 @@ public class mainScreenController implements Initializable {
     }
 
     // Updates current customer project when customer logged in - called from login controller.
-    public void setUser(AppCustomer newCustomer) {
+    public void setCustomer(AppCustomer newCustomer) {
+        // Handle instance of logged customer.
         this.currentCustomer = newCustomer;
 
-        // Bindings.
-        // TODO - Number of unread notification change.
+        // Initialize properties
+        customerNameLabel.setText("Hello " + newCustomer.getName());
+        yazLabel.setText(this.currentCustomer.getTimeInYaz().get() + "");
+
+        // Listeners and bindings.
+        this.currentCustomer.getTimeInYaz().addListener((observable, oldValue, newValue) -> {
+            yazLabel.setText(newValue.intValue() + "");
+        });
+
         alertsViewList.setItems(this.currentCustomer.getListOfAlerts());
-        this.customerPageComponentController.setCusomter(this.currentCustomer);
+        // TODO - Number of unread notification change.
+
+        // Pass instance of customer to customer screen.
+        this.customerPageComponentController.setCustomer(this.currentCustomer);
+
+
 
         // Make customer updates run async.
         startCustomerDataUpdate();
     }
 
+    // Process of loading xml file to system.
     public void loadXmlFile(MouseEvent mouseEvent) throws IOException {
         File selectedFile = fileChooser.showOpenDialog((Stage)((Node) mouseEvent.getSource()).getScene().getWindow());
         if(selectedFile != null) {

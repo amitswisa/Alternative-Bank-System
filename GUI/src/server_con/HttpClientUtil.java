@@ -3,6 +3,7 @@ package server_con;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.util.List;
 
 public class HttpClientUtil
 {
@@ -10,6 +11,7 @@ public class HttpClientUtil
     public static final String hostAddress = "http://localhost:8080";
     public static final String BASE_URL = "/Abs";
     public static final String CUSTOMER_UPDATE = "/customerUpdates";
+    public static final String MAKE_INVESTMENT = "/makeInvestment";
 
     // Pages paths
     public static final String userLoginPage = "/login";
@@ -23,12 +25,7 @@ public class HttpClientUtil
     }
 
     // Async HTTP Post request method.
-    public static void runAsync(String finalUrl, String customerName, Callback callback) {
-        Request request = new Request.Builder()
-                .url(finalUrl)
-                .post(new FormBody.Builder()
-                        .add("customerName", customerName).build())
-                .build();
+    public static void runAsync(Request request, Callback callback) {
 
         Call call = HttpClientUtil.client.newCall(request);
 

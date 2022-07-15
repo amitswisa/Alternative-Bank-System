@@ -1,4 +1,4 @@
-package generalObjects;
+package dto.objectdata;
 
 import javafx.util.Pair;
 

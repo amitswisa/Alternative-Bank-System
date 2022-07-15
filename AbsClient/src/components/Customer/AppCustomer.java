@@ -16,19 +16,19 @@ public class AppCustomer {
 
     private final String name;
     private final SimpleIntegerProperty balance;
-    private final SimpleIntegerProperty timeInYaz;
+    private static SimpleIntegerProperty timeInYaz;
     private ObservableList<CustomerOperationData> logCustomer;
     private ObservableList<LoanDataObject> investmentList; // My investments
     private ObservableList<LoanDataObject> loanList; // my Loans
     private ObservableList<CustomerAlertData> listOfAlerts;
 
-    public AppCustomer(String name){
+    public AppCustomer(String name, String initYaz){
         this.name = name;
         this.logCustomer = FXCollections.observableArrayList();
         this.investmentList = FXCollections.observableArrayList();
         this.loanList = FXCollections.observableArrayList();
         this.balance = new SimpleIntegerProperty(0);
-        this.timeInYaz = new SimpleIntegerProperty(0);
+        timeInYaz = new SimpleIntegerProperty(Integer.parseInt(initYaz));
         this.listOfAlerts = FXCollections.observableArrayList();
     }
 
@@ -149,18 +149,23 @@ public class AppCustomer {
 
     // Updates customer from data returns from server.
     public void updateUser(CustomerDataObject data) {
+        this.balance.set(data.getBalance());
         this.setInvestmentList(data.getInvestmentList());
         this.setListOfAlerts(data.getListOfAlerts());
         this.setLogCustomerList(data.getLogCustomer());
         this.setLoanList(data.getLoanList());
     }
 
-    public IntegerProperty getTimeInYaz() {
+    public SimpleIntegerProperty getTimeInYaz() {
         return timeInYaz;
     }
 
-    public void setTimeInYaz(Integer timeInYaz) {
-        this.timeInYaz.set(timeInYaz);
+    public static int getTimeInYazAsInteger() {
+        return timeInYaz.get();
+    }
+
+    public void setTimeInYaz(Integer yaz) {
+        timeInYaz.set(yaz);
     }
 }
 

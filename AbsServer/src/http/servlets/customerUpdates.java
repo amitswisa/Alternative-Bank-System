@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @WebServlet(name = "Customer Data Update Servlet", urlPatterns = "/customerUpdates")
@@ -45,7 +46,7 @@ public class customerUpdates extends HttpServlet {
 
         // If received customer name doesn't exist.
         if(curCustomer == null) {
-            response.getOutputStream().println("Error: " + customerName + " cannot be found.");
+            response.getOutputStream().print("Error: " + customerName + " cannot be found.");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
 
@@ -57,9 +58,10 @@ public class customerUpdates extends HttpServlet {
                             .collect(Collectors.toList());
 
             int timeInYaz = BankSystem.getCurrentYaz();
+            Set<String> bankCategories = engineManager.getBankCategories();
 
             // Create the return object.
-            SystemUpdates resObj = new SystemUpdates(curCustomer, all_loans, timeInYaz);
+            SystemUpdates resObj = new SystemUpdates(curCustomer, all_loans, timeInYaz, bankCategories);
 
             final Gson gson = gsonBuilder.create(); // Create Gson object with classes adapters.
             String customerJsonString = gson.toJson(resObj, SystemUpdates.class);
@@ -68,8 +70,8 @@ public class customerUpdates extends HttpServlet {
             engineManager.markCustomerMessagesAsRead(customerName);
 
             // Write json string as response to client.
-            response.getOutputStream().println(customerJsonString);
-            System.out.println(customerJsonString);
+            response.getOutputStream().print(customerJsonString);
+            System.out.print(customerJsonString);
             response.setStatus(HttpServletResponse.SC_OK); // Set request status as success.
         }
 

@@ -1,12 +1,8 @@
 package pages.Main_Admin_Screen;
 
+import AppAdmin.AppAdmin;
 import Utils.User;
-import dto.objectdata.CustomerAlertData;
-import dto.objectdata.CustomerDataObject;
 import javafx.animation.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -14,33 +10,32 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.util.Callback;
-import javafx.util.Duration;
-import listview.ListViewCell;
+import okhttp3.HttpUrl;
+import okhttp3.Request;
+import okhttp3.Response;
 import pages.Admin_Screen.AdminController;
+import server_con.HttpClientUtil;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+
+import static AppAdmin.AppAdmin.getYazInTime;
+import static server_con.HttpClientUtil.PATH;
+import static server_con.HttpClientUtil.userLoginPage;
 
 public class mainScreenController implements Initializable {
 
     // Data members
-    private User currentAdmin;
+    private AppAdmin currentAdmin;
     private TranslateTransition translateTransition;
     private ChoiceDialog<String> dialog;
 
     // Pages
     @FXML private AnchorPane mainPane;
-    @FXML private AnchorPane dataDiv;
-    @FXML private AnchorPane adminPageComponent;
-    @FXML private AdminController adminPageComponentController;
-
 
     // FXML members
-    @FXML private ChoiceBox<String> userTypeChoice;
     @FXML private ImageView settingsBtn;
-    @FXML private Button increaseYAZBtn;
     @FXML private Button rewindBtn;
     @FXML private Label yazLabel;
 
@@ -67,20 +62,6 @@ public class mainScreenController implements Initializable {
 
     }
 
-    public ChoiceBox<String> getUserTypeChoice() {
-        return userTypeChoice;
-    }
-
-    // Return current chosen customer name.
-    public String getCurrentAdmin() {
-        return this.currentAdmin.getUsername();
-    }
-
-    public void setYazLabelText(String yazString) {
-        this.yazLabel.setText(yazString);
-    }
-
-
     public void settingsFunctionallity(MouseEvent mouseEvent) {
 
         String formResult = dialog.getResult();
@@ -106,12 +87,31 @@ public class mainScreenController implements Initializable {
 
     // Called when "increase yaz" btn clicked.
     public void increaseYaz(MouseEvent mouseEvent) {
-        //TODO - create servlet that increase yaz
-        //engineManager.increaseYazDate();
-        setYazLabelText(/*BankSystem.getCurrentYaz()*/ 0 +"");
+
+        String finalUrl = HttpUrl
+                .parse(PATH + "/increaseYaz")
+                .newBuilder()
+                .build()
+                .toString(); // Build url string.
+
+        Request increaseYazRequest = new Request.Builder().url(finalUrl).build(); // Build http request from url string.
+
+        try {
+            Response res = HttpClientUtil.sendSyncRequest(increaseYazRequest);
+            String yazRes = res.body().string().replace("\"", "");
+            this.currentAdmin.setYaz(Integer.parseInt(yazRes));
+
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    public void setUser(User currentAdmin) {
+    public void setUser(AppAdmin currentAdmin) {
         this.currentAdmin = currentAdmin;
+
+        yazLabel.setText(getYazInTime().get()+"");
+        getYazInTime().addListener((observable, oldValue, newValue) -> {
+            yazLabel.setText(newValue.intValue() + "");
+        });
     }
 }

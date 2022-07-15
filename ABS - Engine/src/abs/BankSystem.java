@@ -1,12 +1,11 @@
 package abs;
 
+import dto.JSON.InvestmentData;
 import dto.infodata.DataTransferObject;
-import dto.infodata.XmlFileData;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
+import dto.objectdata.Triple;
 import engine.convertor.Convertor;
-import generalObjects.LoanTask;
-import generalObjects.Triple;
 import xmlgenerated.AbsDescriptor;
 import xmlgenerated.AbsLoan;
 
@@ -141,21 +140,21 @@ public class BankSystem {
     }
 
     //Section 6 - from menu.
-    public String makeInvestments(String customerName, int amountToInvest, List<Triple<String,Integer,String>> customerLoansToInvestList, LoanTask loanTask) {
+    public String makeInvestments(InvestmentData investmentData) {
 
         // Get list of Bank Loans from list of bank loans names.
-        List<BankLoan> loansToInvest = this.makeLoansListFromLoansNames(customerLoansToInvestList);
+        List<BankLoan> loansToInvest = this.makeLoansListFromLoansNames(investmentData.getNameOfLoansToInvest());
 
         //Sort the list by  the amount left to activate the loan.
         this.sortLoanslist(loansToInvest);
 
         // go through the list and invest money as much as possible and equally between all loans.
-        return this.investEqually(getCustomerByName(customerName) , amountToInvest , loansToInvest, loanTask);
+        return this.investEqually(getCustomerByName(investmentData.getInvestorName()) , investmentData.getInvestmentAmount() , loansToInvest);
 
     }
 
     // go through the list and invest money as much as possible and equally berween all loans.
-    private String investEqually(BankCustomer customerName, int amountToInvest, List<BankLoan> loansToInvest, LoanTask loanTask) {
+    private String investEqually(BankCustomer customerName, int amountToInvest, List<BankLoan> loansToInvest) {
         String res = "New investments: \n";
         for (int i = 0 ; i < loansToInvest.size() ; i++) {
 
@@ -173,9 +172,6 @@ public class BankSystem {
 
             amountToInvest -= realTimeInvestedAmount;
             res += "Invested " + realTimeInvestedAmount + " in " + loansToInvest.get(i).getLoanID() + ".\n";
-            loanTask.setMessage(res);
-            loanTask.progressUpdate();
-            loanTask.sleepForAWhile();
         }
         return res;
     }

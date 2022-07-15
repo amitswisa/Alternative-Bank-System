@@ -1,5 +1,6 @@
 package pages.Login_Screen;
 
+import AppAdmin.AppAdmin;
 import Utils.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -57,6 +58,7 @@ public class loginScreenController {
         String eMsg = "";
         try {
             Response res = HttpClientUtil.sendSyncRequest(customerValidationRequest);
+            eMsg = res.body().string();
 
             // If user is authenticated and server approved login.
             // Then pass username to Customer's page Controller and open new scene with customer papge.
@@ -71,11 +73,10 @@ public class loginScreenController {
                 mainScreenController mainController = loader.getController();
 
                 this.primStage.setScene(new Scene(root));
-                mainController.setUser(new User(usernameFieldContent));
+                mainController.setUser(new AppAdmin(usernameFieldContent, Integer.parseInt(eMsg)));
                 this.primStage.show();
             }
 
-            eMsg = res.body().string();
             System.out.println(eMsg);
 
 

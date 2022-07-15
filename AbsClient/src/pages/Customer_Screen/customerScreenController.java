@@ -3,9 +3,12 @@ package pages.Customer_Screen;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import components.Customer.AppCustomer;
+import dto.JSON.InvestmentData;
+import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerAlertData;
-import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
+import dto.objectdata.Triple;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -33,10 +37,9 @@ import parts.tableview.transactions_view.TransactionTable;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
+
+import static components.Customer.AppCustomer.getTimeInYazAsInteger;
 
 public class customerScreenController implements Initializable {
 
@@ -65,8 +68,8 @@ public class customerScreenController implements Initializable {
 
     //Make New Loan
     @FXML private TextField loanID, capital, interestPerPayment, paymentsInterval, loanTotalTime;
-    @FXML private ChoiceBox category;
-    @FXML private Button createLoan;
+    @FXML private ChoiceBox<String> categoryChoiceBox;
+    @FXML private Label newLoanErMsg;
 
     public customerScreenController() {
 
@@ -113,13 +116,13 @@ public class customerScreenController implements Initializable {
                     public void changed(ObservableValue<? extends Boolean> ov,
                                         Boolean old_val, Boolean new_val) {
 
-                        if(new_val == true)
+                        if(new_val.booleanValue())
                         {
-                            if(!loansToInvestList.contains(loan))
+                            if(!loansToInvestList.contains(loan)) {
                                 loansToInvestList.add(loan);
+                            }
                         } else {
-                            if(loansToInvestList.contains(loan))
-                                loansToInvestList.remove(loan);
+                            loansToInvestList.remove(loan);
                         }
 
                     }
@@ -210,11 +213,7 @@ public class customerScreenController implements Initializable {
         refreshPaymentView();
     }
 
-    public void updatePayments() {
-        paymentTableController.setPaymentList(currentCustomer.getLoanList());
-    }
-
-    // Set ChangeEventListener to each filter component.
+    // Bind filter options to all loans investment table view.
     private void setFilterOptionsListeners() {
 
         // Bind slider value to label.
@@ -286,11 +285,6 @@ public class customerScreenController implements Initializable {
 
     }
 
-    // Set slider max value to be user balance (even if balance changed).
-    /*private void setMaxAmountToInvest() {
-         this.investmentAmount.setMax(this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()));
-    }*/
-
     public void resetSettings() {
 
         // reset filter object's value.
@@ -345,32 +339,25 @@ public class customerScreenController implements Initializable {
         String value = String.valueOf(moneyPopup.getEditor().getText());
 
         // Try parsing input to int and if success update user bank.
-       // try {
+        try {
             int valueOfInput = Integer.parseInt(value);
 
             // Trying to deposit negative number.
             if(valueOfInput <= 0)
                 throw new NumberFormatException("Negative");
 
-           /* if(valueOfInput > this.engineManager.getBalanceOfCustomerByName(this.currentUser.getUsername()))
-                throw new DataTransferObject("You cant invest more money then your balance.", BankSystem.getCurrentYaz());*/
+            if(valueOfInput > this.getCustomerBalance())
+                throw new DataTransferObject("You cant invest more money then your balance.", getTimeInYazAsInteger());
 
             // Invest proccess
-            /*List<Triple<String,Integer,String>> nameOfLoansToInvest = new ArrayList<>();
+            List<Triple<String,Integer,String>> nameOfLoansToInvest = new ArrayList<>();
             for(LoanDataObject l : loansToInvestList)
                 nameOfLoansToInvest.add(new Triple<>(l.getOwner(), l.getLoanOpeningTime(), l.getLoanID()));
 
-            loanTask
-                    = new LoanTask(nameOfLoansToInvest, this.engineManager, valueOfInput, this.currentUser.getUsername(), alertDialog);
+            // Send investment to server to invest.
+            sendInvestmentsToServer(nameOfLoansToInvest, valueOfInput);
+            resetCheckBoxToInvestList();
 
-            // Progressbar
-            progressBar.setVisible(true);
-            progressBar.progressProperty().bind(loanTask.progressProperty());
-
-            // Run task as a thread.
-            Thread taskThread = new Thread(loanTask);
-            taskThread.setDaemon(true);
-            taskThread.start();
 
         } catch(NumberFormatException | DataTransferObject nfe) {
 
@@ -390,7 +377,32 @@ public class customerScreenController implements Initializable {
             alertDialog.setHeaderText("Error");
             alertDialog.setAlertType(Alert.AlertType.ERROR);
         }
-*/
+
+    }
+
+    // Method that builds investmentData object and send to server with HTTP POST Request the information.
+    private void sendInvestmentsToServer(List<Triple<String, Integer, String>> nameOfLoansToInvest, int valueOfInput) {
+        InvestmentData investmentData = new InvestmentData(nameOfLoansToInvest, valueOfInput, this.currentCustomer.getName());
+        String investmentDataAsJson = new Gson().toJson(investmentData, InvestmentData.class);
+
+        Request request = new Request.Builder()
+                .url(HttpClientUtil.PATH + HttpClientUtil.MAKE_INVESTMENT)
+                .post(new FormBody.Builder()
+                        .add("investmentData", investmentDataAsJson).build())
+                .build();
+
+        HttpClientUtil.runAsync(request, new okhttp3.Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        String msg = response.body().string();
+                        System.out.println(msg);
+                    }
+                });
     }
 
     public List<CustomerAlertData> getCustomerAlertList() {
@@ -398,13 +410,6 @@ public class customerScreenController implements Initializable {
     }
     /* END SCRAMBLE PAGE */
 
-    public AnchorPane getCustomerMainPane() {
-        return this.customerPane;
-    }
-
-    public int getCurrentCustomerBalance(){
-      return currentCustomer.getBalance();
-    }
 
     // Payment page
 
@@ -424,28 +429,51 @@ public class customerScreenController implements Initializable {
 
     public void refreshPaymentView() { paymentAreaController.refreshRelevantData(); }
 
-    public void setCusomter(AppCustomer customer) {
+    public void setCustomer(AppCustomer customer) {
         this.currentCustomer = customer;
+
+        // Initialize properties
         this.currentBalance.setText("Current balance: " + this.currentCustomer.getBalance());
 
         // Set-up balance change listener.
         this.currentCustomer.getBalanceAsIntegerProperty().addListener((observable, oldValue, newValue) -> {
             currentBalance.setText("Current balance: " + newValue.intValue());
+
+            // Slider integer max range value.
+            int sliderValue = 100;
+            if(newValue.intValue() > 0)
+                sliderValue = newValue.intValue();
+
+            this.investmentAmount.setMax(sliderValue);
         });
 
-        // Bind tables that shows user loans, investments and transactions.
         myLoansTableController.setLoansObservableList(this.currentCustomer.getLoanList());
         paymentTableController.setPaymentList(currentCustomer.getLoanList());
         myInvestmentsLoansController.setLoansObservableList(this.currentCustomer.getInvestmentList());
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
         loansToInvestTableController.setLoansObservableList(allLoans);
 
-        //this.updatePayments();
         //paymentTableController.resetChoiceBtn();
     }
 
+    // Insert new loans into all loans list.
     public void updateAllLoansList(List<LoanDataObject> list) {
-        allLoans.setAll(list);
+        list.forEach(e -> {
+            int loanIndex = allLoans.indexOf(e);
+            // -1 EQUALS NOT FOUND.
+            if(e.getLoanStatus() == LoanDataObject.Status.NEW
+                    || e.getLoanStatus() == LoanDataObject.Status.PENDING)
+                if(loanIndex == -1)
+                    allLoans.add(e);
+                else {
+                    LoanDataObject loan = allLoans.get(loanIndex);
+                    loan.update(e);
+                }
+            else
+               allLoans.remove(e);
+        });
+
+        loansToInvestTableController.refresh(); // update table view.
     }
 
     public CheckComboBox<String> getCategoryComboBox() {
@@ -454,28 +482,55 @@ public class customerScreenController implements Initializable {
 
     public void addCategoryToList(String category_name) {
         filterCats.getItems().add(category_name);
+        categoryChoiceBox.getItems().add(category_name);
+    }
+
+    // Update list of categories if received new added category.
+    public void addCategoriesToList(Set<String> categories_name) {
+        categories_name.forEach(e -> {
+            if(!filterCats.getItems().contains(e)) {
+                filterCats.getItems().add(e);
+                categoryChoiceBox.getItems().add(e);
+            }
+        });
     }
 
     public int getCustomerBalance() {
         return this.currentCustomer.getBalance();
     }
 
-    //Make New Loan page
-    //loanID, capital, interestPerPayment, paymentsInterval, loanTotalTime;
+    // Create new loan.
+    public void makeNewLoanClicked(MouseEvent actionEvent) {
 
-    public void makeNewLoanClicked(ActionEvent actionEvent) {
+        /*
+                @FXML private TextField loanID, capital, interestPerPayment, paymentsInterval, loanTotalTime;
+                @FXML private ChoiceBox<String> categoryChoiceBox;
+
+         */
+        if (loanID.getText().isEmpty() || capital.getText().isEmpty()
+                || interestPerPayment.getText().isEmpty() || paymentsInterval.getText().isEmpty()
+                || loanTotalTime.getText().isEmpty() || categoryChoiceBox.getValue().isEmpty())
+        {
+            popInfoAlert("Please fill all fields.");
+            return;
+        }
 
         try {
-            LoanDataObject newLoan = new LoanDataObject(currentCustomer.getName(), loanID.getText(), category.toString() , Integer.parseInt(capital.getText()),
+            LoanDataObject newLoan = new LoanDataObject(currentCustomer.getName(), loanID.getText(), categoryChoiceBox.getValue() , Integer.parseInt(capital.getText()),
                     Integer.parseInt(interestPerPayment.getText()), Integer.parseInt(paymentsInterval.getText()),
-                    /*TODO- loan opening time = current yaz*/0, Integer.parseInt(loanTotalTime.getText()));
+                    getTimeInYazAsInteger(), Integer.parseInt(loanTotalTime.getText()));
 
-            if(newLoan.isValidLoan()){
-             //TODO- request to the servlet to add the loan
+            if(newLoan.isValidLoan()) {
                Gson gson = new GsonBuilder().registerTypeAdapter(LoanDataObject.class, new LoanDataObject.LoanDataObjectAdapter()).create();
                String jsonLoan = gson.toJson(newLoan, LoanDataObject.class);
 
-               HttpClientUtil.runAsync(HttpClientUtil.PATH + "/ClientMakeLoanServlet", jsonLoan, new okhttp3.Callback() {
+                Request request = new Request.Builder()
+                        .url(HttpClientUtil.PATH + "/ClientMakeLoanServlet")
+                        .post(new FormBody.Builder()
+                                .add("loanData", jsonLoan).build())
+                        .build();
+
+               HttpClientUtil.runAsync(request, new okhttp3.Callback() {
                    @Override
                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
                        System.out.println(e.getMessage());
@@ -483,16 +538,39 @@ public class customerScreenController implements Initializable {
 
                    @Override
                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    //TODO
+                       String responseMsg = response.body().string();
+
+                       // If success -> clear all fields.
+                       if(response.code() == 200) {
+                           Platform.runLater(() -> {
+                               loanID.setText("");
+                               capital.setText("");
+                               interestPerPayment.setText("");
+                               paymentsInterval.setText("");
+                               loanTotalTime.setText("");
+                               categoryChoiceBox.getSelectionModel().clearSelection();
+                           });
+                       }
+
+                       // Pop up message.
+                       Platform.runLater(() -> popInfoAlert(responseMsg));
                    }
                });
-           } else {
-
-           }
+            } else {
+                popInfoAlert("Payments arent dividing equally.");
+            }
 
         } catch (Error e){
-
-}
+            System.out.println(e.getMessage());
+        }
 
     }
+
+    public void popInfoAlert(String message) {
+        alertDialog.setAlertType(Alert.AlertType.INFORMATION);
+        alertDialog.setContentText(message);
+        alertDialog.showAndWait();
+    }
+
 }
+
