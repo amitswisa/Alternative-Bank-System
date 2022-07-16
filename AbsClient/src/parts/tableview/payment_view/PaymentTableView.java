@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static components.Customer.AppCustomer.getTimeInYazAsInteger;
@@ -79,10 +80,16 @@ public class PaymentTableView implements Initializable {
 
     public void setPaymentList(ObservableList<LoanDataObject> list) {
 
-        if(list == null || list.isEmpty())
+        if(list == null)
             return;
 
-        paymentTable.setItems(list);
+        paymentTable.setItems(list.filtered(new Predicate<LoanDataObject>() {
+            @Override
+            public boolean test(LoanDataObject loanDataObject) {
+                return loanDataObject.getLoanStatus() == LoanDataObject.Status.ACTIVE ||
+                        loanDataObject.getLoanStatus() == LoanDataObject.Status.RISK;
+            }
+        }));
     }
 
     public void setCustomerController(customerScreenController controller) {

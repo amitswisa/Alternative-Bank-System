@@ -177,6 +177,7 @@ public class mainScreenController implements Initializable {
         // Listeners and bindings.
         this.currentCustomer.getTimeInYaz().addListener((observable, oldValue, newValue) -> {
             yazLabel.setText(newValue.intValue() + "");
+            customerPageComponentController.refreshPaymentView();
         });
 
         alertsViewList.setItems(this.currentCustomer.getListOfAlerts());
@@ -184,8 +185,6 @@ public class mainScreenController implements Initializable {
 
         // Pass instance of customer to customer screen.
         this.customerPageComponentController.setCustomer(this.currentCustomer);
-
-
 
         // Make customer updates run async.
         startCustomerDataUpdate();

@@ -49,7 +49,6 @@ public class customerScreenController implements Initializable {
     private final Alert alertDialog;
     private final List<LoanDataObject> loansToInvestList; // Holds loans to invest in when user mark them.
     private final ObservableList<LoanDataObject> allLoans;
-    //private LoanTask loanTask;
 
     // FXML MEMBERS
     @FXML private AnchorPane customerPane;
@@ -265,44 +264,6 @@ public class customerScreenController implements Initializable {
         paymentAreaController.updateInfo(d);
     }
 
-    /* SCRAMBLE PAGE */
-
-    // Show and re-render all loans to invest in list.
-    private void updateScramble() {
-/*
-        // Get all loans and exclude current user's ones.
-        List<LoanDataObject> listOfLoansExcludedCurrentUser = this.engineManager.getAllLoansData().stream()
-                .filter(e -> (e.getLoanStatus() == LoanDataObject.Status.NEW || e.getLoanStatus() == LoanDataObject.Status.PENDING) && !e.getOwner().equals(this.currentUser.getUsername())).collect(Collectors.toList());
-
-        // update number of open loans for customer.
-        for(LoanDataObject e : listOfLoansExcludedCurrentUser)
-            e.setUnfinishedLoansNumber(this.engineManager.getCustomerByName(e.getOwner()).countUnfinishedLoans());
-
-        loansToInvestTableController.setLoanItems(listOfLoansExcludedCurrentUser);
-
-        this.setMaxAmountToInvest(); // Define max amount to invest by user balance.
-        this.resetSettings(); // reset filter object's values.*/
-
-    }
-
-    public void resetSettings() {
-
-        // reset filter object's value.
-        this.investmentAmount.adjustValue(0); // Updating label too because of binding.
-        minInterest.setText("");
-        minYaz.setText("");
-        maxOpenLoans.setText("");
-        ownershipPrecent.setText("");
-
-        // Categories in filer (CheckComboBox) set all to be selected.
-        for(String s : this.filterCats.getItems()) {
-            this.filterCats.getItemBooleanProperty(s).set(true);
-        }
-
-        // Add checkbox column for scramble page.
-        this.resetCheckBoxToInvestList();
-    }
-
     // Validator function for binding textfield to check textfield dont contain non-integers.
     private String validateTextField(String oldValue, String newValue, TextField tf) {
 
@@ -408,7 +369,6 @@ public class customerScreenController implements Initializable {
     public List<CustomerAlertData> getCustomerAlertList() {
         return currentCustomer.getListOfAlerts();
     }
-    /* END SCRAMBLE PAGE */
 
 
     // Payment page
@@ -447,8 +407,8 @@ public class customerScreenController implements Initializable {
             this.investmentAmount.setMax(sliderValue);
         });
 
-        myLoansTableController.setLoansObservableList(this.currentCustomer.getLoanList());
         paymentTableController.setPaymentList(this.currentCustomer.getLoanList());
+        myLoansTableController.setLoansObservableList(this.currentCustomer.getLoanList());
         myInvestmentsLoansController.setLoansObservableList(this.currentCustomer.getInvestmentList());
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
         loansToInvestTableController.setLoansObservableList(allLoans);
@@ -472,7 +432,6 @@ public class customerScreenController implements Initializable {
         });
 
         loansToInvestTableController.refresh(); // update table view.
-        paymentTableController.refreshTable();
     }
 
     public CheckComboBox<String> getCategoryComboBox() {
@@ -501,11 +460,6 @@ public class customerScreenController implements Initializable {
     // Create new loan.
     public void makeNewLoanClicked(MouseEvent actionEvent) {
 
-        /*
-                @FXML private TextField loanID, capital, interestPerPayment, paymentsInterval, loanTotalTime;
-                @FXML private ChoiceBox<String> categoryChoiceBox;
-
-         */
         if (loanID.getText().isEmpty() || capital.getText().isEmpty()
                 || interestPerPayment.getText().isEmpty() || paymentsInterval.getText().isEmpty()
                 || loanTotalTime.getText().isEmpty() || categoryChoiceBox.getValue().isEmpty())

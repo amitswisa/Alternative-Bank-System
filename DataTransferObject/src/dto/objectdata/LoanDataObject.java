@@ -170,7 +170,6 @@ public class LoanDataObject extends DataTransferObject {
         }
 
         return transactionList.get(size-1).getTotalPayment();
-
     }
 
     public int getInterestAmount() {

@@ -1,7 +1,12 @@
 package parts.payment_area;
 
 
+import com.google.gson.Gson;
 import components.Customer.AppCustomer;
+import javafx.application.Platform;
+import javafx.scene.input.MouseEvent;
+import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 import pages.Customer_Screen.customerScreenController;
 import dto.infodata.DataTransferObject;
 import dto.objectdata.LoanDataObject;
@@ -9,6 +14,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import server_con.HttpClientUtil;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +60,7 @@ public class PaymentAreaController implements Initializable {
                     int num = Integer.parseInt(res.get());
 
                     if(num <= 0 || num > customerController.getCustomerBalance())
-                        //TODO - servlet that return current yaz
-                        throw new DataTransferObject("Unvalid amount of money.",0/* TODO- BankSystem.getCurrentYaz()*/);
+                        throw new DataTransferObject("Unvalid amount of money.", AppCustomer.getTimeInYazAsInteger());
 
                     amountToPay = num;
                 } catch (NumberFormatException | DataTransferObject e) {
@@ -67,20 +74,20 @@ public class PaymentAreaController implements Initializable {
             if(currentLoan.getLoanStatus() == LoanDataObject.Status.RISK && amountToPay == 0)
                 return;
 
-            //customerController.handleCustomerLoansPayments(currentLoan,amountToPay);
+            this.handleCustomerLoansPayments(amountToPay);
             refreshRelevantData();
         });
 
         payAll.setOnAction((ActionEvent event) -> {
-            List<LoanDataObject> temp = new ArrayList<>(1);
-            temp.add(currentLoan);
 
-            //try {
-               // customerController.handleCustomerPayAllDebt(temp);
+            if(currentLoan == null)
+                return;
+
+            if(currentLoan.getAmountLeftToPayTofinished() <= customerController.getCustomerBalance())
+            {
+                handleCustomerPayAllDebt();
                 refreshRelevantData();
-            /*} catch (DataTransferObject e) {
-                System.out.println(e.getMessage());
-            }*/
+            }
 
         });
 
@@ -105,7 +112,7 @@ public class PaymentAreaController implements Initializable {
         //Status active
         if(dataObject.getLoanStatus() == LoanDataObject.Status.ACTIVE) {
             if (customerController.getCustomerBalance() >= dataObject.getThisPaymentAmount() &&
-                    0/* TODO- BankSystem.getCurrentYaz()*/ == dataObject.getPaymentYaz())
+                    AppCustomer.getTimeInYazAsInteger() == dataObject.getPaymentYaz())
                 payThisPayment.setDisable(false);
             else
                 payThisPayment.setDisable(true);
@@ -138,5 +145,79 @@ public class PaymentAreaController implements Initializable {
         paymentNumber.setText("");
         amountLeft.setText("");
         paymentAmount.setText("");
+    }
+
+    public void handleCustomerLoansPayments(int investAmount) {
+        if(currentLoan == null)
+            return;
+
+        String jsonLoan = new Gson().toJson(currentLoan, LoanDataObject.class);
+
+        Request request = new Request.Builder()
+                .url(HttpClientUtil.PATH + "/payloan")
+                .post(new FormBody.Builder()
+                        .add("loan", jsonLoan)
+                        .add("investAmount", String.valueOf(investAmount)).build())
+                .build();
+
+        HttpClientUtil.runAsync(request, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+                String msg = "";
+                if(response.code() == 200) {
+                    msg = "Loan paid!";
+                } else {
+                    msg = "Some error occurred.";
+                }
+
+                String finalMsg = msg;
+                Platform.runLater(() -> {
+                    refreshRelevantData();
+                    customerController.popInfoAlert(finalMsg);
+                });
+
+            }
+        });
+    }
+
+    public void handleCustomerPayAllDebt() {
+        if(currentLoan == null)
+            return;
+
+        String jsonLoan = new Gson().toJson(currentLoan, LoanDataObject.class);
+
+        Request request = new Request.Builder()
+                .url(HttpClientUtil.PATH + "/payalldebt")
+                .post(new FormBody.Builder()
+                        .add("loan", jsonLoan).build())
+                .build();
+
+        HttpClientUtil.runAsync(request, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+                Platform.runLater(() -> {
+                    try {
+                        customerController.popInfoAlert(response.body().string());
+                        refreshRelevantData();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        customerController.popInfoAlert("Error occurred!");
+                    }
+                });
+
+            }
+        });
     }
 }
