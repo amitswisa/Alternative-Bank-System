@@ -448,12 +448,10 @@ public class customerScreenController implements Initializable {
         });
 
         myLoansTableController.setLoansObservableList(this.currentCustomer.getLoanList());
-        paymentTableController.setPaymentList(currentCustomer.getLoanList());
+        paymentTableController.setPaymentList(this.currentCustomer.getLoanList());
         myInvestmentsLoansController.setLoansObservableList(this.currentCustomer.getInvestmentList());
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
         loansToInvestTableController.setLoansObservableList(allLoans);
-
-        //paymentTableController.resetChoiceBtn();
     }
 
     // Insert new loans into all loans list.
@@ -474,6 +472,7 @@ public class customerScreenController implements Initializable {
         });
 
         loansToInvestTableController.refresh(); // update table view.
+        paymentTableController.refreshTable();
     }
 
     public CheckComboBox<String> getCategoryComboBox() {

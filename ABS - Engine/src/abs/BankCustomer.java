@@ -144,6 +144,7 @@ public class BankCustomer {
 
     // Get loan name and opening date (Yaz time) and return it.
     public BankLoan getLoanByNameAndYaz(String loanName, Integer openingTime) {
+        System.out.println(openingTime);
         for(BankLoan oneLoan : loansTaken.get(openingTime))
             if(oneLoan.getLoanID().equals(loanName))
                 return oneLoan;

@@ -1,6 +1,7 @@
 package parts.payment_area;
 
 
+import components.Customer.AppCustomer;
 import pages.Customer_Screen.customerScreenController;
 import dto.infodata.DataTransferObject;
 import dto.objectdata.LoanDataObject;
@@ -89,7 +90,7 @@ public class PaymentAreaController implements Initializable {
         currentLoan=dataObject;
         loanStatus.setText(dataObject.getLoanStatus().toString());
         paymentNumber.setText(dataObject.getThisPaymentNumber() + "");
-        amountLeft.setText(dataObject.getLastPayment(0/* TODO- BankSystem.getCurrentYaz()*/) + " ");
+        amountLeft.setText(dataObject.getLastPayment(AppCustomer.getTimeInYazAsInteger()) + " ");
         paymentAmount.setText(dataObject.getAmountLeftToPayTofinished() + " ");
         activateBtnPayThisPayment(dataObject);
         activateBtnPayAll(dataObject);

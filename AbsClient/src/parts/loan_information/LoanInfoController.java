@@ -1,5 +1,6 @@
 package parts.loan_information;
 
+import components.Customer.AppCustomer;
 import dto.objectdata.LoanDataObject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,7 +37,7 @@ public class LoanInfoController implements Initializable {
         this.status.setText(loan.getLoanStatus().toString());
 
         // TODO - Update yaz.
-        scrollPane.setContent(new Text(loan.showLoanData(0)));
+        scrollPane.setContent(new Text(loan.showLoanData(AppCustomer.getTimeInYazAsInteger())));
     }
 
     @Override
