@@ -5,7 +5,6 @@ import dto.JSON.SystemUpdates;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
 import javafx.application.Platform;
-import javafx.scene.control.Label;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import server_con.HttpClientUtil;
@@ -23,19 +22,21 @@ public class CustomerRefresher extends TimerTask {
     private Consumer<Integer> updateYaz;
     private Consumer<List<LoanDataObject>> all_loans;
     private Consumer<Set<String>> addCategories;
+    private Consumer<Integer> countMsg;
     private final String customerName;
 
     // Constructor
     public CustomerRefresher(Consumer<CustomerDataObject> updateUserFunction
             , Consumer<Integer> updateYaz
             , Consumer<List<LoanDataObject>> all_loans
-            ,Consumer<Set<String>> addCategories
-            , String customerName) {
+            , Consumer<Set<String>> addCategories
+            , String customerName, Consumer<Integer> countMsg) {
         this.updateUserFunction = updateUserFunction;
         this.all_loans = all_loans;
         this.updateYaz = updateYaz;
         this.addCategories = addCategories;
         this.customerName = customerName;
+        this.countMsg = countMsg;
         gson = new Gson();
     }
 
@@ -67,6 +68,7 @@ public class CustomerRefresher extends TimerTask {
 
                 // Run updates by JAT
                 Platform.runLater(() -> {
+                    countMsg.accept(0);
                     updateUserFunction.accept(customerData);
                     updateYaz.accept(resValue.getTimeInYaz());
                 });

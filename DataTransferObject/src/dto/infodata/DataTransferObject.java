@@ -50,4 +50,22 @@ public class DataTransferObject extends Throwable {
     public boolean isSuccess() {
         return isSuccess;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DataTransferObject that = (DataTransferObject) o;
+
+        if (timeInYaz != that.timeInYaz) return false;
+        return message != null ? message.equals(that.message) : that.message == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = message != null ? message.hashCode() : 0;
+        result = 31 * result + timeInYaz;
+        return result;
+    }
 }

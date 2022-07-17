@@ -412,7 +412,6 @@ public class customerScreenController implements Initializable {
         myInvestmentsLoansController.setLoansObservableList(this.currentCustomer.getInvestmentList());
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
         loansToInvestTableController.setLoansObservableList(allLoans);
-        loansToSaleTableController.setLoansObservableList(this.currentCustomer.getInvestmentListForSale());
     }
 
     // Insert new loans into all loans list.

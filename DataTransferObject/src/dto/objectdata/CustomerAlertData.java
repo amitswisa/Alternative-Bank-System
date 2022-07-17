@@ -31,7 +31,15 @@ public class CustomerAlertData extends DataTransferObject {
         return this.headline;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
     // Adapter for json serialize.
     public static class CustomerAlertDataAdapter implements JsonSerializer<CustomerAlertData> {
