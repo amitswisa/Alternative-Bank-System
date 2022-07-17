@@ -72,6 +72,7 @@ public class loginScreenController {
                 mainScreenController mainController = loader.getController();
 
                 this.primStage.setScene(new Scene(root));
+                this.primStage.setOnHidden(e -> mainController.shutdown());
                 mainController.setUser(new AppAdmin(usernameFieldContent, Integer.parseInt(eMsg)));
                 this.primStage.show();
             }
