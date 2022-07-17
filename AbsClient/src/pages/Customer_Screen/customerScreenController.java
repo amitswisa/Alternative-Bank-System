@@ -52,7 +52,7 @@ public class customerScreenController implements Initializable {
 
     // FXML MEMBERS
     @FXML private AnchorPane customerPane;
-    @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController;
+    @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController, LoansToSaleTable;
     @FXML private TransactionTable myTransactionListController;
     @FXML private PaymentTableView paymentTableController;
     @FXML private PaymentAreaController paymentAreaController;
@@ -369,19 +369,6 @@ public class customerScreenController implements Initializable {
     public List<CustomerAlertData> getCustomerAlertList() {
         return currentCustomer.getListOfAlerts();
     }
-
-
-    // Payment page
-
-    // Pay all loans current payment.
-    /*public void handleCustomerLoansPayments(LoanDataObject loan, int amountToPay) {
-        this.engineManager.handleCustomerLoansPayments(loan, amountToPay);
-    }*/
-
-    // Close all loans debt or specific loan.
-    /*public void handleCustomerPayAllDebt(List<LoanDataObject> loans) throws DataTransferObject {
-        this.engineManager.handleCustomerPayAllDebt(loans);
-    }*/
 
     public void refreshPaymentTable() {
         paymentTableController.refreshTable();

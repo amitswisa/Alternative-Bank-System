@@ -259,7 +259,7 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="sale loan">
+            <Tab text="Sale loan">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>

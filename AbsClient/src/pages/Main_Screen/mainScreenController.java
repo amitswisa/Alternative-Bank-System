@@ -113,9 +113,15 @@ public class mainScreenController implements Initializable {
                                                     ,currentCustomer::setTimeInYaz
                                                     ,customerPageComponentController::updateAllLoansList
                                                     ,customerPageComponentController::addCategoriesToList
-                                                    ,currentCustomer.getName());
+                                                    ,currentCustomer.getName()
+                                                    ,this::countUnReadMsg);
         timer = new Timer();
         timer.schedule(customerRefresher, 400, 400);
+    }
+
+    private void countUnReadMsg(Integer object) {
+        int count = (int) this.currentCustomer.getListOfAlerts().stream().filter(e -> !e.isAlertGotRead()).count();
+        this.alertMessageCounter.setText(count + "");
     }
 
 
@@ -131,13 +137,6 @@ public class mainScreenController implements Initializable {
             translateTransition.stop();
             customerPageComponentController.getCustomerAlertList().forEach(CustomerAlertData::markAsRead);
         }
-    }
-
-    private int countUnReadMsg() {
-        // Count number of unread notifications.
-        int count = (int) this.currentCustomer.getListOfAlerts().stream().filter(e -> !e.isAlertGotRead()).count();
-        this.alertMessageCounter.setText(count + "");
-        return count;
     }
 
     public void loadAndChaneSettings(MouseEvent mouseEvent) {

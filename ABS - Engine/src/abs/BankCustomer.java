@@ -23,9 +23,6 @@ public class BankCustomer {
         this.loansTaken = new HashMap<>();
         this.loansInvested = new HashMap<>();
         this.listOfAlerts = new ArrayList<>();
-
-        this.listOfAlerts.add(new CustomerAlertData("Headline", "Msg", 1));
-        this.listOfAlerts.add(new CustomerAlertData("Headline2", "Msg2", 1));
     }
 
     // addLoan -> function adding loan to specific customer.
