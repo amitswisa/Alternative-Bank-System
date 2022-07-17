@@ -266,7 +266,7 @@
                         <SplitPane dividerPositions="0.6185770750988142" layoutX="4.0" layoutY="3.0" orientation="VERTICAL" prefHeight="508.0" prefWidth="968.0">
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" >
-                                <fx:include fx:id="LoansToSaleTable" source="../../parts/tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+                                <fx:include fx:id="loansToSaleTable" source="../../parts/tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
                             </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                  <children>

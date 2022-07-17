@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AppCustomer {
 
@@ -98,6 +99,10 @@ public class AppCustomer {
 
     public ObservableList<LoanDataObject> getInvestmentList() {
         return investmentList;
+    }
+
+    public ObservableList<LoanDataObject> getInvestmentListForSale() {
+        return  investmentList.stream().filter(e -> e.getLoanStatus()== LoanDataObject.Status.ACTIVE).collect(Collectors.toList());
     }
 
     public ObservableList<LoanDataObject> getLoanList() {

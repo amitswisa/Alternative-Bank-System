@@ -52,7 +52,7 @@ public class customerScreenController implements Initializable {
 
     // FXML MEMBERS
     @FXML private AnchorPane customerPane;
-    @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController;
+    @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController, loansToSaleTableController;
     @FXML private TransactionTable myTransactionListController;
     @FXML private PaymentTableView paymentTableController;
     @FXML private PaymentAreaController paymentAreaController;
@@ -412,6 +412,7 @@ public class customerScreenController implements Initializable {
         myInvestmentsLoansController.setLoansObservableList(this.currentCustomer.getInvestmentList());
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
         loansToInvestTableController.setLoansObservableList(allLoans);
+        loansToSaleTableController.setLoansObservableList(this.currentCustomer.getInvestmentListForSale());
     }
 
     // Insert new loans into all loans list.
