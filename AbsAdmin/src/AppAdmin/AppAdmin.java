@@ -6,6 +6,7 @@ import dto.objectdata.LoanDataObject;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -23,17 +24,20 @@ public class AppAdmin {
     }
 
     // Updates customer from data returns from server.
-    public void updateAdminData(AdminData data) {
+    public void updateAdminData(@NotNull AdminData data) {
         this.setCustomers(data.getCustomers());
         this.setAllLoan(data.getAllLoans());
+        yazInTime.set(data.getTimeInYaz());
     }
 
     public void setAllLoan(List<LoanDataObject> allLoan) {
-        this.allLoan.setAll(allLoan);
+        if(allLoan != null)
+            this.allLoan.setAll(allLoan);
     }
 
     public void setCustomers(List<CustomerDataObject> customers) {
-        this.customers.setAll(customers);
+        if(customers != null)
+            this.customers.setAll(customers);
     }
 
     public String getName() {

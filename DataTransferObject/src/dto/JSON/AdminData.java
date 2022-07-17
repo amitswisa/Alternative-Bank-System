@@ -27,7 +27,7 @@ public class AdminData {
     }
 
     public List<CustomerDataObject> getCustomers() {
-        return customers;
+        return this.customers;
     }
 
     public Integer getTimeInYaz() {

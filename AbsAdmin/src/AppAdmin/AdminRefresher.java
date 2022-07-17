@@ -23,7 +23,6 @@ public class AdminRefresher extends TimerTask {
     private final Gson gson;
     private Consumer<AdminData> data;
 
-
     // Constructor
     public AdminRefresher(Consumer<AdminData> data) {
         this.data = data;
@@ -35,7 +34,7 @@ public class AdminRefresher extends TimerTask {
 
         Request request = new Request.Builder()
                 .url(HttpClientUtil.PATH + HttpClientUtil.ADMIN_UPDATE)
-                .get()
+                .post(new FormBody.Builder().build())
                 .build();
 
         HttpClientUtil.runAsync(request, new Callback() {

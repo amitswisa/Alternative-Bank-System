@@ -120,12 +120,12 @@ public class mainScreenController implements Initializable {
         this.currentAdmin = currentAdmin;
         adminPageComponentController.setUser(this.currentAdmin);
 
-        startAdminDataUpdate();
-
         yazLabel.setText(getYazInTime().get()+"");
         getYazInTime().addListener((observable, oldValue, newValue) -> {
             yazLabel.setText(newValue.intValue() + "");
         });
+
+        startAdminDataUpdate();
     }
 
     public void shutdown() {
