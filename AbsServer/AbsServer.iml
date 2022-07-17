@@ -12,6 +12,6 @@
     <orderEntry type="module" module-name="DataTransferObject" />
     <orderEntry type="library" scope="PROVIDED" name="Tomcat 10.0.11" level="application_server_libraries" />
     <orderEntry type="library" name="gson-2.11" level="project" />
-    <orderEntry type="library" name="okHttp" level="application" />
+    <orderEntry type="library" name="okHttp" level="project" />
   </component>
 </module>

@@ -1,6 +1,7 @@
 package pages.Main_Admin_Screen;
 
 import AppAdmin.AppAdmin;
+import AppAdmin.AdminRefresher;
 import Utils.User;
 import javafx.animation.*;
 import javafx.fxml.FXML;
@@ -29,6 +30,8 @@ public class mainScreenController implements Initializable {
     // Data members
     private AppAdmin currentAdmin;
     private TranslateTransition translateTransition;
+    private Timer timer;
+    private AdminRefresher adminRefresher;
     private ChoiceDialog<String> dialog;
 
     // Pages
@@ -61,6 +64,16 @@ public class mainScreenController implements Initializable {
        // adminPageComponentController.setInitData(this);
 
     }
+
+    //todo- doesnt right just a try
+    // Start running TimerTask AppCustomer run method every 400 ms.
+   /* private void startAdminDataUpdate() {
+        adminRefresher = new AdminRefresher(currentAdmin::updateUser
+                ,currentAdmin::setYaz
+                ,currentAdmin::setCustomers);
+        timer = new Timer();
+        timer.schedule(adminRefresher, 400, 400);
+    }*/
 
     public void settingsFunctionallity(MouseEvent mouseEvent) {
 

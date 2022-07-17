@@ -20,7 +20,7 @@ public class customerTableView implements Initializable {
     private ObservableList<CustomerDataObject> list = null;
 
     @FXML private TableView<CustomerDataObject> customerTable;
-    @FXML private TableColumn<LoanDataObject, String> name, balance , takenLoansNumber , investedLoansNumber;
+    @FXML private TableColumn<LoanDataObject, String> name, balance ;
 
     public customerTableView() {
         list = FXCollections.observableArrayList();
@@ -30,8 +30,6 @@ public class customerTableView implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
         balance.setCellValueFactory(new PropertyValueFactory<>("balance"));
-        takenLoansNumber.setCellValueFactory(new PropertyValueFactory<>("takenLoansNumber"));
-        investedLoansNumber.setCellValueFactory(new PropertyValueFactory<>("investedLoansNumber"));
     }
 
     public void setCustomerList(List<CustomerDataObject> list) {

@@ -21,8 +21,7 @@ import server_con.HttpClientUtil;
 import java.io.IOException;
 import java.net.URL;
 
-import static server_con.HttpClientUtil.PATH;
-import static server_con.HttpClientUtil.userLoginPage;
+import static server_con.HttpClientUtil.*;
 
 public class loginScreenController {
 
@@ -47,7 +46,7 @@ public class loginScreenController {
         // Server request to authenticate customer username
         // If is a new customer creates the user.
         String finalUrl = HttpUrl
-                .parse(PATH + userLoginPage)
+                .parse(PATH + adminLoginPage)
                 .newBuilder()
                 .addQueryParameter("username", usernameFieldContent)
                 .build()

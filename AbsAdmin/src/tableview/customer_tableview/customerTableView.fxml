@@ -8,8 +8,6 @@
            <columns>
                <TableColumn fx:id="name" maxWidth="2500.0" prefWidth="172.66665136814117" text="Customer Name" />
                <TableColumn fx:id="balance" maxWidth="2500.0" prefWidth="104.66667175292969" text="Balance" />
-               <TableColumn fx:id="takenLoansNumber" prefWidth="322.3332824707031" text="Taken Loans (NEW / PENDING / ACTIVE / RISK)" />
-               <TableColumn fx:id="investedLoansNumber" prefWidth="321.33331298828125" text="Invested Loans (NEW / PENDING / ACTIVE / RISK)" />
            </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

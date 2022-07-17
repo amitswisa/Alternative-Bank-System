@@ -12,9 +12,11 @@ public class HttpClientUtil
     public static final String BASE_URL = "/Abs";
     public static final String CUSTOMER_UPDATE = "/customerUpdates";
     public static final String MAKE_INVESTMENT = "/makeInvestment";
+    public static final String ADMIN_UPDATE = "/adminUpdates";
 
     // Pages paths
     public static final String userLoginPage = "/login";
+    public static final String adminLoginPage = "/loginadmin";
 
     public static final String PATH = hostAddress + BASE_URL;
 

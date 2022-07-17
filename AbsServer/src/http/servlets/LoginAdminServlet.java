@@ -1,23 +1,22 @@
 package http.servlets;
 
 import abs.BankSystem;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import engine.EngineManager;
 import http.constants.Constants;
-import http.utils.SessionUtils;
 import http.utils.ServletUtils;
+import http.utils.SessionUtils;
 import jakarta.servlet.annotation.WebServlet;
-import users.UserManager;
-import java.io.IOException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import users.UserManager;
+
+import java.io.IOException;
 
 import static http.constants.Constants.USERNAME;
 
-@WebServlet(name = "Login Servlet", urlPatterns = "/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "Login Admin Servlet", urlPatterns = "/loginadmin")
+public class LoginAdminServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -40,7 +39,14 @@ public class LoginServlet extends HttpServlet {
                 usernameFromParameter = usernameFromParameter.trim();
 
                 synchronized (this) {
-                    if (userManager.isUserExists(usernameFromParameter)) {
+                    if (userManager.isAdminExists()) {
+                        String errorMessage = "Admin already exists.";
+
+                        // stands for unauthorized as there is already such user with this name
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.getOutputStream().print(errorMessage);
+                    }
+                    else if(userManager.isUserExists(usernameFromParameter)) {
                         String errorMessage = "Username " + usernameFromParameter + " already exists. Please enter a different username.";
 
                         // stands for unauthorized as there is already such user with this name
@@ -51,9 +57,8 @@ public class LoginServlet extends HttpServlet {
                         // Get engine from servlet context.
                         EngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
 
-                        //add the new user to the users list.
-                        userManager.addUser(usernameFromParameter, engineManager);
-                        System.out.println(engineManager.getAllCustomersNames());
+                        //add admin.
+                        userManager.addAdmin(usernameFromParameter, engineManager);
 
                         //set the username in a session so it will be available on each request
                         //the true parameter means that if a session object does not exists yet create a new one

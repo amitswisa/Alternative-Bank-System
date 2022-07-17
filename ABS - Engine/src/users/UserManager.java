@@ -13,9 +13,11 @@ of the user of this class to handle the synchronization of isUserExists with oth
  */
 public class UserManager {
 
+    private String admin;
     private final Set<String> usersSet;
 
     public UserManager() {
+        admin = "";
         usersSet = new HashSet<>();
     }
 
@@ -24,11 +26,22 @@ public class UserManager {
         engineManager.addNewCustomer(customerName);
     }
 
+    public synchronized void addAdmin(String customerName, EngineManager engineManager) {
+        admin = customerName;
+    }
+
     public synchronized Set<String> getUsers() {
         return Collections.unmodifiableSet(usersSet);
     }
 
     public boolean isUserExists(String username) {
         return usersSet.contains(username);
+    }
+
+    public boolean isAdminExists() {
+        if(admin.equals(""))
+            return false;
+
+        return true;
     }
 }

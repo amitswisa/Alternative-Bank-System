@@ -18,7 +18,7 @@ public class AppCustomer {
     private final SimpleIntegerProperty balance;
     private static SimpleIntegerProperty timeInYaz;
     private ObservableList<CustomerOperationData> logCustomer;
-    private ObservableList<LoanDataObject> investmentList; // My investments
+    private ObservableList<LoanDataObject> investmentList;//  My investments
     private ObservableList<LoanDataObject> loanList; // my Loans
     private ObservableList<CustomerAlertData> listOfAlerts;
 
