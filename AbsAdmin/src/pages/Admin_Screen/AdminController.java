@@ -1,36 +1,23 @@
 package pages.Admin_Screen;
 
 
+import AppAdmin.AppAdmin;
 import javafx.fxml.FXML;
-import pages.Main_Admin_Screen.mainScreenController;
 import tableview.loan_tableview.loansTableView;
 import tableview.customer_tableview.customerTableView;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AdminController {
 
-    private List<String> customersNames;
+    private AppAdmin currentAdmin;
 
     // @FXML
     @FXML private loansTableView loanTableController;
     @FXML private customerTableView customerTableController;
 
-    public AdminController() {
-        customersNames = new ArrayList<String>();
+    public void setUser(AppAdmin currentAdmin) {
+        this.currentAdmin = currentAdmin;
+        loanTableController.setLoansObservableList(this.currentAdmin.getAllLoan());
+        customerTableController.setCustomerList(this.currentAdmin.getCustomers());
     }
-
-    public void setInitData(mainScreenController mainScreenController) {
-        //TODO- set table information
-    }
-
-
-//TODO - update table information
-   /* public void updateAdminLists() {
-        if(fileToLoad != null) {
-            loanTableController.setLoanItems(this.engineManager.getAllLoansData()); // Transfer loan's list from loaded file to controller.
-            customerTableController.setCustomerList(this.engineManager.getAllCustomerData()); // Transfer customer's list from loaded file to controller.
-        }
-    }*/
 
 }

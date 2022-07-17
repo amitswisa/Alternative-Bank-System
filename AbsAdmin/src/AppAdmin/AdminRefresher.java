@@ -1,6 +1,7 @@
 package AppAdmin;
 
 import com.google.gson.Gson;
+import dto.JSON.AdminData;
 import dto.JSON.SystemUpdates;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
@@ -20,22 +21,15 @@ public class AdminRefresher extends TimerTask {
 
     // Hold pointers to customer set functions of those topics.
     private final Gson gson;
-    private Consumer<List<LoanDataObject>> updateLoans;
-    private Consumer<Integer> updateYaz;
-    private Consumer<List<CustomerDataObject>> customers;
+    private Consumer<AdminData> data;
 
 
     // Constructor
-    public AdminRefresher(Consumer<List<LoanDataObject>> updateLoans
-            , Consumer<Integer> updateYaz
-            , Consumer<List<CustomerDataObject>> customers) {
-        this.updateLoans = updateLoans;
-        this.updateYaz = updateYaz;
-        this.customers = customers;
+    public AdminRefresher(Consumer<AdminData> data) {
+        this.data = data;
         gson = new Gson();
     }
 
-    //TODO - Method that runs according to timer timing.
     @Override
     public void run() {
 
@@ -52,17 +46,10 @@ public class AdminRefresher extends TimerTask {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                SystemUpdates resValue = gson.fromJson(response.body().string(), SystemUpdates.class);
+                AdminData resValue = gson.fromJson(response.body().string(), AdminData.class);
 
-                // Extract & Update data.
-                CustomerDataObject customerData = resValue.getCurCustomerData();
-
-                updateLoans.accept(resValue.getAll_loans());
-
-                // Run updates by JAT
                 Platform.runLater(() -> {
-                   // updateUserFunction.accept(customerData);
-                    updateYaz.accept(resValue.getTimeInYaz());
+                    data.accept(resValue);
                 });
             }
         });

@@ -20,7 +20,6 @@ public class AdminData {
         this.customers = customers;
         this.allLoans = allLoans;
         this.timeInYaz = timeInYaz;
-
     }
 
     public List<LoanDataObject> getAllLoans() {

@@ -8,23 +8,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.List;
-import java.util.Map;
 
 public class AppAdmin {
     private final String username;
     private static SimpleIntegerProperty yazInTime;
-    private ObservableList<LoanDataObject> allLoan;
-    private ObservableList<CustomerDataObject> customers;
+    private final ObservableList<LoanDataObject> allLoan;
+    private final ObservableList<CustomerDataObject> customers;
 
     public AppAdmin(String username, int yaz) {
         this.username = username;
         yazInTime = new SimpleIntegerProperty(yaz);
         this.allLoan = FXCollections.observableArrayList();
-        this.customers = FXCollections.observableArrayList();//TODO- INIT with the customers
+        this.customers = FXCollections.observableArrayList();
     }
 
     // Updates customer from data returns from server.
-    public void updateUser(AdminData data) {
+    public void updateAdminData(AdminData data) {
         this.setCustomers(data.getCustomers());
         this.setAllLoan(data.getAllLoans());
     }

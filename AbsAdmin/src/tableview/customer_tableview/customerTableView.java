@@ -17,13 +17,11 @@ import java.util.ResourceBundle;
 public class customerTableView implements Initializable {
 
     // this Data-Members
-    private ObservableList<CustomerDataObject> list = null;
-
     @FXML private TableView<CustomerDataObject> customerTable;
     @FXML private TableColumn<LoanDataObject, String> name, balance ;
 
     public customerTableView() {
-        list = FXCollections.observableArrayList();
+
     }
 
     @Override
@@ -32,12 +30,11 @@ public class customerTableView implements Initializable {
         balance.setCellValueFactory(new PropertyValueFactory<>("balance"));
     }
 
-    public void setCustomerList(List<CustomerDataObject> list) {
+    public void setCustomerList(ObservableList<CustomerDataObject> list) {
 
-        if(list == null || list.isEmpty())
+        if(list == null)
             return;
 
-        this.list.setAll(list);
-        this.customerTable.setItems(this.list);
+        this.customerTable.setItems(list);
     }
 }

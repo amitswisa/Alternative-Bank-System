@@ -2,7 +2,6 @@ package pages.Main_Admin_Screen;
 
 import AppAdmin.AppAdmin;
 import AppAdmin.AdminRefresher;
-import Utils.User;
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,18 +22,18 @@ import java.util.*;
 
 import static AppAdmin.AppAdmin.getYazInTime;
 import static server_con.HttpClientUtil.PATH;
-import static server_con.HttpClientUtil.userLoginPage;
 
 public class mainScreenController implements Initializable {
 
     // Data members
-    private AppAdmin currentAdmin;
-    private TranslateTransition translateTransition;
     private Timer timer;
     private AdminRefresher adminRefresher;
-    private ChoiceDialog<String> dialog;
+    private AppAdmin currentAdmin;
+    private TranslateTransition translateTransition;
+    private final ChoiceDialog<String> dialog;
 
     // Pages
+    @FXML private AdminController adminPageComponentController;
     @FXML private AnchorPane mainPane;
 
     // FXML members
@@ -44,6 +43,8 @@ public class mainScreenController implements Initializable {
 
 
     public mainScreenController() {
+
+        timer = new Timer();
 
         // Dialog to settings
         List<String> choices = new ArrayList<String>();
@@ -60,20 +61,16 @@ public class mainScreenController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        // Transfer engine to included fxmls.
-       // adminPageComponentController.setInitData(this);
+        
 
     }
 
-    //todo- doesnt right just a try
-    // Start running TimerTask AppCustomer run method every 400 ms.
-   /* private void startAdminDataUpdate() {
-        adminRefresher = new AdminRefresher(currentAdmin::updateUser
-                ,currentAdmin::setYaz
-                ,currentAdmin::setCustomers);
+    // TimerTask creation, every 400ms refresh data from server.
+   private void startAdminDataUpdate() {
+        adminRefresher = new AdminRefresher(currentAdmin::updateAdminData);
         timer = new Timer();
         timer.schedule(adminRefresher, 400, 400);
-    }*/
+    }
 
     public void settingsFunctionallity(MouseEvent mouseEvent) {
 
@@ -121,10 +118,23 @@ public class mainScreenController implements Initializable {
 
     public void setUser(AppAdmin currentAdmin) {
         this.currentAdmin = currentAdmin;
+        adminPageComponentController.setUser(this.currentAdmin);
+
+        startAdminDataUpdate();
 
         yazLabel.setText(getYazInTime().get()+"");
         getYazInTime().addListener((observable, oldValue, newValue) -> {
             yazLabel.setText(newValue.intValue() + "");
         });
+    }
+
+    public void shutdown() {
+        // When closing app stop refresher task.
+        if(adminRefresher != null && timer != null)
+        {
+            adminRefresher.cancel();
+            timer.cancel();
+        }
+        System.exit(0);
     }
 }
