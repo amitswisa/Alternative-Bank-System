@@ -110,18 +110,13 @@ public class mainScreenController implements Initializable {
     // Start running TimerTask AppCustomer run method every 400 ms.
     private void startCustomerDataUpdate() {
         customerRefresher = new CustomerRefresher(currentCustomer::updateUser
-                                                    ,currentCustomer::setTimeInYaz
-                                                    ,customerPageComponentController::updateAllLoansList
-                                                    ,customerPageComponentController::addCategoriesToList
-                                                    ,currentCustomer.getName()
-                                                    ,this::countUnReadMsg);
+                ,currentCustomer::setTimeInYaz
+                ,customerPageComponentController::updateAllLoansList
+                ,customerPageComponentController::addCategoriesToList
+                ,currentCustomer.getName()
+                ,this::countUnReadMsg);
         timer = new Timer();
         timer.schedule(customerRefresher, 400, 400);
-    }
-
-    private void countUnReadMsg(Integer object) {
-        int count = (int) this.currentCustomer.getListOfAlerts().stream().filter(e -> !e.isAlertGotRead()).count();
-        this.alertMessageCounter.setText(count + "");
     }
 
 
@@ -137,6 +132,11 @@ public class mainScreenController implements Initializable {
             translateTransition.stop();
             customerPageComponentController.getCustomerAlertList().forEach(CustomerAlertData::markAsRead);
         }
+    }
+
+    private void countUnReadMsg(Integer object) {
+        int count = (int) this.currentCustomer.getListOfAlerts().stream().filter(e -> !e.isAlertGotRead()).count();
+        this.alertMessageCounter.setText(count + "");
     }
 
     public void loadAndChaneSettings(MouseEvent mouseEvent) {
@@ -180,7 +180,6 @@ public class mainScreenController implements Initializable {
         });
 
         alertsViewList.setItems(this.currentCustomer.getListOfAlerts());
-        // TODO - Number of unread notification change.
 
         // Pass instance of customer to customer screen.
         this.customerPageComponentController.setCustomer(this.currentCustomer);
@@ -204,7 +203,7 @@ public class mainScreenController implements Initializable {
             // Create request and add its body from "formBody"
             Request upload_xml_request = new Request.Builder()
                     .url(HttpClientUtil.PATH + "/UploadCustomerData")
-                            .post(formBody).build();
+                    .post(formBody).build();
 
             String responseMessage = "";
             try {

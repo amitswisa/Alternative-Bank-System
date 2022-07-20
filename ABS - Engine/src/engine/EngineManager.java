@@ -158,4 +158,20 @@ public class EngineManager {
         this.bankSystem.getCustomerByName(customer.getName()).addLoan(bankLoan);
         return true;
     }
+
+    public String changeLoanSellStatus(String name, String sellerName, String loanName) {
+        return bankSystem.changeLoanSellStatus(name,sellerName, loanName);
+    }
+
+    public void handleLoanBuying(String loanOwner, String sellerName, String buyerName, String loanName) throws DataTransferObject {
+
+        if(bankSystem.getCustomerByName(loanOwner) == null ||
+                bankSystem.getCustomerByName(sellerName) == null ||
+                    bankSystem.getCustomerByName(buyerName) == null) {
+            throw new DataTransferObject("Error: one of the customer doesnt exist.", BankSystem.getCurrentYaz());
+        }
+
+        this.bankSystem.handleLoanBuying(loanOwner, sellerName, buyerName, loanName);
+
+    }
 }

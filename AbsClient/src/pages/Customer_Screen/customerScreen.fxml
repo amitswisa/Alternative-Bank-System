@@ -259,58 +259,12 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Sale loan">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <SplitPane dividerPositions="0.6185770750988142" layoutX="4.0" layoutY="3.0" orientation="VERTICAL" prefHeight="508.0" prefWidth="968.0">
-                          <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" >
-                                <fx:include fx:id="loansToSaleTable" source="../../parts/tableview/loan_tableview/loanTableView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
-                            </AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                                 <children>
-                                    <HBox alignment="CENTER" layoutX="5.0" layoutY="8.0" prefHeight="176.0" prefWidth="956.0">
-                                       <children>
-                                          <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="142.0" text="Offer for sale" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </AnchorPane>
-                          </items>
-                        </SplitPane>
-                     </children>
-                  </AnchorPane>
-              </content>
-            </Tab>
             <Tab text="buy loan">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <SplitPane dividerPositions="0.6442687747035574" layoutX="3.0" layoutY="3.0" orientation="VERTICAL" prefHeight="508.0" prefWidth="967.0">
-                          <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                                 <children>
-                                    <TableView layoutX="2.0" layoutY="1.0" prefHeight="320.0" prefWidth="960.0">
-                                      <columns>
-                                        <TableColumn prefWidth="75.0" text="C1" />
-                                        <TableColumn prefWidth="75.0" text="C2" />
-                                      </columns>
-                                    </TableView>
-                                 </children>
-                              </AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                                 <children>
-                                    <HBox alignment="CENTER" layoutX="1.0" layoutY="1.0" prefHeight="174.0" prefWidth="961.0">
-                                       <children>
-                                          <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="129.0" text="Buy The Loan" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </AnchorPane>
-                          </items>
-                        </SplitPane>
-                     </children>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="680.0">
+                      <children>
+                          <fx:include fx:id="buyLoanList" source="../../parts/tableview/buyloans_tableview/buyLoanTableView.fxml" />
+                      </children>
                   </AnchorPane>
               </content>
             </Tab>

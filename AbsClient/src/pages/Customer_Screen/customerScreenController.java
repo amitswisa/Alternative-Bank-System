@@ -30,6 +30,7 @@ import okhttp3.Response;
 import org.controlsfx.control.CheckComboBox;
 import org.jetbrains.annotations.NotNull;
 import parts.payment_area.PaymentAreaController;
+import parts.tableview.buyloans_tableview.BuyLoanView;
 import server_con.HttpClientUtil;
 import parts.tableview.loan_tableview.loansTableView;
 import parts.tableview.payment_view.PaymentTableView;
@@ -52,10 +53,11 @@ public class customerScreenController implements Initializable {
 
     // FXML MEMBERS
     @FXML private AnchorPane customerPane;
-    @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController, loansToSaleTableController;
+    @FXML private loansTableView myLoansTableController, myInvestmentsLoansController, loansToInvestTableController, LoansToSaleTableController;
     @FXML private TransactionTable myTransactionListController;
     @FXML private PaymentTableView paymentTableController;
     @FXML private PaymentAreaController paymentAreaController;
+    @FXML private BuyLoanView buyLoanListController;
     @FXML private Label currentBalance;
     @FXML private Button depositBtn, withdrawalBtn;
 
@@ -353,35 +355,22 @@ public class customerScreenController implements Initializable {
                 .build();
 
         HttpClientUtil.runAsync(request, new okhttp3.Callback() {
-                    @Override
-                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        System.out.println(e.getMessage());
-                    }
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println(e.getMessage());
+            }
 
-                    @Override
-                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                        String msg = response.body().string();
-                        System.out.println(msg);
-                    }
-                });
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String msg = response.body().string();
+                System.out.println(msg);
+            }
+        });
     }
 
     public List<CustomerAlertData> getCustomerAlertList() {
         return currentCustomer.getListOfAlerts();
     }
-
-
-    // Payment page
-
-    // Pay all loans current payment.
-    /*public void handleCustomerLoansPayments(LoanDataObject loan, int amountToPay) {
-        this.engineManager.handleCustomerLoansPayments(loan, amountToPay);
-    }*/
-
-    // Close all loans debt or specific loan.
-    /*public void handleCustomerPayAllDebt(List<LoanDataObject> loans) throws DataTransferObject {
-        this.engineManager.handleCustomerPayAllDebt(loans);
-    }*/
 
     public void refreshPaymentTable() {
         paymentTableController.refreshTable();
@@ -407,11 +396,20 @@ public class customerScreenController implements Initializable {
             this.investmentAmount.setMax(sliderValue);
         });
 
+        // Tables binding.
+
         paymentTableController.setPaymentList(this.currentCustomer.getLoanList());
+
         myLoansTableController.setLoansObservableList(this.currentCustomer.getLoanList());
+
+        myInvestmentsLoansController.doSellButton(this.currentCustomer.getName());
         myInvestmentsLoansController.setLoansObservableList(this.currentCustomer.getInvestmentList());
+
         myTransactionListController.setTransactionList(this.currentCustomer.getLogCustomer());
+
         loansToInvestTableController.setLoansObservableList(allLoans);
+
+        buyLoanListController.setBuyLoansObservableList(this.currentCustomer.getLoanSellerList(), this.currentCustomer);
     }
 
     // Insert new loans into all loans list.
@@ -428,10 +426,13 @@ public class customerScreenController implements Initializable {
                     loan.update(e);
                 }
             else
-               allLoans.remove(e);
+                allLoans.remove(e);
         });
 
         loansToInvestTableController.refresh(); // update table view.
+
+        // Update investors loans selling list.
+        this.currentCustomer.setLoanSellerList(list);
     }
 
     public CheckComboBox<String> getCategoryComboBox() {
@@ -474,8 +475,8 @@ public class customerScreenController implements Initializable {
                     getTimeInYazAsInteger(), Integer.parseInt(loanTotalTime.getText()));
 
             if(newLoan.isValidLoan()) {
-               Gson gson = new GsonBuilder().registerTypeAdapter(LoanDataObject.class, new LoanDataObject.LoanDataObjectAdapter()).create();
-               String jsonLoan = gson.toJson(newLoan, LoanDataObject.class);
+                Gson gson = new GsonBuilder().registerTypeAdapter(LoanDataObject.class, new LoanDataObject.LoanDataObjectAdapter()).create();
+                String jsonLoan = gson.toJson(newLoan, LoanDataObject.class);
 
                 Request request = new Request.Builder()
                         .url(HttpClientUtil.PATH + "/ClientMakeLoanServlet")
@@ -483,32 +484,32 @@ public class customerScreenController implements Initializable {
                                 .add("loanData", jsonLoan).build())
                         .build();
 
-               HttpClientUtil.runAsync(request, new okhttp3.Callback() {
-                   @Override
-                   public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                       System.out.println(e.getMessage());
-                   }
+                HttpClientUtil.runAsync(request, new okhttp3.Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        System.out.println(e.getMessage());
+                    }
 
-                   @Override
-                   public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                       String responseMsg = response.body().string();
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        String responseMsg = response.body().string();
 
-                       // If success -> clear all fields.
-                       if(response.code() == 200) {
-                           Platform.runLater(() -> {
-                               loanID.setText("");
-                               capital.setText("");
-                               interestPerPayment.setText("");
-                               paymentsInterval.setText("");
-                               loanTotalTime.setText("");
-                               categoryChoiceBox.getSelectionModel().clearSelection();
-                           });
-                       }
+                        // If success -> clear all fields.
+                        if(response.code() == 200) {
+                            Platform.runLater(() -> {
+                                loanID.setText("");
+                                capital.setText("");
+                                interestPerPayment.setText("");
+                                paymentsInterval.setText("");
+                                loanTotalTime.setText("");
+                                categoryChoiceBox.getSelectionModel().clearSelection();
+                            });
+                        }
 
-                       // Pop up message.
-                       Platform.runLater(() -> popInfoAlert(responseMsg));
-                   }
-               });
+                        // Pop up message.
+                        Platform.runLater(() -> popInfoAlert(responseMsg));
+                    }
+                });
             } else {
                 popInfoAlert("Payments arent dividing equally.");
             }
@@ -526,4 +527,3 @@ public class customerScreenController implements Initializable {
     }
 
 }
-

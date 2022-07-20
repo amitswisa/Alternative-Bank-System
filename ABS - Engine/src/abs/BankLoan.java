@@ -31,8 +31,7 @@ public class BankLoan {
         this.loanCategory = absLoan.getAbsCategory();
         this.loanAmount = absLoan.getAbsCapital();
         this.loanTotalTime = absLoan.getAbsTotalYazTime();
-        //TODO- change the start time to current yaz
-        this.loanOpeningTime = 1;
+        this.loanOpeningTime = BankSystem.getCurrentYaz();
         this.loanStartTime = 0;
         this.loanInterestPerPayment = absLoan.getAbsIntristPerPayment();
         this.paymentInterval = absLoan.getAbsPaysEveryYaz();
@@ -55,7 +54,6 @@ public class BankLoan {
         this.loanStatus = LoanDataObject.Status.NEW;
         transactionList = new ArrayList<>();
     }
-
 
     // Return next payment time for current loan in Yaz.
     public int getNextPaymentTime(){
@@ -324,6 +322,14 @@ public class BankLoan {
 
         // If balance is not enough to make the payment.
         this.setStatus(LoanDataObject.Status.RISK); // set status to RISK.
+
+        // Stop investors share sale if loan becomes at risk.
+        this.loanInvestors.forEach((name, data) -> {
+            data.resetIsSell();
+            data.getInvestor().addAlert("Sale cancelled!", this.getLoanID() + " is at risk status!");
+        });
+
+
     }
 
     // Returns the index of current payment need to pay.
@@ -364,6 +370,36 @@ public class BankLoan {
         });
     }
 
+    public Map<String, Boolean> getInvestorsSellStatusMap() {
+        Map<String, Boolean> shareSellList = new HashMap<>();
+
+        this.getLoanInvestors().forEach((name, inv) -> {
+            shareSellList.put(name, inv.getIsSell());
+        });
+
+        return shareSellList;
+    }
+
+    public int getInvestorLeftShare(String investorName) {
+        return ((this.loanInvestors.get(investorName).getCapital()) * ((getLoanTotalTime() / getPaymentInterval()) - getThisPaymentNumber() + 1));
+    }
+
+    //Returns the current payment number.
+    public int getThisPaymentNumber(){
+        int count=1, i=0;
+
+        while(this.transactionList.get(i).getTransactionStatus() == TransactionDataObject.Status.PAYED || this.transactionList.get(i).getTransactionStatus() == TransactionDataObject.Status.DEPT_COVERED) {
+            count++;
+            i++;
+        }
+        return count;
+    }
+
+    //Returns the number of payments.
+    public int getNumberOfPayments(){
+        return this.loanTotalTime / this.paymentInterval;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -375,5 +411,23 @@ public class BankLoan {
     @Override
     public int hashCode() {
         return loanID.hashCode();
+    }
+
+    public void changeShareOwner(BankCustomer seller, BankCustomer buyer) {
+
+        int money = this.getInvestorLeftShare(seller.getName());
+
+        // Pay & Receive money.
+        buyer.payMoneyOfShareBuying(money, this.getLoanID());
+        seller.getMoneyOfShareSell(money, this.getLoanID());
+
+        // Add & Remove loan from investment list.
+        seller.removeLoanAfterSell(this);
+        buyer.addLoanAfterBuy(this);
+
+        // Change shareholder.
+        Investor shareHolderInstance = this.loanInvestors.remove(seller.getName()); // Remove and get seller.
+        shareHolderInstance.setInvestor(buyer); // Replace investor.
+        this.loanInvestors.put(buyer.getName(), shareHolderInstance); // Update owner and insert to investors list.
     }
 }

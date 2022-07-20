@@ -19,6 +19,8 @@ public class HttpClientUtil
     public static final String adminLoginPage = "/loginadmin";
 
     public static final String PATH = hostAddress + BASE_URL;
+    public static final String SELL_LOAN = "/SellLoan";
+    public static final String BUY_LOAN = "/BuyLoan";
 
     // Sync HTTP Requests sender method.
     public static Response sendSyncRequest(Request req) throws IOException {

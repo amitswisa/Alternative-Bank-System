@@ -1,5 +1,6 @@
 package parts.tableview.payment_tableview;
 
+import components.Customer.AppCustomer;
 import dto.objectdata.LoanDataObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -32,9 +33,7 @@ public class PaymentTableView implements Initializable {
         // Init table columns
         loanID.setCellValueFactory(new PropertyValueFactory<>("loanID"));
         paymentYaz.setCellValueFactory(new PropertyValueFactory<>("paymentYaz"));
-
-        // TODO - Current yaz update.
-        lastPayment.setCellValueFactory((TableColumn.CellDataFeatures<LoanDataObject, String> d) -> new SimpleStringProperty(d.getValue().getLastPayment(0)+""));
+        lastPayment.setCellValueFactory((TableColumn.CellDataFeatures<LoanDataObject, String> d) -> new SimpleStringProperty(d.getValue().getLastPayment(AppCustomer.getTimeInYazAsInteger())+""));
     }
 
     public void setpaymentItems(List<LoanDataObject> list) {

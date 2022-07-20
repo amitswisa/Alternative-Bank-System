@@ -63,14 +63,13 @@ public class CustomerRefresher extends TimerTask {
                 // Extract & Update data.
                 CustomerDataObject customerData = resValue.getCurCustomerData();
 
-                all_loans.accept(resValue.getAll_loans());
-                addCategories.accept(resValue.getBankCategories());
-
                 // Run updates by JAT
                 Platform.runLater(() -> {
                     countMsg.accept(0);
-                    updateUserFunction.accept(customerData);
+                    addCategories.accept(resValue.getBankCategories());
                     updateYaz.accept(resValue.getTimeInYaz());
+                    updateUserFunction.accept(customerData);
+                    all_loans.accept(resValue.getAll_loans());
                 });
             }
         });

@@ -1,8 +1,11 @@
 package parts.tableview.loan_tableview;
 
 import dto.objectdata.LoanDataObject;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -18,7 +21,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import parts.loan_information.LoanInfoController;
+import server_con.HttpClientUtil;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,6 +40,7 @@ public class loansTableView implements Initializable {
     private FXMLLoader loader;
     private LoanInfoController controller;
     private Scene firstScene = null;
+    private String customerName;
 
     // this Data-Members
     private FilteredList<LoanDataObject> list = null;
@@ -145,6 +155,10 @@ public class loansTableView implements Initializable {
         this.loansToInvestList = loansToInvestList;
     }
 
+    public void setCustomerName(String name) {
+        this.customerName = name;
+    }
+
     public void setLoansObservableList(ObservableList<LoanDataObject> loanList) {
 
         // Init list of loans.
@@ -161,5 +175,73 @@ public class loansTableView implements Initializable {
         ));
 
         this.loansTable.setItems(list);
+    }
+
+    public void doSellButton(String sellerName) {
+
+        setCustomerName(sellerName);
+
+        TableColumn<LoanDataObject, Void> sellBtn = new TableColumn("Sell / Unsell");
+        Callback<TableColumn<LoanDataObject, Void>, TableCell<LoanDataObject, Void>> cellFactory = param -> {
+            return new TableCell<LoanDataObject, Void>() {
+
+                private final Button btn = new Button("Sell loan");
+                {
+                    btn.setOnAction((ActionEvent event) -> {
+                        // Get loan data when clicking specific View button.
+                        LoanDataObject dataObject = getTableView().getItems().get(getIndex());
+
+                        Request sellLoanRequest = new Request.Builder()
+                                    .url(HttpClientUtil.PATH + HttpClientUtil.SELL_LOAN)
+                                .post(new FormBody.Builder()
+                                        .add("customerName", dataObject.getOwner())
+                                        .add("sellerName", customerName)
+                                        .add("loanName", dataObject.getLoanID()).build())
+                                .build();
+
+                        HttpClientUtil.runAsync(sellLoanRequest, new okhttp3.Callback() {
+                            @Override
+                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                                System.out.println(e.getMessage());
+                            }
+
+                            @Override
+                            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                                String msg = response.body().string();
+                                System.out.println(msg);
+                            }
+                        });
+
+                    });
+                }
+
+                @Override
+                public void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        LoanDataObject dataObject = getTableView().getItems().get(getIndex());
+
+                        if(dataObject.getLoanStatus() == LoanDataObject.Status.ACTIVE) {
+                            btn.setDisable(false);
+                            if (dataObject.getInvestorShareSellStatus(customerName))
+                                btn.setText("Cancel sell");
+                            else
+                                btn.setText("Sell Share");
+                        } else {
+                            btn.setText("Disabled");
+                            btn.setDisable(true);
+                        }
+
+                        setGraphic(btn);
+                    }
+                }
+            };
+        };
+        sellBtn.setCellFactory(cellFactory);
+        loansTable.getColumns().add(sellBtn);
+
+
     }
 }
