@@ -1,11 +1,7 @@
 package components.Customer;
 
 
-import dto.objectdata.CustomerAlertData;
-import dto.objectdata.CustomerDataObject;
-import dto.objectdata.CustomerOperationData;
-import dto.objectdata.LoanDataObject;
-import javafx.beans.property.IntegerProperty;
+import dto.objectdata.*;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +17,7 @@ public class AppCustomer {
     private ObservableList<LoanDataObject> investmentList;//  My investments
     private ObservableList<LoanDataObject> loanList; // my Loans
     private ObservableList<CustomerAlertData> listOfAlerts;
+    private ObservableList<LoanSellerObject> loanSellerList;
 
     public AppCustomer(String name, String initYaz){
         this.name = name;
@@ -30,6 +27,7 @@ public class AppCustomer {
         this.balance = new SimpleIntegerProperty(0);
         timeInYaz = new SimpleIntegerProperty(Integer.parseInt(initYaz));
         this.listOfAlerts = FXCollections.observableArrayList();
+        this.loanSellerList = FXCollections.observableArrayList();
     }
 
     public String getName() {
@@ -104,6 +102,10 @@ public class AppCustomer {
         return this.loanList;
     }
 
+    public ObservableList<LoanSellerObject> getLoanSellerList() {
+        return this.loanSellerList;
+    }
+
     public int countUnfinishedLoans() {
         return (int) this.getLoanList().stream()
                 .filter(i -> i.getLoanStatus() != LoanDataObject.Status.FINISHED).count();
@@ -136,6 +138,30 @@ public class AppCustomer {
 
     public void setLoanList(List<LoanDataObject> loanList) {
         this.loanList.setAll(loanList);
+    }
+
+    public void setLoanSellerList(List<LoanDataObject> allOtherLoans) {
+
+        // Clear list.
+        this.loanSellerList.clear();
+
+        // Go through all other loans and insert to list relevant ones.
+        allOtherLoans.forEach(loan -> {
+            loan.getShareSellList().forEach((sellerName, isSelling) -> {
+                if(isSelling && !sellerName.equals(this.name)) { // Means that other investor sell his share.
+                    this.loanSellerList.add(new LoanSellerObject(loan, sellerName));
+                }
+            });
+        });
+
+        // Go through all customer investments and insert to list relevant ones.
+        this.getInvestmentList().forEach(loan -> {
+            loan.getShareSellList().forEach((sellerName, isSelling) -> {
+                if(isSelling && !sellerName.equals(this.name)) { // Means that other investor sell his share.
+                    this.loanSellerList.add(new LoanSellerObject(loan, sellerName));
+                }
+            });
+        });
     }
 
     public void setListOfAlerts(List<CustomerAlertData> listOfAlerts) {

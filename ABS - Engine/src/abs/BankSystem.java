@@ -207,4 +207,18 @@ public class BankSystem {
     public void markCustomerMessagesAsRead(String customerName) {
         this.customers.get(customerName).markCustomerMessagesAsRead();
     }
+
+    public String changeLoanSellStatus(String name, String sellerName, String loanName) {
+        return this.getCustomerByName(name).changeLoanSellStatus(sellerName, loanName);
+    }
+
+    public void handleLoanBuying(String loanOwnerName, String sellerName, String buyerName, String loanName) throws DataTransferObject{
+
+        BankCustomer loanOwner = this.getCustomerByName(loanOwnerName);
+        BankCustomer seller = this.getCustomerByName(sellerName);
+        BankCustomer buyer = this.getCustomerByName(buyerName);
+
+        loanOwner.changeShareOwner(seller, buyer, loanName);
+
+    }
 }

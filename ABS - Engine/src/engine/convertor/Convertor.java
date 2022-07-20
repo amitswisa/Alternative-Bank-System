@@ -46,7 +46,7 @@ public class Convertor {
             LoanDataObject d = new LoanDataObject(B_l.getOwner(), B_l.getLoanID(), B_l.getLoanCategory(), B_l.getLoanAmount(),
                     B_l.getLoanOpeningTime(), B_l.getLoanTotalTime(), B_l.getLoanStartTime(), B_l.getLoanEndTime(),
                     B_l.getLoanInterestPerPayment(), B_l.getPaymentInterval(), B_l.getLoanStatus(),
-                    B_l.getAmountLeftToActivateLoan(), B_l.getTransactionList(), B_l.getLoanInvestorsToView());
+                    B_l.getAmountLeftToActivateLoan(), B_l.getTransactionList(), B_l.getLoanInvestorsToView(), B_l.getInvestorsSellStatusMap());
 
             resLoanList.add(d);
 

@@ -7,6 +7,7 @@ public class Investor {
     private int currentDebt;
     private int capital;
     private int interest;
+    private boolean isSell;
 
     public Investor(BankCustomer investor, int capital, int interest, int initialInvestment) {
 
@@ -15,10 +16,16 @@ public class Investor {
         this.interest = interest;
         this.initialInvestment = initialInvestment;
         this.currentDebt = initialInvestment;
+        this.isSell = false;
     }
 
     public BankCustomer getInvestor() {
         return investor;
+    }
+
+    public void setInvestor(BankCustomer newInvestor) {
+        this.investor = newInvestor;
+        this.setIsSell();
     }
 
     public int getCapital() {
@@ -52,4 +59,21 @@ public class Investor {
         return (this.getPaymentAmount() * 100 / oneTimeLoanPayment); // 4120 * 100 / 4120
     }
 
+    public boolean getIsSell() {
+        return isSell;
+    }
+
+    public String setIsSell() {
+
+        this.isSell = !(this.isSell);
+
+        if(this.isSell)
+            return "Cancel Sell";
+
+        return "Sell Share";
+    }
+
+    public void resetIsSell() {
+        this.isSell = false;
+    }
 }

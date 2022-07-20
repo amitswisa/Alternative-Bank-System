@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="923.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="parts.tableview.buyloans_tableview.BuyLoanView">
+   <children>
+      <TableView id="loanTable" fx:id="buyLoanTable" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columns>
+            <TableColumn fx:id="loanName" prefWidth="242.0000203847885" text="Name" />
+            <TableColumn fx:id="loanOwner" prefWidth="153.3333740234375" text="Owner" />
+            <TableColumn fx:id="seller" prefWidth="174.00003051757812" text="Seller" />
+            <TableColumn fx:id="share" prefWidth="128.66668701171875" text="Amount" />
+            <TableColumn fx:id="interest" minWidth="0.0" prefWidth="69.3333740234375" text="Interest" />
+            <TableColumn fx:id="paymentLeft" prefWidth="101.33331298828125" text="Payments left" />
+         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+</AnchorPane>

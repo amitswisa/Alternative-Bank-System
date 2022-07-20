@@ -5,10 +5,7 @@ import dto.infodata.DataTransferObject;
 import javafx.util.Pair;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static dto.objectdata.LoanDataObject.Status.*;
@@ -37,6 +34,7 @@ public class LoanDataObject extends DataTransferObject {
     private int unfinishedLoansNumber;
     private Status loanStatus;
     private List<Pair<String, Integer>> investersList = new ArrayList<>();
+    private Map<String, Boolean> shareSellList;
     private List<TransactionDataObject> transactionList = new ArrayList<>(); // hold all transaction's history.
 
     // XML Constructor.
@@ -44,14 +42,14 @@ public class LoanDataObject extends DataTransferObject {
             ,int loan_payment_interval, int loan_opening_time, int loan_total_time) {
 
         this(loan_owner, loan_id, loan_category, loan_amount, loan_opening_time,
-                loan_total_time, 0, 0, loan_interest, loan_payment_interval, NEW, 0, new ArrayList<>(), new ArrayList<>());
+                loan_total_time, 0, 0, loan_interest, loan_payment_interval, NEW, 0, new ArrayList<>(), new ArrayList<>(), new HashMap<>());
 
     }
 
     public LoanDataObject(String owner, String loanID, String loanCategory, int loanAmount, int loanOpeningTime, int loanTotalTime,
                           int loanStartTime, int loanEndTime, int loanInterestPerPayment, int paymentInterval, Status loanStatus,
                           int amountLeftToPay, List<TransactionDataObject> transactionList,
-                          List<Pair<String, Integer>> investersList)
+                          List<Pair<String, Integer>> investersList, Map<String, Boolean> shareSellList)
     {
         super();
         this.owner = owner;
@@ -68,6 +66,7 @@ public class LoanDataObject extends DataTransferObject {
         this.amountLeftToPay = amountLeftToPay;
         this.transactionList = transactionList;
         this.investersList = investersList;
+        this.shareSellList = shareSellList;
     }
 
     //check if the loan details it's ok. when the client open loan by himself.
@@ -294,19 +293,6 @@ public class LoanDataObject extends DataTransferObject {
         return transactionList;
     }
 
-    /*
-    private final int amountLeftToPay; //left to pay to activate
-    private final int loanStartTime; // in yaz - set value when being active.
-    private final int loanEndTime;
-    private final int loanInterestPerPayment;
-    private final int paymentInterval; // Time in yaz for every customer payment.(ex: every 2 yaz etc...)
-    private int unfinishedLoansNumber;
-    private final Status loanStatus;
-    private List<Pair<String, Integer>> investersList = new ArrayList<>();
-    private List<TransactionDataObject> transactionList = new ArrayList<>();
-
-     */
-
     public void update(LoanDataObject e) {
         this.amountLeftToPay = e.getAmountLeftToPay();
         this.loanStartTime = e.getLoanStartTime();
@@ -317,6 +303,28 @@ public class LoanDataObject extends DataTransferObject {
         this.transactionList = e.getTransactionList();
     }
 
+    public Map<String, Boolean> getShareSellList() {
+        return shareSellList;
+    }
+
+    public boolean getInvestorShareSellStatus(String investorName) {
+
+        Boolean sellStatus = getShareSellList().get(investorName);
+
+        if(sellStatus == null)
+            return false;
+
+        return sellStatus;
+    }
+
+    public Integer getInvestorShare(String sellerName) {
+
+        for(Pair<String, Integer> pair : this.getInvestersList())
+            if(pair.getKey().equals(sellerName))
+                return pair.getValue();
+
+        return null;
+    }
 
     @Override
     public String toString() {
@@ -358,6 +366,7 @@ public class LoanDataObject extends DataTransferObject {
             jsonObject.addProperty("loanStatus", loan.getLoanStatus().toString());
             jsonObject.add("investersList", new Gson().toJsonTree(loan.getInvestersList()));
             jsonObject.add("transactionList", new Gson().toJsonTree(loan.getTransactionList()));
+            jsonObject.add("shareSellList", new Gson().toJsonTree(loan.getShareSellList()));
             return jsonObject;
         }
     }

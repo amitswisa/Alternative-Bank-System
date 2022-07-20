@@ -45,7 +45,7 @@ public class BankCustomer {
                 myListOfLoans.add(new LoanDataObject(bankLoan.getOwner(), bankLoan.getLoanID(), bankLoan.getLoanCategory(), bankLoan.getLoanAmount(),
                         bankLoan.getLoanOpeningTime(), bankLoan.getLoanTotalTime(), bankLoan.getLoanStartTime(), bankLoan.getLoanEndTime(),
                         bankLoan.getLoanInterestPerPayment(), bankLoan.getPaymentInterval(), bankLoan.getLoanStatus(),
-                        bankLoan.getAmountLeftToActivateLoan(), bankLoan.getTransactionList(), bankLoan.getLoanInvestorsToView()));
+                        bankLoan.getAmountLeftToActivateLoan(), bankLoan.getTransactionList(), bankLoan.getLoanInvestorsToView(), bankLoan.getInvestorsSellStatusMap()));
         return myListOfLoans;
     }
 
@@ -119,7 +119,7 @@ public class BankCustomer {
                 loansTakenList.add(new LoanDataObject(currentBankLoan.getOwner(), currentBankLoan.getLoanID(), currentBankLoan.getLoanCategory(), currentBankLoan.getLoanAmount(),
                         currentBankLoan.getLoanOpeningTime(), currentBankLoan.getLoanTotalTime(), currentBankLoan.getLoanStartTime(), currentBankLoan.getLoanEndTime(),
                         currentBankLoan.getLoanInterestPerPayment(), currentBankLoan.getPaymentInterval(), currentBankLoan.getLoanStatus(),
-                        currentBankLoan.getAmountLeftToActivateLoan(),currentBankLoan.getTransactionList(), currentBankLoan.getLoanInvestorsToView() ));
+                        currentBankLoan.getAmountLeftToActivateLoan(),currentBankLoan.getTransactionList(), currentBankLoan.getLoanInvestorsToView(), currentBankLoan.getInvestorsSellStatusMap()));
 
         return loansTakenList;
     }
@@ -134,7 +134,7 @@ public class BankCustomer {
                 loansInvestedList.add(new LoanDataObject(currentBankLoan.getOwner(), currentBankLoan.getLoanID(), currentBankLoan.getLoanCategory(), currentBankLoan.getLoanAmount(),
                         currentBankLoan.getLoanOpeningTime(), currentBankLoan.getLoanTotalTime(), currentBankLoan.getLoanStartTime(), currentBankLoan.getLoanEndTime(),
                         currentBankLoan.getLoanInterestPerPayment(), currentBankLoan.getPaymentInterval(), currentBankLoan.getLoanStatus(),
-                        currentBankLoan.getAmountLeftToActivateLoan(), currentBankLoan.getTransactionList(), currentBankLoan.getLoanInvestorsToView()));
+                        currentBankLoan.getAmountLeftToActivateLoan(), currentBankLoan.getTransactionList(), currentBankLoan.getLoanInvestorsToView(), currentBankLoan.getInvestorsSellStatusMap()));
 
         return loansInvestedList;
     }
@@ -215,6 +215,80 @@ public class BankCustomer {
         this.addOperationToCustomerLog(
                 new CustomerOperationData("Loan payment"
                         , "", this.balance, -1*amount));
+        this.balance -= amount;
+    }
+
+    // Change loan investor selling status.
+    public String changeLoanSellStatus(String sellerName, String loanName) {
+
+        BankLoan loan = getLoan(loanName); // Get loan from loan's list.
+
+        if(loan == null)
+            return "Loan doesnt exist.";
+
+        return loan.getLoanInvestors().get(sellerName).setIsSell();
+    }
+
+    // Get loan from customer loan's list by name.
+    private BankLoan getLoan(String name) {
+        BankLoan temp = null;
+
+        for(Set<BankLoan> loans : loansTaken.values())
+        {
+            for(BankLoan loan : loans) {
+                if(loan.getLoanID().equals(name)) {
+                    temp = loan;
+                    break;
+                }
+            }
+        }
+
+        return temp;
+    }
+
+    private BankLoan getLoanByName(String loanName) throws DataTransferObject {
+
+        for(Map.Entry<Integer, Set<BankLoan>> loan : loansTaken.entrySet())
+            for(BankLoan bankLoan : loan.getValue())
+                if(bankLoan.getLoanID().equals(loanName))
+                    return bankLoan;
+
+        throw new DataTransferObject("Error: loan doesnt exist.", BankSystem.getCurrentYaz());
+    }
+
+    public void changeShareOwner(BankCustomer seller, BankCustomer buyer, String loanName) throws DataTransferObject {
+
+        BankLoan loan = this.getLoanByName(loanName);
+
+        if(buyer.getBalance() < loan.getInvestorLeftShare(seller.getName()))
+            throw new DataTransferObject("Error: you dont have enough money to buy this loan.", BankSystem.getCurrentYaz());
+
+        loan.changeShareOwner(seller, buyer);
+    }
+
+    public void addLoanAfterBuy(BankLoan loan) {
+        if(this.loansInvested.get(loan.getLoanOpeningTime()) == null)
+            this.loansInvested.put(loan.getLoanOpeningTime(), new HashSet<BankLoan>());
+
+        this.loansInvested.get(loan.getLoanOpeningTime()).add(loan);
+    }
+
+    public void removeLoanAfterSell(BankLoan loan) {
+        this.loansInvested.get(loan.getLoanOpeningTime()).remove(loan);
+    }
+
+    public void getMoneyOfShareSell(int amount, String loanID) {
+        this.addOperationToCustomerLog(
+                new CustomerOperationData("Loan sale"
+                        , "The loan " + loanID + " sold!", this.balance, amount));
+        this.addAlert("Loan " + loanID + " sold!", "You received " + amount + " for selling this loan.");
+        this.balance += amount;
+    }
+
+    public void payMoneyOfShareBuying(int amount, String loanID) {
+        this.addOperationToCustomerLog(
+                new CustomerOperationData("Loan buy"
+                        , "You bought '" + loanID + "' loan!", this.balance, (-1)*amount));
         this.balance -= amount;
     }
 }
