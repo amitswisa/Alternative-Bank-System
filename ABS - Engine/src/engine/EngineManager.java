@@ -3,26 +3,36 @@ package engine;
 import abs.BankCustomer;
 import abs.BankLoan;
 import abs.BankSystem;
+import dto.JSON.AdminData;
 import dto.JSON.InvestmentData;
 import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerDataObject;
 import dto.objectdata.LoanDataObject;
+import dto.objectdata.TransactionDataObject;
 import engine.xmlmanager.XMLManager;
 import xmlgenerated.AbsDescriptor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EngineManager {
 
+    public enum BankStatus{
+        ACTIVE,
+        READ_ONLY;
+    }
+
     private final XMLManager xmlManager;
     private BankSystem bankSystem;
+    private Map<Integer, AdminData> rewindData;
+    private BankStatus bankStatus;
+    private Integer realYaz; //In rewind we save the real yaz.
 
     public EngineManager() {
         bankSystem = new BankSystem(); // Creating bank systenm for the first time.
         xmlManager = new XMLManager(); // Init xml manager.
+        rewindData = new HashMap<>();
+        bankStatus = BankStatus.ACTIVE;
     }
 
     /*# readXmlFile - Load relevant xml file to XMLManager.
@@ -120,8 +130,10 @@ public class EngineManager {
     }
 
     // Increase YAZ date by 1.
-    public void increaseYazDate() {
+    public void increaseYazDate(AdminData adminData) {
+        rewindData.put(BankSystem.getCurrentYaz(),adminData);
         this.bankSystem.increaseYazDate();
+
     }
 
     public List<CustomerDataObject> getAllCustomerData() {
@@ -173,5 +185,29 @@ public class EngineManager {
 
         this.bankSystem.handleLoanBuying(loanOwner, sellerName, buyerName, loanName);
 
+    }
+
+    public AdminData rewindYazDate(Integer choosenYaz, AdminData adminData) {
+        //save the real yaz
+        realYaz = BankSystem.getCurrentYaz();
+        //save cuurent yaz data
+        rewindData.put(BankSystem.getCurrentYaz(),adminData);
+
+        //change status to read only
+        bankStatus = BankStatus.READ_ONLY;
+
+        //get data from choosen yaz.
+        if(choosenYaz< BankSystem.getCurrentYaz()){
+            AdminData res = rewindData.get(choosenYaz);
+            return res;
+        }
+        return null;
+    }
+
+    public AdminData endRewind() {
+        //Cange status back to active.
+        bankStatus = BankStatus.ACTIVE;
+        //Return the data from real yaz.
+        return rewindData.get(realYaz);
     }
 }

@@ -99,10 +99,6 @@ public class AppCustomer {
         return investmentList;
     }
 
-    public ObservableList<LoanDataObject> getInvestmentListForSale() {
-        return  investmentList.stream().filter(e -> e.getLoanStatus()== LoanDataObject.Status.ACTIVE).collect(Collectors.toList());
-    }
-
     public ObservableList<LoanDataObject> getLoanList() {
         return this.loanList;
     }
