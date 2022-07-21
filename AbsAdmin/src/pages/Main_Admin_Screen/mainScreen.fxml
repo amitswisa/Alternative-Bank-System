@@ -76,7 +76,7 @@
             <HBox prefHeight="100.0" prefWidth="200.0" />
             <HBox prefHeight="27.0" prefWidth="105.0" GridPane.columnIndex="2">
                <children>
-                  <Button fx:id="endRewindBtn" visible="false" onMouseClicked="#endRewind" alignment="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="113.0" text="END REWIND " />
+                  <Button fx:id="endRewindBtn" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#endRewind" prefHeight="27.0" prefWidth="113.0" text="END REWIND " visible="false" />
                </children>
             </HBox>
          </children>
