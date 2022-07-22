@@ -1,5 +1,6 @@
 package abs;
 
+import dto.JSON.AdminData;
 import dto.JSON.InvestmentData;
 import dto.infodata.DataTransferObject;
 import dto.objectdata.CustomerDataObject;
@@ -18,12 +19,17 @@ public class BankSystem {
     private Map<String, BankCustomer> customers;
     private List<AbsLoan> uploaded_loans_data_list; // Hold all loans pre-parse objects to compare with new ones.
 
+    // History hold for admin rewind.
+    private Map<Integer, AdminData> systemHistory;
+    private static int adminYazTime = 1;
+
     public BankSystem()
     {
         // Create empty bank when the server is running.
         categories = new BankCategories();
         customers = new HashMap<>();
         uploaded_loans_data_list = new ArrayList<>();
+        systemHistory = new HashMap<>();
     }
 
     public List<LoanDataObject> LoadCustomerXML(AbsDescriptor absDescriptor, String customerName) throws DataTransferObject
@@ -44,11 +50,30 @@ public class BankSystem {
         return currentYaz;
     }
 
-    public void increaseYazDate() {
-        // make relevant investments payment.
-        customers.values().forEach(BankCustomer::updateCustomerLoansStatus);
+    public static int getAdminYazTime() {
+        return adminYazTime;
+    }
 
-        currentYaz++; // increase YAZ date by 1.
+    public void increaseYazDate() {
+
+        adminYazTime++;
+
+        // Do increase yaz process only when were not on read only mode!
+        if(adminYazTime > currentYaz) {
+
+            this.saveDataToSystemHistory(); // Load all previous yaz data to history holder object.
+
+            // make relevant investments payment.
+            customers.values().forEach(BankCustomer::updateCustomerLoansStatus);
+
+            currentYaz++; // increase YAZ date by 1.
+        }
+    }
+
+    // Load all previous yaz data to history holder object.
+    private void saveDataToSystemHistory() {
+        AdminData adminData = new AdminData(this.getAllCustomersLoansAndLogs(), this.getCustomersLoansData(), BankSystem.getCurrentYaz());
+        systemHistory.put(BankSystem.getCurrentYaz(), adminData);
     }
 
     // Close all loans.
@@ -220,5 +245,14 @@ public class BankSystem {
 
         loanOwner.changeShareOwner(seller, buyer, loanName);
 
+    }
+
+    public AdminData getPrevYazData(Integer yaz_time) {
+        return this.systemHistory.get(yaz_time);
+    }
+
+    public void decreaseYaz() {
+        if(adminYazTime > 1)
+            adminYazTime--;
     }
 }

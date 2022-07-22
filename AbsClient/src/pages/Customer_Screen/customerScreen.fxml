@@ -245,7 +245,7 @@
                               <TextField fx:id="loanID" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
                                  <children>
-                                    <Button mnemonicParsing="false" onMouseClicked="#makeNewLoanClicked" prefHeight="39.0" prefWidth="113.0" text="Create Loan" />
+                                    <Button fx:id="newLoanBtn" mnemonicParsing="false" onMouseClicked="#makeNewLoanClicked" prefHeight="39.0" prefWidth="113.0" text="Create Loan" />
                                  </children>
                               </HBox>
                               <TextField fx:id="capital" GridPane.columnIndex="3" GridPane.rowIndex="3" />

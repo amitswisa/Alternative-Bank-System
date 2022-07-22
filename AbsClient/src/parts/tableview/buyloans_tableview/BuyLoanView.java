@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static pages.Customer_Screen.customerScreenController.getReadOnlyState;
+
 public class BuyLoanView implements Initializable {
 
     // this Data-Members
@@ -94,10 +96,8 @@ public class BuyLoanView implements Initializable {
                     } else {
                         LoanSellerObject dataObject = getTableView().getItems().get(getIndex());
 
-                        if(Integer.parseInt(dataObject.getShare()) > customerName.getBalance())
-                            btn.setDisable(true);
-                        else
-                            btn.setDisable(false);
+                        btn.setDisable(Integer.parseInt(dataObject.getShare()) > customerName.getBalance());
+                        btn.setDisable(getReadOnlyState());
 
                         setGraphic(btn);
                     }

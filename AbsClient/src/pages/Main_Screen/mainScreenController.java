@@ -49,6 +49,7 @@ public class mainScreenController implements Initializable {
     @FXML private customerScreenController customerPageComponentController;
 
     // FXML members
+    @FXML private Button uploadXMLBtn;
     @FXML private ImageView settingsBtn;
     @FXML private Label yazLabel;
     @FXML private Label alertMessageCounter;
@@ -114,11 +115,11 @@ public class mainScreenController implements Initializable {
                 ,customerPageComponentController::updateAllLoansList
                 ,customerPageComponentController::addCategoriesToList
                 ,currentCustomer.getName()
-                ,this::countUnReadMsg);
+                ,this::countUnReadMsg
+                ,customerPageComponentController::readOnlyHandle);
         timer = new Timer();
         timer.schedule(customerRefresher, 400, 400);
     }
-
 
     private void handleAlertBoxClick() {
 
@@ -182,7 +183,7 @@ public class mainScreenController implements Initializable {
         alertsViewList.setItems(this.currentCustomer.getListOfAlerts());
 
         // Pass instance of customer to customer screen.
-        this.customerPageComponentController.setCustomer(this.currentCustomer);
+        this.customerPageComponentController.setCustomer(this.currentCustomer, uploadXMLBtn);
 
         // Make customer updates run async.
         startCustomerDataUpdate();
@@ -245,7 +246,6 @@ public class mainScreenController implements Initializable {
         // Add loan to customer and then refresh his lists.
         this.currentCustomer.addToMyLoansList(newLoansUploadedList);
     }
-
     // Shutdown process when program close.
     public void shutdown() {
         // When closing app stop refresher task.

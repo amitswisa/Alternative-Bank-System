@@ -12,15 +12,17 @@ public class SystemUpdates {
     private List<LoanDataObject> all_loans;
     private Integer timeInYaz;
     private Set<String> bankCategories;
+    private boolean readonly;
 
     public SystemUpdates(CustomerDataObject curCustomerData,
                          List<LoanDataObject> all_loans,
                          Integer timeInYaz
-                        , Set<String> bankCategories) {
+                        , Set<String> bankCategories, boolean readonly) {
         this.curCustomerData = curCustomerData;
         this.all_loans = all_loans;
         this.timeInYaz = timeInYaz;
         this.bankCategories = bankCategories;
+        this.readonly = readonly;
     }
 
     public CustomerDataObject getCurCustomerData() {
@@ -37,5 +39,9 @@ public class SystemUpdates {
 
     public Set<String> getBankCategories() {
         return bankCategories;
+    }
+
+    public boolean getReadOnly() {
+        return this.readonly;
     }
 }

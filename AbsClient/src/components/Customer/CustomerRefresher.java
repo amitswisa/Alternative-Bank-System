@@ -23,6 +23,7 @@ public class CustomerRefresher extends TimerTask {
     private Consumer<List<LoanDataObject>> all_loans;
     private Consumer<Set<String>> addCategories;
     private Consumer<Integer> countMsg;
+    private Consumer<Boolean> readonly;
     private final String customerName;
 
     // Constructor
@@ -30,13 +31,15 @@ public class CustomerRefresher extends TimerTask {
             , Consumer<Integer> updateYaz
             , Consumer<List<LoanDataObject>> all_loans
             , Consumer<Set<String>> addCategories
-            , String customerName, Consumer<Integer> countMsg) {
+            , String customerName, Consumer<Integer> countMsg
+            ,Consumer<Boolean> readonly) {
         this.updateUserFunction = updateUserFunction;
         this.all_loans = all_loans;
         this.updateYaz = updateYaz;
         this.addCategories = addCategories;
         this.customerName = customerName;
         this.countMsg = countMsg;
+        this.readonly = readonly;
         gson = new Gson();
     }
 
@@ -65,6 +68,7 @@ public class CustomerRefresher extends TimerTask {
 
                 // Run updates by JAT
                 Platform.runLater(() -> {
+                    readonly.accept(resValue.getReadOnly());
                     countMsg.accept(0);
                     addCategories.accept(resValue.getBankCategories());
                     updateYaz.accept(resValue.getTimeInYaz());

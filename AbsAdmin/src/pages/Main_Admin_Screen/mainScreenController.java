@@ -79,9 +79,8 @@ public class mainScreenController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        
-
+        // Disable rewind
+        rewindBtn.setDisable(true);
     }
 
     // TimerTask creation, every 400ms refresh data from server.
@@ -248,6 +247,10 @@ public class mainScreenController implements Initializable {
         yazLabel.setText(getYazInTime().get()+"");
         getYazInTime().addListener((observable, oldValue, newValue) -> {
             yazLabel.setText(newValue.intValue() + "");
+
+            // Disable rewind if yaz label changed to 1.
+            rewindBtn.setDisable(newValue.intValue() == 1);
+
         });
 
         startAdminDataUpdate();
@@ -261,5 +264,25 @@ public class mainScreenController implements Initializable {
             timer.cancel();
         }
         System.exit(0);
+    }
+
+    public void rewindYazTime(MouseEvent mouseEvent) {
+
+        String finalUrl = HttpUrl
+                .parse(PATH + "/DecreaseYaz")
+                .newBuilder()
+                .build()
+                .toString(); // Build url string.
+
+        Request decreaseYaz = new Request.Builder().url(finalUrl).build();
+
+        try {
+            Response res = HttpClientUtil.sendSyncRequest(decreaseYaz);
+            String yazRes = res.body().string().replace("\"", "");
+            this.currentAdmin.setYaz(Integer.parseInt(yazRes));
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 }

@@ -57,11 +57,14 @@ public class customerUpdates extends HttpServlet {
                         .filter(e -> !e.getOwner().equals(customerName))
                             .collect(Collectors.toList());
 
-            int timeInYaz = BankSystem.getCurrentYaz();
             Set<String> bankCategories = engineManager.getBankCategories();
 
+            // Check if admin did rewind to yaz time.
+            int timeInYaz = BankSystem.getCurrentYaz();
+            boolean readonly = (timeInYaz > BankSystem.getAdminYazTime());
+
             // Create the return object.
-            SystemUpdates resObj = new SystemUpdates(curCustomer, all_loans, timeInYaz, bankCategories);
+            SystemUpdates resObj = new SystemUpdates(curCustomer, all_loans, timeInYaz, bankCategories, readonly);
 
             final Gson gson = gsonBuilder.create(); // Create Gson object with classes adapters.
             String customerJsonString = gson.toJson(resObj, SystemUpdates.class);

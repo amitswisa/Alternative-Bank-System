@@ -36,7 +36,11 @@ public class adminUpdates extends HttpServlet {
         EngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
 
         // Create transfer data object.
-        AdminData data = new AdminData(engineManager.getAllCustomerData(), engineManager.getAllLoansData(), BankSystem.getCurrentYaz());
+        AdminData data;
+        if(BankSystem.getCurrentYaz() <= BankSystem.getAdminYazTime()) // Rewind didnt happen.
+            data = new AdminData(engineManager.getAllCustomerData(), engineManager.getAllLoansData(), BankSystem.getCurrentYaz());
+        else
+            data = engineManager.getPrevYazData(BankSystem.getAdminYazTime());
 
         String dataToJson = gsonBuilder.create().toJson(data, AdminData.class);
         System.out.println(dataToJson);

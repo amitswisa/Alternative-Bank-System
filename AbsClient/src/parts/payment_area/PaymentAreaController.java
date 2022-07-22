@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static pages.Customer_Screen.customerScreenController.getReadOnlyState;
+
 public class PaymentAreaController implements Initializable {
 
     private customerScreenController customerController;
@@ -94,13 +96,20 @@ public class PaymentAreaController implements Initializable {
     }
 
     public void updateInfo(LoanDataObject dataObject){
-        currentLoan=dataObject;
-        loanStatus.setText(dataObject.getLoanStatus().toString());
-        paymentNumber.setText(dataObject.getThisPaymentNumber() + "");
-        amountLeft.setText(dataObject.getLastPayment(AppCustomer.getTimeInYazAsInteger()) + " ");
-        paymentAmount.setText(dataObject.getAmountLeftToPayTofinished() + " ");
-        activateBtnPayThisPayment(dataObject);
-        activateBtnPayAll(dataObject);
+
+        if(getReadOnlyState())
+        {
+            this.payAll.setDisable(true);
+            this.payThisPayment.setDisable(true);
+        } else {
+            currentLoan = dataObject;
+            loanStatus.setText(dataObject.getLoanStatus().toString());
+            paymentNumber.setText(dataObject.getThisPaymentNumber() + "");
+            amountLeft.setText(dataObject.getLastPayment(AppCustomer.getTimeInYazAsInteger()) + " ");
+            paymentAmount.setText(dataObject.getAmountLeftToPayTofinished() + " ");
+            activateBtnPayThisPayment(dataObject);
+            activateBtnPayAll(dataObject);
+        }
     }
 
     public void setCustomerController(customerScreenController controller) {

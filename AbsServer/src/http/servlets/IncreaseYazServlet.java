@@ -36,7 +36,10 @@ public class IncreaseYazServlet extends HttpServlet {
         engineManager.increaseYazDate(reqValue);
         System.out.print("Yaz increased, current yaz: " + BankSystem.getCurrentYaz());
 
-        response.getOutputStream().print(BankSystem.getCurrentYaz());
+        int resInt = (BankSystem.getCurrentYaz() == BankSystem.getAdminYazTime())
+                            ? BankSystem.getCurrentYaz() : BankSystem.getAdminYazTime();
+
+        response.getOutputStream().print(resInt);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

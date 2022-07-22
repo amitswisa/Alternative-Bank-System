@@ -44,6 +44,8 @@ import static components.Customer.AppCustomer.getTimeInYazAsInteger;
 
 public class customerScreenController implements Initializable {
 
+    private static boolean readonly = false;
+
     // DATA MEMBERS
     private AppCustomer currentCustomer;
     private final TextInputDialog moneyPopup;
@@ -60,6 +62,8 @@ public class customerScreenController implements Initializable {
     @FXML private BuyLoanView buyLoanListController;
     @FXML private Label currentBalance;
     @FXML private Button depositBtn, withdrawalBtn;
+    @FXML private Button makeInvestment;
+    @FXML private Button newLoanBtn, uploadXMLBtn;
 
     // SCRAMBLE
     @FXML private Slider investmentAmount;
@@ -378,8 +382,9 @@ public class customerScreenController implements Initializable {
 
     public void refreshPaymentView() { paymentAreaController.refreshRelevantData(); }
 
-    public void setCustomer(AppCustomer customer) {
+    public void setCustomer(AppCustomer customer, Button uploadXMLBtn) {
         this.currentCustomer = customer;
+        this.uploadXMLBtn = uploadXMLBtn;
 
         // Initialize properties
         this.currentBalance.setText("Current balance: " + this.currentCustomer.getBalance());
@@ -524,6 +529,20 @@ public class customerScreenController implements Initializable {
         alertDialog.setAlertType(Alert.AlertType.INFORMATION);
         alertDialog.setContentText(message);
         alertDialog.showAndWait();
+    }
+
+    public void readOnlyHandle(boolean readOnlyState) {
+        readonly = readOnlyState;
+        this.depositBtn.setDisable(readOnlyState);
+        this.withdrawalBtn.setDisable(readOnlyState);
+        this.withdrawalBtn.setDisable(readOnlyState);
+        this.makeInvestment.setDisable(readOnlyState);
+        this.newLoanBtn.setDisable(readOnlyState);
+        this.uploadXMLBtn.setDisable(readOnlyState);
+    }
+
+    public static boolean getReadOnlyState() {
+        return readonly;
     }
 
 }
