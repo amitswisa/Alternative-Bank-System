@@ -27,14 +27,9 @@ public class IncreaseYazServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/plain;charset=UTF-8");
 
-        // Get relevant user from CustomerDataObject map.
-        String json = request.getParameter("adminData"); // Get customer name from request.
-        AdminData reqValue = gson.fromJson(json, AdminData.class);
-
         // Get engine and increase yaz.
         EngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
-        engineManager.increaseYazDate(reqValue);
-        System.out.print("Yaz increased, current yaz: " + BankSystem.getCurrentYaz());
+        engineManager.increaseYazDate();
 
         int resInt = (BankSystem.getCurrentYaz() == BankSystem.getAdminYazTime())
                             ? BankSystem.getCurrentYaz() : BankSystem.getAdminYazTime();

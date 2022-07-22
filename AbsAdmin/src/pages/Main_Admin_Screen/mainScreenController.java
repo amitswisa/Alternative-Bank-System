@@ -51,7 +51,7 @@ public class mainScreenController implements Initializable {
 
     // FXML members
     @FXML private ImageView settingsBtn;
-    @FXML private Button endRewindBtn;
+    @FXML private Button rewindBtn;
     @FXML private Label yazLabel;
 
 
@@ -84,7 +84,7 @@ public class mainScreenController implements Initializable {
     }
 
     // TimerTask creation, every 400ms refresh data from server.
-   private void startAdminDataUpdate() {
+    private void startAdminDataUpdate() {
         adminRefresher = new AdminRefresher(currentAdmin::updateAdminData);
         timer = new Timer();
         timer.schedule(adminRefresher, 400, 400);
@@ -113,106 +113,6 @@ public class mainScreenController implements Initializable {
 
     }
 
-    // Called when "rewind yaz" btn clicked.
-    public void rewindYaz(MouseEvent mouseEvent) {
-
-        endRewindBtn.setVisible(true);
-
-        //show popup window to choose yaz to go back
-        rewindPopup.setTitle("Investment");
-        rewindPopup.setContentText("Enter amount of money to invest: ");
-        Optional<String> result = rewindPopup.showAndWait();
-        if(!result.isPresent())
-            return;
-
-        String choosenYaz = String.valueOf(rewindPopup.getEditor().getText());
-
-        // Try parsing input to int and if success update user bank.
-        try {
-            int valueOfInput = Integer.parseInt(choosenYaz);
-
-            // Trying to go to unvaild yaz.
-            if(valueOfInput <= 0)
-                throw new NumberFormatException("Unvaild yaz");
-
-            if(valueOfInput > getYazInTimeAsInt())
-                throw new DataTransferObject("You cant choose future YAZ.", getYazInTimeAsInt());
-
-
-            AdminData newAdmin = new AdminData(currentAdmin.getCustomers(),currentAdmin.getAllLoan(), getYazInTimeAsInt());
-            Gson gson= new GsonBuilder().registerTypeAdapter(AdminData.class, new AdminData.AdminDataObjectAdapter()).create();
-            String jsonLoan = gson.toJson(newAdmin, AdminData.class);
-
-            String finalUrl = HttpUrl
-                    .parse(PATH + "/rewindYaz")
-                    .newBuilder()
-                    .build()
-                    .toString(); // Build url string.
-
-            Request rewindYazRequest = new Request.Builder().url(finalUrl).
-                    post(new FormBody.Builder().add("choosenYaz",choosenYaz).build())
-                    .post(new FormBody.Builder().add("adminData",jsonLoan).build())
-                    .build(); // Build http request from url string.
-
-            try {
-                Response res = HttpClientUtil.sendSyncRequest(rewindYazRequest);
-                AdminData resAdmin = this.gson.fromJson(res.body().string(), AdminData.class);
-
-                currentAdmin.updateAdminData(resAdmin);
-
-            } catch(IOException e) {
-                System.out.println(e.getMessage());
-            }
-
-
-        } catch(NumberFormatException | DataTransferObject nfe) {
-
-            // If ok button was pressed!
-            if(result.isPresent()) {
-                if(nfe instanceof DataTransferObject)
-                    alertDialog.setContentText(nfe.getMessage());
-                else if(nfe.getMessage().equals("Unvaild yaz"))
-                    alertDialog.setContentText("Please enter positive number.");
-                else
-                    alertDialog.setContentText("Please enter a valid number.");
-
-                alertDialog.showAndWait();
-            }
-        } finally {
-            rewindPopup.getEditor().setText(""); // empty input text.
-            alertDialog.setHeaderText("Error");
-            alertDialog.setAlertType(Alert.AlertType.ERROR);
-        }
-
-
-    }
-
-    public void endRewind(MouseEvent mouseEvent){
-
-
-        String finalUrl = HttpUrl
-                .parse(PATH + "/endRewind")
-                .newBuilder()
-                .build()
-                .toString(); // Build url string.
-
-        Request endRewindRequest = new Request.Builder().url(finalUrl)
-                .post(new FormBody.Builder().build() )
-                .build(); // Build http request from url string.
-
-        try {
-            Response res = HttpClientUtil.sendSyncRequest(endRewindRequest);
-            AdminData resAdmin = gson.fromJson(res.body().string(), AdminData.class);
-
-            currentAdmin.updateAdminData(resAdmin);
-
-        } catch(IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-}
-
-
     // Called when "increase yaz" btn clicked.
     public void increaseYaz(MouseEvent mouseEvent) {
 
@@ -226,15 +126,12 @@ public class mainScreenController implements Initializable {
                 .build()
                 .toString(); // Build url string.
 
-        Request increaseYazRequest = new Request.Builder().url(finalUrl).
-                post(new FormBody.Builder().add("adminData",jsonLoan).build())
-                .build(); // Build http request from url string.
+        Request increaseYazRequest = new Request.Builder().url(finalUrl).build();
 
         try {
             Response res = HttpClientUtil.sendSyncRequest(increaseYazRequest);
             String yazRes = res.body().string().replace("\"", "");
             this.currentAdmin.setYaz(Integer.parseInt(yazRes));
-
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }
