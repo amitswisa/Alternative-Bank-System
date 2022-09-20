@@ -118,7 +118,7 @@ public class mainScreenController implements Initializable {
                 ,this::countUnReadMsg
                 ,customerPageComponentController::readOnlyHandle);
         timer = new Timer();
-        timer.schedule(customerRefresher, 400, 400);
+        timer.schedule(customerRefresher, 1, 1);
     }
 
     private void handleAlertBoxClick() {
